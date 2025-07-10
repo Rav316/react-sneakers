@@ -10,12 +10,18 @@ export const CartDrawer = () => {
   const { isDrawerOpen, setIsDrawerOpen } = useContext(CartDrawerContext);
   return (
     <>
-      <div className={clsx(styles.overlay, { [styles.open]: isDrawerOpen })}/>
+      <div
+        className={clsx(styles.overlay, { [styles.open]: isDrawerOpen })}
+        onClick={() => setIsDrawerOpen(false)}
+      />
       <div className={clsx(styles.drawer, { [styles.open]: isDrawerOpen })}>
         <div className={styles.infoWrapper}>
           <div className={styles.titleWrapper}>
             <h1>Корзина</h1>
-            <div className={styles.removeButton} onClick={() => setIsDrawerOpen(false)}>
+            <div
+              className={styles.removeButton}
+              onClick={() => setIsDrawerOpen(false)}
+            >
               <div>
                 <img src={closeIcon} alt={"close icon"} />
               </div>
