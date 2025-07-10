@@ -4,8 +4,12 @@ import appLogo from '../../../public/app-logo.svg';
 import cartIcon from '../../assets/cart.svg';
 import favoritesIcon from '../../assets/favorites/favorites.svg';
 import profileIcon from '../../assets/profile.svg';
+import { useContext } from "react";
+import { CartDrawerContext } from "../../context/cart-drawer-context.ts";
 
 export const Header = () => {
+  const {setIsDrawerOpen} = useContext(CartDrawerContext);
+
   return (
     <header className={styles.root}>
       <div className={styles.wrapper}>
@@ -17,7 +21,7 @@ export const Header = () => {
       </div>
 
       <div className={styles.menu}>
-        <div className={styles.menuItem}>
+        <div onClick={() => setIsDrawerOpen(true)} className={styles.menuItem}>
           <img src={cartIcon} alt={"cart icon"}/>
           <span>1205 руб.</span>
         </div>

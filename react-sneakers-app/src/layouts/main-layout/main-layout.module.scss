@@ -4,6 +4,9 @@
   display: flex;
   justify-content: center;
 
+  @media (max-width: 1000px) {
+    margin-top: 0;
+  }
 
   .root {
     width: calc(100% - 170px);

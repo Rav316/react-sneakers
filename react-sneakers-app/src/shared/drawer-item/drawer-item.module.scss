@@ -1,0 +1,42 @@
+.root {
+  padding: 20px;
+  display: flex;
+  align-items: center;
+  border: 1px solid #F3F3F3;
+  border-radius: 20px;
+  position: relative;
+
+  img {
+    width: 70px;
+    height: 70px;
+  }
+
+  .infoWrapper {
+    display: flex;
+    row-gap: 8px;
+    flex-direction: column;
+    margin-left: 21px;
+    margin-right: 12px;
+
+    .price {
+      font-weight: 700;
+    }
+  }
+
+  .removeButton {
+    width: 32px;
+    height: 32px;
+    position: absolute;
+    bottom: 15px;
+    right: 15px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid #DBDBDB;
+    border-radius: 8px;
+    img {
+      width: 11px;
+      height: 11px;
+    }
+  }
+}
