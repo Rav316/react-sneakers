@@ -1,0 +1,15 @@
+databaseChangeLog:
+  - include:
+      file: db/changelog/db.create-firm-table-1.0.sql
+  - include:
+      file: db/changelog/db.create-sneaker-table-1.0.sql
+  - include:
+      file: db/changelog/db.create-sneaker-item-table-1.0.sql
+  - include:
+      file: db/changelog/db.create-users-table-1.0.sql
+  - include:
+      file: db/changelog/db.insert-firm-data-1.0.sql
+  - include:
+      file: db/changelog/db.insert-sneaker-data-1.0.sql
+  - include:
+      file: db/changelog/db.insert-sneaker-item-data-1.0.sql
