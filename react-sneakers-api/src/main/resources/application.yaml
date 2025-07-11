@@ -1,3 +1,12 @@
+app:
+  jwt:
+    secret: MJR3#y#FEp}T90dh4)!:\d!|r?C$O+8TQr&vcI,lY@BPYJO*tayg1kEVd5ud#9R1
+    subject: react-sneakers-api
+    issuer: User details service
+    expiration: 43200000 # 12 hours
+    total-expiration: 1209600000 # 2 weeks
+  host-address: ${HOST_ADDRESS}
+
 spring:
   application:
     name: react-sneakers-api
@@ -11,3 +20,12 @@ spring:
     properties:
       hibernate:
         format_sql: true
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: ${MAIL_USERNAME}
+    password: ${MAIL_PASSWORD}
+    properties:
+      mail.smtp:
+        auth: true
+        starttls.enable: true
