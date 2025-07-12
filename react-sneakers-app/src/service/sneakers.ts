@@ -5,6 +5,7 @@ import { ApiRoutes } from "./constants.ts";
 export interface SearchParams {
   page?: number;
   size?: number;
+  search?: string;
 }
 
 export const findAll = async (

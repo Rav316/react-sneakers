@@ -1,17 +1,42 @@
-.searchInput {
-  width: 250px;
-  border-radius: 10px;
-  padding: 15px 18px 15px 40px;
-  border: 1px solid #F3F3F3;
-  background: url("../../../assets/search.svg") no-repeat left 15px center;
-  background-size: 14px 14px;
-  outline: none;
-  transition: border-color .3s ease;
+.searchWrapper {
+  position: relative;
 
-  &:focus {
-    border-color: black;
+  @media (max-width: 841px) {
+    width: 100%;
+  }
+
+  .searchInput {
+    border-radius: 10px;
+    padding: 15px 40px 15px 40px;
+    width: 250px;
+    border: 1px solid #F3F3F3;
+    background: url("../../../assets/search.svg") no-repeat left 15px center;
+    background-size: 14px 14px;
+    outline: none;
+    font-size: 16px;
+    transition: border-color .3s ease;
+    box-sizing: border-box;
+
+    @media (max-width: 841px) {
+      width: 100%;
+    }
+
+    &:focus {
+      border-color: black;
+    }
+  }
+
+  .clearButton {
+    width: 10px;
+    height: 10px;
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
   }
 }
+
 
 *::-webkit-input-placeholder {
   color: #C4C4C4;

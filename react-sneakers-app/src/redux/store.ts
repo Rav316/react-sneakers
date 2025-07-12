@@ -3,12 +3,14 @@ import { configureStore } from "@reduxjs/toolkit";
 import cartDrawerReducer from './slice/cart-drawer-slice';
 import authModalReducer from './slice/auth-modal-slice';
 import sneakerReducer from './slice/sneaker-slice';
+import searchReducer from './slice/search-slice';
 
 export const store = configureStore({
   reducer: {
     cartDrawer: cartDrawerReducer,
     authModal: authModalReducer,
-    sneaker: sneakerReducer
+    sneaker: sneakerReducer,
+    search: searchReducer
   }
 });
 
