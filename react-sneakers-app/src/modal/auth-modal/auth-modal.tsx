@@ -1,7 +1,7 @@
 import styles from './auth-modal.module.scss';
-import { HeaderLogo } from "../../shared/ui/header-logo/header-logo.tsx";
-import { FormInput } from "../../shared/ui/input/form-input.tsx";
-import { Button } from "../../shared/ui/button/button.tsx";
+import { HeaderLogo } from "../../components/ui/header-logo/header-logo.tsx";
+import { FormInput } from "../../components/ui/input/form-input.tsx";
+import { Button } from "../../components/ui/button/button.tsx";
 
 import closeIcon from '../../assets/close.svg';
 import * as React from "react";

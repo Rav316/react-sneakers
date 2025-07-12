@@ -1,8 +1,8 @@
 import "./app.scss";
 import { MainLayout } from "./layouts/main-layout/main-layout.tsx";
 import HomePage from "./pages/home-page/home-page.tsx";
-import { Header } from "./shared/header/header.tsx";
-import { CartDrawer } from "./shared/drawer/cart-drawer.tsx";
+import { Header } from "./components/shared/header/header.tsx";
+import { CartDrawer } from "./components/shared/drawer/cart-drawer.tsx";
 import { useEffect } from "react";
 import { AuthModal } from "./modal/auth-modal/auth-modal.tsx";
 import { useSelector } from "react-redux";

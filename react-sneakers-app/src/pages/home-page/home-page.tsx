@@ -1,14 +1,17 @@
 import styles from './home-page.module.scss';
-import { Search } from "../../shared/search/search.tsx";
-import { SneakerCard } from "../../shared/sneaker-card/sneaker-card.tsx";
+import { Search } from "../../components/shared/search/search.tsx";
+import { SneakerCard } from "../../components/shared/sneaker-card/sneaker-card.tsx";
 import { useDispatch, useSelector } from "react-redux";
 import type { AppDispatch, RootState } from "../../redux/store.ts";
 import { useEffect } from "react";
 import { fetchSneakers } from "../../redux/slice/sneaker-slice.ts";
+import { SneakerCardSkeleton } from "../../components/shared/sneaker-card/skeleton/sneaker-card-skeleton.tsx";
 
 const HomePage = () => {
   const dispatch = useDispatch<AppDispatch>();
-  const sneakers = useSelector((state: RootState) => state.sneaker.sneakers);
+  const { sneakers, loading } = useSelector(
+    (state: RootState) => state.sneaker,
+  );
   useEffect(() => {
     dispatch(fetchSneakers({}))
   }, [dispatch]);
@@ -20,9 +23,15 @@ const HomePage = () => {
       </div>
       <div className={styles.sneakerCardsWrapper}>
         {
-          sneakers.content.map((sneaker) => (
-            <SneakerCard key={sneaker.id} sneaker={sneaker}/>
-          ))
+          loading ? (
+            Array.from({length: 6}).map((_, index) => (
+              <SneakerCardSkeleton key={index}/>
+            ))
+          ) : (
+            sneakers.content.map((sneaker) => (
+              <SneakerCard key={sneaker.id} sneaker={sneaker}/>
+            ))
+          )
         }
       </div>
     </div>

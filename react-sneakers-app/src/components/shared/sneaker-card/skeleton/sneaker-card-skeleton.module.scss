@@ -1,0 +1,14 @@
+.root {
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  box-sizing: border-box;
+  row-gap: 20px;
+
+  .priceInfo {
+    display: flex;
+    flex-direction: column;
+    row-gap: 10px;
+    width: 100%;
+  }
+}

@@ -1,11 +1,11 @@
-import arrowNextIcon from "../../assets/arrow-next.svg";
-import closeIcon from "../../assets/close.svg";
+import arrowNextIcon from "../../../assets/arrow-next.svg";
+import closeIcon from "../../../assets/close.svg";
 import styles from "./drawer.module.scss";
 import { DrawerItem } from "../drawer-item/drawer-item.tsx";
 import clsx from "clsx";
 import { useDispatch, useSelector } from "react-redux";
-import type { RootState } from "../../redux/store.ts";
-import { setIsDrawerOpen } from "../../redux/slice/cart-drawer-slice.ts";
+import type { RootState } from "../../../redux/store.ts";
+import { setIsDrawerOpen } from "../../../redux/slice/cart-drawer-slice.ts";
 
 export const CartDrawer = () => {
   const dispatch = useDispatch();

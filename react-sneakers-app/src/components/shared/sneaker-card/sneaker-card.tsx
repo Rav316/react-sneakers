@@ -2,11 +2,11 @@ import styles from "./sneaker-card.module.scss";
 import * as React from "react";
 import clsx from "clsx";
 
-import favoritesIcon from "../../assets/favorites/favorites-light.svg";
-import selectedFavoritesIcon from "../../assets/favorites/selected-favorites.svg";
-import plusIcon from "../../assets/plus.svg";
-import checkIcon from "../../assets/check.svg";
-import type { SneakerListItem } from "../../service/model.ts";
+import favoritesIcon from "../../../assets/favorites/favorites-light.svg";
+import selectedFavoritesIcon from "../../../assets/favorites/selected-favorites.svg";
+import plusIcon from "../../../assets/plus.svg";
+import checkIcon from "../../../assets/check.svg";
+import type { SneakerListItem } from "../../../service/model.ts";
 
 interface Props {
   sneaker: SneakerListItem;

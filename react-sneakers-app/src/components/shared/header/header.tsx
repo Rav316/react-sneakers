@@ -1,13 +1,13 @@
 import styles from './header.module.scss';
 
-import cartIcon from '../../assets/cart.svg';
-import favoritesIcon from '../../assets/favorites/favorites.svg';
-import profileIcon from '../../assets/profile.svg';
-import { HeaderLogo } from "../ui/header-logo/header-logo.tsx";
+import cartIcon from '../../../assets/cart.svg';
+import favoritesIcon from '../../../assets/favorites/favorites.svg';
+import profileIcon from '../../../assets/profile.svg';
+import { HeaderLogo } from "../../ui/header-logo/header-logo.tsx";
 import { useDispatch } from "react-redux";
-import type { AppDispatch } from "../../redux/store.ts";
-import { setIsDrawerOpen } from "../../redux/slice/cart-drawer-slice.ts";
-import { setIsModalOpen } from "../../redux/slice/auth-modal-slice.ts";
+import type { AppDispatch } from "../../../redux/store.ts";
+import { setIsDrawerOpen } from "../../../redux/slice/cart-drawer-slice.ts";
+import { setIsModalOpen } from "../../../redux/slice/auth-modal-slice.ts";
 
 export const Header = () => {
   const dispatch = useDispatch<AppDispatch>();
