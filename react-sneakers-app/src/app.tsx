@@ -5,12 +5,15 @@ import { Header } from "./shared/header/header.tsx";
 import { CartDrawer } from "./shared/drawer/cart-drawer.tsx";
 import { CartDrawerContext } from "./context/cart-drawer-context.ts";
 import { useEffect, useState } from "react";
+import { AuthModal } from "./modal/auth-modal/auth-modal.tsx";
+import { ModalContext } from "./context/modal-context.ts";
 
 const App = () => {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
-    if (isDrawerOpen) {
+    if (isDrawerOpen || isModalOpen) {
       document.body.style.overflow = 'hidden';
     } else {
       document.body.style.overflow = '';
@@ -19,15 +22,18 @@ const App = () => {
     return () => {
       document.body.style.overflow = '';
     };
-  }, [isDrawerOpen]);
+  }, [isDrawerOpen, isModalOpen]);
 
   return (
     <CartDrawerContext.Provider value={{isDrawerOpen, setIsDrawerOpen}}>
-      <CartDrawer/>
-      <MainLayout>
-        <Header />
-        <HomePage />
-      </MainLayout>
+      <ModalContext.Provider value={{isModalOpen, setIsModalOpen}}>
+        <CartDrawer/>
+        {isModalOpen && <AuthModal/>}
+        <MainLayout>
+          <Header />
+          <HomePage />
+        </MainLayout>
+      </ModalContext.Provider>
     </CartDrawerContext.Provider>
   );
 };
