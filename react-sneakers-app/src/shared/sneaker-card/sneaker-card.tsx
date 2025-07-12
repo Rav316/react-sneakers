@@ -4,11 +4,16 @@ import clsx from "clsx";
 
 import favoritesIcon from "../../assets/favorites/favorites-light.svg";
 import selectedFavoritesIcon from "../../assets/favorites/selected-favorites.svg";
-import sneakerExampleImg from "../../assets/sneaker-example.png";
 import plusIcon from "../../assets/plus.svg";
 import checkIcon from "../../assets/check.svg";
+import type { SneakerListItem } from "../../service/model.ts";
 
-export const SneakerCard = () => {
+interface Props {
+  sneaker: SneakerListItem;
+}
+
+export const SneakerCard: React.FC<Props> = ({sneaker: {imageUrl, price, name}}) => {
+  const staticUrl: string = import.meta.env.VITE_STATIC_URL;
   const [isFavorite, setIsFavorite] = React.useState(false);
   const [inCart, setInCart] = React.useState(false);
 
@@ -29,12 +34,12 @@ export const SneakerCard = () => {
           alt="favorites icon"
         />
       </div>
-      <img src={sneakerExampleImg} alt={"sneaker image"} />
-      <span>Мужские Кроссовки Nike Blazer Mid Suede</span>
+      <img src={`${staticUrl}${imageUrl}`} alt={"sneaker image"} />
+      <span>{name}</span>
       <div className={styles.priceInfo}>
         <div>
           <span className={styles.priceLabel}>ЦЕНА:</span>
-          <span className={styles.price}>12 999 руб.</span>
+          <span className={styles.price}>{price} руб.</span>
         </div>
         <div
           className={clsx(styles.cartButton, { [styles.selected]: inCart })}

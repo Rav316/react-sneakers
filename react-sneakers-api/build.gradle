@@ -2,6 +2,7 @@ plugins {
     id 'java'
     id 'org.springframework.boot' version '3.5.3'
     id 'io.spring.dependency-management' version '1.1.7'
+    id "com.ewerk.gradle.plugins.querydsl" version "1.0.10"
 }
 apply from: 'version.gradle'
 
@@ -12,6 +13,10 @@ java {
     toolchain {
         languageVersion = JavaLanguageVersion.of(17)
     }
+}
+
+configurations {
+    querydsl.extendsFrom implementation, runtimeOnly, compileOnly
 }
 
 configurations {
@@ -29,12 +34,16 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.liquibase:liquibase-core'
     implementation 'org.springframework.boot:spring-boot-starter-security'
-    implementation "com.auth0:java-jwt:${versions.jwt}"
     implementation 'org.springframework.boot:spring-boot-starter-validation'
     implementation 'org.springframework.boot:spring-boot-starter-mail'
     implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
     implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity6'
+    implementation "com.auth0:java-jwt:${versions.jwt}"
     implementation "org.springdoc:springdoc-openapi-starter-webmvc-ui:${versions.openapi}"
+    implementation "com.querydsl:querydsl-jpa:${versions.querydsl}:jakarta"
+    implementation "com.querydsl:querydsl-core:${versions.querydsl}"
+    implementation "org.hibernate.orm:hibernate-core:${versions.hibernate}"
+    implementation "jakarta.persistence:jakarta.persistence-api:${versions.jakarta}"
 
     testImplementation 'org.springframework.security:spring-security-test'
     compileOnly 'org.projectlombok:lombok'
@@ -43,6 +52,18 @@ dependencies {
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
+
+querydsl {
+    jpa = true
+    library = "com.querydsl:querydsl-apt:${versions.querydsl}:jakarta"
+    querydslSourcesDir = layout.buildDirectory.dir("generated/sources/annotationProcessor/java/main").get().asFile
+}
+
+compileQuerydsl {
+    options.annotationProcessorPath = configurations.querydsl
+}
+
+compileQuerydsl.dependsOn(clean)
 
 tasks.named('test') {
     useJUnitPlatform()

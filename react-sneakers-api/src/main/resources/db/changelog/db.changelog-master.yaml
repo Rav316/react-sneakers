@@ -23,3 +23,9 @@ databaseChangeLog:
       file: db/changelog/db.create-users-table-1.4.sql
   - include:
       file: db/changelog/db.create-users-table-1.5.sql
+  - include:
+      file: db/changelog/db.insert-sneaker-data-1.1.sql
+  - include:
+      file: db/changelog/db.insert-sneaker-data-2.0.sql
+  - include:
+      file: db/changelog/db.insert-sneaker-data-2.1.sql

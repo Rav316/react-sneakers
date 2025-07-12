@@ -2,25 +2,32 @@ import arrowNextIcon from "../../assets/arrow-next.svg";
 import closeIcon from "../../assets/close.svg";
 import styles from "./drawer.module.scss";
 import { DrawerItem } from "../drawer-item/drawer-item.tsx";
-import { useContext } from "react";
-import { CartDrawerContext } from "../../context/cart-drawer-context.ts";
 import clsx from "clsx";
+import { useDispatch, useSelector } from "react-redux";
+import type { RootState } from "../../redux/store.ts";
+import { setIsDrawerOpen } from "../../redux/slice/cart-drawer-slice.ts";
 
 export const CartDrawer = () => {
-  const { isDrawerOpen, setIsDrawerOpen } = useContext(CartDrawerContext);
+  const dispatch = useDispatch();
+  const {isOpen} = useSelector((state: RootState) => state.cartDrawer);
+
+  const onCloseDrawer = () => {
+    dispatch(setIsDrawerOpen(false))
+  };
+
   return (
     <>
       <div
-        className={clsx(styles.overlay, { [styles.open]: isDrawerOpen })}
-        onClick={() => setIsDrawerOpen(false)}
+        className={clsx(styles.overlay, { [styles.open]: isOpen })}
+        onClick={onCloseDrawer}
       />
-      <div className={clsx(styles.drawer, { [styles.open]: isDrawerOpen })}>
+      <div className={clsx(styles.drawer, { [styles.open]: isOpen })}>
         <div className={styles.infoWrapper}>
           <div className={styles.titleWrapper}>
             <h1>Корзина</h1>
             <div
               className={styles.removeButton}
-              onClick={() => setIsDrawerOpen(false)}
+              onClick={onCloseDrawer}
             >
               <div>
                 <img src={closeIcon} alt={"close icon"} />

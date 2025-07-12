@@ -4,16 +4,21 @@ import { FormInput } from "../../shared/ui/input/form-input.tsx";
 import { Button } from "../../shared/ui/button/button.tsx";
 
 import closeIcon from '../../assets/close.svg';
-import { useContext } from "react";
-import { ModalContext } from "../../context/modal-context.ts";
 import * as React from "react";
+import { useDispatch } from "react-redux";
+import { setIsModalOpen } from "../../redux/slice/auth-modal-slice.ts";
+import type { AppDispatch } from "../../redux/store.ts";
 
 export const AuthModal = () => {
-  const {setIsModalOpen} = useContext(ModalContext);
+  const dispatch = useDispatch<AppDispatch>();
+
+  const onModalClose = () => {
+    dispatch(setIsModalOpen(false))
+  }
 
   const handleRootClick = (e: React.MouseEvent<HTMLDivElement>) => {
     if (e.target === e.currentTarget) {
-      setIsModalOpen(false);
+      onModalClose();
     }
   };
 
@@ -21,7 +26,7 @@ export const AuthModal = () => {
   return (
     <div className={styles.root} onClick={handleRootClick}>
       <div className={styles.modal}>
-        <img onClick={() => setIsModalOpen(false)} className={styles.closeButton} src={closeIcon} alt={"close icon"}/>
+        <img onClick={() => onModalClose()} className={styles.closeButton} src={closeIcon} alt={"close icon"}/>
         <HeaderLogo/>
         <h1>Вход</h1>
         <div className={styles.elementWrapper}>

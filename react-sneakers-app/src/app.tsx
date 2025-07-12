@@ -3,14 +3,14 @@ import { MainLayout } from "./layouts/main-layout/main-layout.tsx";
 import HomePage from "./pages/home-page/home-page.tsx";
 import { Header } from "./shared/header/header.tsx";
 import { CartDrawer } from "./shared/drawer/cart-drawer.tsx";
-import { CartDrawerContext } from "./context/cart-drawer-context.ts";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { AuthModal } from "./modal/auth-modal/auth-modal.tsx";
-import { ModalContext } from "./context/modal-context.ts";
+import { useSelector } from "react-redux";
+import type { RootState } from "./redux/store.ts";
 
 const App = () => {
-  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const isDrawerOpen = useSelector((state: RootState) => state.cartDrawer.isOpen);
+  const isModalOpen = useSelector((state: RootState) => state.authModal.isOpen);
 
   useEffect(() => {
     if (isDrawerOpen || isModalOpen) {
@@ -25,16 +25,14 @@ const App = () => {
   }, [isDrawerOpen, isModalOpen]);
 
   return (
-    <CartDrawerContext.Provider value={{isDrawerOpen, setIsDrawerOpen}}>
-      <ModalContext.Provider value={{isModalOpen, setIsModalOpen}}>
-        <CartDrawer/>
-        {isModalOpen && <AuthModal/>}
-        <MainLayout>
-          <Header />
-          <HomePage />
-        </MainLayout>
-      </ModalContext.Provider>
-    </CartDrawerContext.Provider>
+        <>
+          <CartDrawer/>
+          {isModalOpen && <AuthModal/>}
+          <MainLayout>
+            <Header />
+            <HomePage />
+          </MainLayout>
+        </>
   );
 };
 
