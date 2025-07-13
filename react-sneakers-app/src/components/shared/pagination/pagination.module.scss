@@ -1,0 +1,38 @@
+.root {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+
+  ul {
+    display: flex;
+    column-gap: 30px;
+
+    @media (max-width: 500px) {
+      column-gap: 20px;
+    }
+  }
+
+  li {
+    list-style: none;
+    cursor: pointer;
+    border: 1px solid #9dd558;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 7px;
+    color: #8CC644;
+    user-select: none;
+
+    &.active {
+      background-color: #9DD558;
+      color: white;
+    }
+  }
+
+  img {
+    width: 11px;
+    height: 11px;
+  }
+}

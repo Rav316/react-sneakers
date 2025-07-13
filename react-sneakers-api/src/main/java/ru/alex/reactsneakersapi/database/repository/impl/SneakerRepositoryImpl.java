@@ -25,15 +25,19 @@ public class SneakerRepositoryImpl implements SneakerRepositoryCustom {
     @Override
     public Page<Sneaker> findAllListItems(SneakerFilter filter, Pageable pageable) {
 
+        BooleanExpression predicate = buildPredicate(filter);
         List<Sneaker> sneakers = queryFactory
                 .selectFrom(sneaker)
-                .where(buildPredicate(filter))
+                .where(predicate)
                 .orderBy(sneaker.id.asc())
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
                 .fetch();
 
         Long total = queryFactory
                 .select(sneaker.count())
                 .from(sneaker)
+                .where(predicate)
                 .fetchOne();
         return new PageImpl<>(sneakers, pageable, Objects.requireNonNull(total));
     }
