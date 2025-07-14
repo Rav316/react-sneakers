@@ -4,13 +4,15 @@ import cartDrawerReducer from './slice/cart-drawer-slice';
 import authModalReducer from './slice/auth-modal-slice';
 import sneakerReducer from './slice/sneaker-slice';
 import searchReducer from './slice/search-slice';
+import authReducer from './slice/auth-slice';
 
 export const store = configureStore({
   reducer: {
     cartDrawer: cartDrawerReducer,
     authModal: authModalReducer,
     sneaker: sneakerReducer,
-    search: searchReducer
+    search: searchReducer,
+    auth: authReducer
   }
 });
 

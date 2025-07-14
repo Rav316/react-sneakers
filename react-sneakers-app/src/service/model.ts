@@ -17,3 +17,16 @@ export interface SneakerListItem {
   description: string;
   firm: number;
 }
+
+export interface UserAuthData {
+  id?: number;
+  name?: string;
+  email?: string;
+  token?: string;
+  isActivated?: boolean;
+}
+
+export interface ErrorResponse {
+  code: number;
+  message: string;
+}

@@ -6,6 +6,7 @@ app:
     expiration: 43200000 # 12 hours
     total-expiration: 1209600000 # 2 weeks
   host-address: ${HOST_ADDRESS}
+  email-confirmation: false
 
 spring:
   application:

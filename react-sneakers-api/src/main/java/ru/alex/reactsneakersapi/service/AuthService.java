@@ -26,6 +26,9 @@ public class AuthService {
     @Value("${app.host-address}")
     private String hostAddress;
 
+    @Value("${app.email-confirmation}")
+    private Boolean emailConfirmation;
+
     private final AuthenticationManager authenticationManager;
     private final JwtService jwtService;
     private final EmailService emailService;
@@ -38,13 +41,18 @@ public class AuthService {
         User user = userRegisterMapper.toEntity(userDto);
         String uuid = UUID.randomUUID().toString();
         user.setUuid(uuid);
+        if(!emailConfirmation) {
+            user.setIsActivated(true);
+        }
         User createdUser = userRepository.save(user);
         String authToken = jwtService.generateAuthToken(userDto.email());
         UserAuthDto userAuthDto = userAuthMapper.toDto(createdUser, authToken);
-        String scheme = request.getScheme();
-        int serverPort = request.getServerPort();
-        String link = scheme + "://" + hostAddress + ":" + serverPort + "/api/auth/activate/" + uuid;
-        emailService.sendActivationMail(userAuthDto, link);
+        if(emailConfirmation) {
+            String scheme = request.getScheme();
+            int serverPort = request.getServerPort();
+            String link = scheme + "://" + hostAddress + ":" + serverPort + "/api/auth/activate/" + uuid;
+            emailService.sendActivationMail(userAuthDto, link);
+        }
         return userAuthDto;
     }
 

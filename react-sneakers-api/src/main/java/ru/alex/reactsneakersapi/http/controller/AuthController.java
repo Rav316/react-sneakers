@@ -1,8 +1,6 @@
 package ru.alex.reactsneakersapi.http.controller;
 
-import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -32,15 +30,9 @@ public class AuthController {
     @PostMapping("/register")
     public ResponseEntity<UserAuthDto> register(
             @RequestBody @Valid UserRegisterDto userRegisterDto,
-            HttpServletRequest request,
-            HttpServletResponse response
+            HttpServletRequest request
     ) {
         UserAuthDto registeredUser = authService.register(userRegisterDto, request);
-        Cookie jwtCookie = new Cookie("JWT_TOKEN", registeredUser.token());
-        jwtCookie.setHttpOnly(true);
-        jwtCookie.setPath("/");
-        jwtCookie.setMaxAge(7 * 24 * 60 * 60); // 1 week
-        response.addCookie(jwtCookie);
         return new ResponseEntity<>(registeredUser, CREATED);
     }
 

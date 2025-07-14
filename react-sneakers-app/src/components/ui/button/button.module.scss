@@ -24,4 +24,9 @@ button {
       background-color: #F3F3F3;
     }
   }
+
+  &:disabled {
+    background-color: #C4C4C4;
+    cursor: default;
+  }
 }

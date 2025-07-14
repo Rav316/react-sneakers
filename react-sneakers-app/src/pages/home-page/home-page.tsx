@@ -19,13 +19,21 @@ const HomePage = () => {
   );
   const [currentPage, setCurrentPage] = useState(1);
   useEffect(() => {
-    dispatch(fetchSneakers({ search: debouncedSearch, page: currentPage - 1, size: 12}));
+    dispatch(
+      fetchSneakers({
+        search: debouncedSearch,
+        page: currentPage - 1,
+        size: 12,
+      }),
+    );
   }, [dispatch, debouncedSearch, currentPage]);
 
   useEffect(() => {
-    setCurrentPage(1)
+    setCurrentPage(1);
   }, [debouncedSearch]);
-  const totalPages = Math.ceil(sneakers.metadata.totalElements / sneakers.metadata.size);
+  const totalPages = Math.ceil(
+    sneakers.metadata.totalElements / sneakers.metadata.size,
+  );
   return (
     <div className={styles.root}>
       <div className={styles.titleWrapper}>
@@ -39,17 +47,19 @@ const HomePage = () => {
           <div className={styles.sneakerCardsWrapper}>
             {loading
               ? Array.from({ length: 6 }).map((_, index) => (
-                <SneakerCardSkeleton key={index} />
-              ))
+                  <SneakerCardSkeleton key={index} />
+                ))
               : sneakers.content.map((sneaker) => (
-                <SneakerCard key={sneaker.id} sneaker={sneaker} />
-              ))}
+                  <SneakerCard key={sneaker.id} sneaker={sneaker} />
+                ))}
           </div>
-          <Pagination
-            selectedPage={currentPage}
-            totalPages={totalPages}
-            onPageChange={(page) => setCurrentPage(page)}
-          />
+          {!loading && (
+            <Pagination
+              selectedPage={currentPage}
+              totalPages={totalPages}
+              onPageChange={(page) => setCurrentPage(page)}
+            />
+          )}
         </>
       )}
     </div>

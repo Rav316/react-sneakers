@@ -25,12 +25,14 @@ export const Search = () => {
         className={styles.searchInput}
         placeholder={"Поиск..."}
       />
-      <img
-        onClick={onClickClear}
-        className={styles.clearButton}
-        src={closeIcon}
-        alt={"clear button"}
-      />
+      {searchValue && (
+        <img
+          onClick={onClickClear}
+          className={styles.clearButton}
+          src={closeIcon}
+          alt={"clear button"}
+        />
+      )}
     </div>
   );
 };
