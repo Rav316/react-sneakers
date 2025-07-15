@@ -1,24 +1,25 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import type { ErrorResponse, UserAuthData } from "../../service/model.ts";
+import type { AuthResponse, ErrorResponse, User } from "../../service/model.ts";
 import { Api } from "../../service/api-client.ts";
 import type { LoginData } from "../../service/auth.ts";
 import type { AxiosError } from "axios";
 
 interface AuthSlice {
-  user: UserAuthData;
+  user?: User;
+  token?: string;
   loading: boolean;
   error?: ErrorResponse;
 }
 
-const tokenFromStorage = localStorage.getItem("token");
+const tokenFromStorage = localStorage.getItem("token") ?? undefined;
 
 const initialState: AuthSlice = {
-  user: tokenFromStorage ? { token: tokenFromStorage } : {},
+  token: tokenFromStorage,
   loading: false,
 };
 
 export const login = createAsyncThunk<
-  UserAuthData,
+  AuthResponse,
   LoginData,
   { rejectValue: ErrorResponse }
 >("auth/login", async (loginData: LoginData, { rejectWithValue }) => {
@@ -34,6 +35,18 @@ export const login = createAsyncThunk<
   }
 });
 
+export const checkAuth = createAsyncThunk(
+  "auth/checkAuth",
+  async (_, thunkAPI) => {
+    try {
+      return await Api.users.profile();
+    } catch {
+      localStorage.removeItem("token");
+      return thunkAPI.rejectWithValue("Unauthorized");
+    }
+  },
+);
+
 const authSlice = createSlice({
   name: "auth",
   initialState,
@@ -44,6 +57,7 @@ const authSlice = createSlice({
     logout(state) {
       localStorage.removeItem("token");
       state.user = {};
+      state.token = undefined;
     },
   },
   extraReducers: (builder) => {
@@ -53,7 +67,8 @@ const authSlice = createSlice({
       })
       .addCase(login.fulfilled, (state, action) => {
         state.loading = false;
-        state.user = action.payload;
+        state.user = action.payload.user;
+        state.token = action.payload.token;
         if (action.payload.token != null) {
           localStorage.setItem("token", action.payload.token);
         }

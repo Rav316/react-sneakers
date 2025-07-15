@@ -18,12 +18,16 @@ export interface SneakerListItem {
   firm: number;
 }
 
-export interface UserAuthData {
+export interface User {
   id?: number;
   name?: string;
   email?: string;
-  token?: string;
   isActivated?: boolean;
+}
+
+export interface AuthResponse {
+  user: User;
+  token?: string;
 }
 
 export interface ErrorResponse {

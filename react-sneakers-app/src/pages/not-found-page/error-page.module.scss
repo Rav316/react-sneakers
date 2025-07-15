@@ -1,0 +1,50 @@
+.root {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  column-gap: 100px;
+  margin-bottom: 20px;
+  box-sizing: border-box;
+  padding: 20px 43px;
+
+  @media (max-width: 1430px) {
+    flex-direction: column-reverse;
+  }
+
+  .textWrapper {
+    display: flex;
+    flex-direction: column;
+  }
+
+  h1 {
+    font-size: 40px;
+
+    @media (max-width: 505px) {
+      font-size: 30px;
+    }
+  }
+
+  span {
+    color: #999999;
+  }
+
+  img {
+    width: 40%;
+    height: auto;
+
+    @media (max-width: 1000px) {
+      width: 100%;
+    }
+  }
+
+  .buttonWrapper {
+    margin-top: 20px;
+    display: flex;
+    column-gap: 20px;
+  }
+
+  button {
+    padding: 10px 20px;
+  }
+}

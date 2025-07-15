@@ -17,19 +17,19 @@ import { useNavigate } from "react-router";
 export const AuthModal = () => {
   const dispatch = useDispatch<AppDispatch>();
   const [form, setForm] = useState<LoginData>({ email: "", password: "" });
-  const { loading, error, user } = useSelector(
+  const { loading, error, token } = useSelector(
     (state: RootState) => state.auth,
   );
   const navigate = useNavigate();
   const [mouseDownOnRoot, setMouseDownOnRoot] = useState(false);
 
   useEffect(() => {
-    if (user.token) {
+    if (token) {
       toast.success("Вы успешно вошли в аккаунт");
       dispatch(setIsModalOpen(false));
       navigate("/profile");
     }
-  }, [dispatch, navigate, user.token]);
+  }, [dispatch, navigate, token]);
 
   useEffect(() => {
     if (error) {

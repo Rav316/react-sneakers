@@ -1,4 +1,4 @@
-import type { UserAuthData } from "./model.ts";
+import type { AuthResponse } from "./model.ts";
 import { axiosInstance } from "./instance.ts";
 import { ApiRoutes } from "./constants.ts";
 
@@ -9,8 +9,8 @@ export interface LoginData {
 
 export const login = async (
   data: LoginData
-): Promise<UserAuthData> => {
-  const response = await axiosInstance.post<UserAuthData>(
+): Promise<AuthResponse> => {
+  const response = await axiosInstance.post<AuthResponse>(
     `${ApiRoutes.AUTH}/login`,
     data,
   );

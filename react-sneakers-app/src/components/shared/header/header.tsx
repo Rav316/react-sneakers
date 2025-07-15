@@ -11,12 +11,12 @@ import { useNavigate } from "react-router";
 import { setIsDrawerOpen } from "../../../redux/slice/cart-drawer-slice.ts";
 
 export const Header = () => {
-  const authUser = useSelector((state: RootState) => state.auth.user);
+  const token = useSelector((state: RootState) => state.auth.token);
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
 
   const onProfileClick = () => {
-    if(authUser.token) {
+    if(token) {
       navigate("/profile");
     } else {
       dispatch(setIsModalOpen(true));
