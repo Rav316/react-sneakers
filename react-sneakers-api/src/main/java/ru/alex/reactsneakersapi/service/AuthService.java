@@ -11,10 +11,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.alex.reactsneakersapi.database.entity.User;
 import ru.alex.reactsneakersapi.database.repository.UserRepository;
-import ru.alex.reactsneakersapi.dto.user.UserAuthDto;
+import ru.alex.reactsneakersapi.dto.response.AuthResponse;
+import ru.alex.reactsneakersapi.dto.user.UserReadDto;
 import ru.alex.reactsneakersapi.dto.user.UserRegisterDto;
-import ru.alex.reactsneakersapi.mapper.user.UserAuthMapper;
 import ru.alex.reactsneakersapi.mapper.user.UserLoginDto;
+import ru.alex.reactsneakersapi.mapper.user.UserReadMapper;
 import ru.alex.reactsneakersapi.mapper.user.UserRegisterMapper;
 
 import java.util.UUID;
@@ -33,11 +34,11 @@ public class AuthService {
     private final JwtService jwtService;
     private final EmailService emailService;
     private final UserRegisterMapper userRegisterMapper;
-    private final UserAuthMapper userAuthMapper;
     private final UserRepository userRepository;
+    private final UserReadMapper userReadMapper;
 
     @Transactional
-    public UserAuthDto register(UserRegisterDto userDto, HttpServletRequest request) {
+    public AuthResponse register(UserRegisterDto userDto, HttpServletRequest request) {
         User user = userRegisterMapper.toEntity(userDto);
         String uuid = UUID.randomUUID().toString();
         user.setUuid(uuid);
@@ -46,14 +47,15 @@ public class AuthService {
         }
         User createdUser = userRepository.save(user);
         String authToken = jwtService.generateAuthToken(userDto.email());
-        UserAuthDto userAuthDto = userAuthMapper.toDto(createdUser, authToken);
+        UserReadDto userReadDto = userReadMapper.toDto(createdUser);
+        AuthResponse authResponse = new AuthResponse(userReadDto, authToken);
         if(emailConfirmation) {
             String scheme = request.getScheme();
             int serverPort = request.getServerPort();
             String link = scheme + "://" + hostAddress + ":" + serverPort + "/api/auth/activate/" + uuid;
-            emailService.sendActivationMail(userAuthDto, link);
+            emailService.sendActivationMail(userReadDto, link);
         }
-        return userAuthDto;
+        return authResponse;
     }
 
     @Transactional
@@ -65,7 +67,7 @@ public class AuthService {
     }
 
     @Transactional
-    public UserAuthDto login(UserLoginDto userDto) {
+    public AuthResponse login(UserLoginDto userDto) {
         UsernamePasswordAuthenticationToken authInputToken = new UsernamePasswordAuthenticationToken(
                 userDto.email(),
                 userDto.password()
@@ -75,11 +77,11 @@ public class AuthService {
         User user = userRepository.findByEmail(userDto.email())
                 .orElseThrow(() -> new UsernameNotFoundException("user with email " + userDto.email() + " not found"));
         String token = jwtService.generateAuthToken(userDto.email());
-        return userAuthMapper.toDto(user, token);
+        return new AuthResponse(userReadMapper.toDto(user), token);
     }
 
     @Transactional
-    public UserAuthDto refreshAuthToken(HttpServletRequest request) {
+    public AuthResponse refreshAuthToken(HttpServletRequest request) {
         return jwtService.refreshAuthToken(request);
     }
 }

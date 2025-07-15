@@ -9,7 +9,7 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
-import ru.alex.reactsneakersapi.dto.user.UserAuthDto;
+import ru.alex.reactsneakersapi.dto.user.UserReadDto;
 
 import java.util.Map;
 
@@ -20,7 +20,7 @@ public class EmailService {
     private final TemplateEngine templateEngine;
 
     @Async
-    public void sendActivationMail(UserAuthDto userAuthDto, String link) {
+    public void sendActivationMail(UserReadDto userAuthDto, String link) {
         Context context = new Context();
         context.setVariables(
                 Map.of(

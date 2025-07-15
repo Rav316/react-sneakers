@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import ru.alex.reactsneakersapi.dto.user.UserAuthDto;
+import ru.alex.reactsneakersapi.dto.response.AuthResponse;
 import ru.alex.reactsneakersapi.dto.user.UserRegisterDto;
 import ru.alex.reactsneakersapi.mapper.user.UserLoginDto;
 import ru.alex.reactsneakersapi.service.AuthService;
@@ -28,11 +28,11 @@ public class AuthController {
     private final AuthService authService;
 
     @PostMapping("/register")
-    public ResponseEntity<UserAuthDto> register(
+    public ResponseEntity<AuthResponse> register(
             @RequestBody @Valid UserRegisterDto userRegisterDto,
             HttpServletRequest request
     ) {
-        UserAuthDto registeredUser = authService.register(userRegisterDto, request);
+        AuthResponse registeredUser = authService.register(userRegisterDto, request);
         return new ResponseEntity<>(registeredUser, CREATED);
     }
 
@@ -43,12 +43,12 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<UserAuthDto> login(@Validated @RequestBody UserLoginDto user) {
+    public ResponseEntity<AuthResponse> login(@Validated @RequestBody UserLoginDto user) {
         return new ResponseEntity<>(authService.login(user), OK);
     }
 
     @PutMapping("/refresh-token")
-    public ResponseEntity<UserAuthDto> refreshAuthToken(HttpServletRequest request) {
+    public ResponseEntity<AuthResponse> refreshAuthToken(HttpServletRequest request) {
         return new ResponseEntity<>(authService.refreshAuthToken(request), OK);
     }
 }

@@ -14,8 +14,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.alex.reactsneakersapi.database.entity.User;
 import ru.alex.reactsneakersapi.database.repository.UserRepository;
-import ru.alex.reactsneakersapi.dto.user.UserAuthDto;
-import ru.alex.reactsneakersapi.mapper.user.UserAuthMapper;
+import ru.alex.reactsneakersapi.dto.response.AuthResponse;
+import ru.alex.reactsneakersapi.mapper.user.UserReadMapper;
 
 import java.time.ZonedDateTime;
 import java.util.Date;
@@ -42,7 +42,7 @@ public class JwtService {
     private long totalExpirationTime;
 
     private final UserRepository userRepository;
-    private final UserAuthMapper userAuthMapper;
+    private final UserReadMapper userReadMapper;
 
     public String generateAuthToken(String email) throws JWTVerificationException {
         Date expirationDate = Date.from(ZonedDateTime.now().toInstant().plusMillis(expirationTime));
@@ -67,11 +67,11 @@ public class JwtService {
             throw e;
         }
         catch (JWTVerificationException e) {
-            throw new JWTVerificationException("JWT token is not valid");
+            throw new JWTVerificationException("token is not valid");
         }
     }
 
-    public UserAuthDto refreshAuthToken(HttpServletRequest request) {
+    public AuthResponse refreshAuthToken(HttpServletRequest request) {
         JWTVerifier verifier = JWT.require(Algorithm.HMAC256(secret))
                 .withSubject(subject)
                 .withIssuer(issuer)
@@ -97,7 +97,7 @@ public class JwtService {
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new EntityNotFoundException("user with email " + email + " not found"));
         String resultToken = generateAuthToken(token.getClaim("email").asString());
-        return userAuthMapper.toDto(user, resultToken);
+        return new AuthResponse(userReadMapper.toDto(user), resultToken);
     }
 
 }

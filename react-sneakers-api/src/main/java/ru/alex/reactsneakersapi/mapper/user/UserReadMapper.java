@@ -2,17 +2,17 @@ package ru.alex.reactsneakersapi.mapper.user;
 
 import org.springframework.stereotype.Component;
 import ru.alex.reactsneakersapi.database.entity.User;
-import ru.alex.reactsneakersapi.dto.user.UserAuthDto;
-import ru.alex.reactsneakersapi.mapper.Mapper;
+import ru.alex.reactsneakersapi.dto.user.UserReadDto;
+import ru.alex.reactsneakersapi.mapper.ReadMapper;
 
 @Component
-public class UserAuthMapper implements Mapper {
-    public UserAuthDto toDto(User entity, String token) {
-        return new UserAuthDto(
+public class UserReadMapper extends ReadMapper<User, UserReadDto> {
+    @Override
+    public UserReadDto toDto(User entity) {
+        return new UserReadDto(
                 entity.getId(),
                 entity.getName(),
                 entity.getEmail(),
-                token,
                 entity.getIsActivated()
         );
     }
