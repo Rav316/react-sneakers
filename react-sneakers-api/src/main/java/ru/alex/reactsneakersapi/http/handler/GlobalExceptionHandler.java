@@ -1,5 +1,6 @@
 package ru.alex.reactsneakersapi.http.handler;
 
+import com.auth0.jwt.exceptions.JWTVerificationException;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.ResponseEntity;
@@ -14,8 +15,7 @@ import java.time.Instant;
 import java.util.HashMap;
 import java.util.Map;
 
-import static org.springframework.http.HttpStatus.BAD_REQUEST;
-import static org.springframework.http.HttpStatus.NOT_FOUND;
+import static org.springframework.http.HttpStatus.*;
 
 
 @ControllerAdvice
@@ -51,6 +51,15 @@ public class GlobalExceptionHandler {
                 ExceptionUtils.getSqlExceptionMessage(ex)
         );
         return new ResponseEntity<>(errorResponse, NOT_FOUND);
+    }
+
+    @ExceptionHandler(JWTVerificationException.class)
+    public ResponseEntity<ErrorResponse> handleJWTVerificationException(JWTVerificationException ex) {
+        ErrorResponse errorResponse = new ErrorResponse(
+                Instant.now(),
+                ex.getMessage()
+        );
+        return new ResponseEntity<>(errorResponse, UNAUTHORIZED);
     }
 
 
