@@ -14,24 +14,25 @@ const tokenFromStorage = localStorage.getItem("token");
 
 const initialState: AuthSlice = {
   user: tokenFromStorage ? { token: tokenFromStorage } : {},
-  loading: false
+  loading: false,
 };
 
-export const login = createAsyncThunk<UserAuthData, LoginData, { rejectValue: ErrorResponse }>(
-  "auth/login",
-  async (loginData: LoginData, { rejectWithValue }) => {
-    try {
-      return await Api.auth.login(loginData);
-    } catch (err) {
-      const error = err as AxiosError<{ message: string }>;
+export const login = createAsyncThunk<
+  UserAuthData,
+  LoginData,
+  { rejectValue: ErrorResponse }
+>("auth/login", async (loginData: LoginData, { rejectWithValue }) => {
+  try {
+    return await Api.auth.login(loginData);
+  } catch (err) {
+    const error = err as AxiosError<{ message: string }>;
 
-      const message = error.response?.data?.message || "Unexpected error";
-      const code = error.response?.status || 500;
+    const message = error.response?.data?.message || "Unexpected error";
+    const code = error.response?.status || 500;
 
-      return rejectWithValue({ message, code });
-    }
-  },
-);
+    return rejectWithValue({ message, code });
+  }
+});
 
 const authSlice = createSlice({
   name: "auth",
@@ -62,9 +63,12 @@ const authSlice = createSlice({
         if (action.payload) {
           state.error = action.payload;
         } else {
-          state.error = { message: action.error.message || "Unknown error", code: 500 };
+          state.error = {
+            message: action.error.message || "Unknown error",
+            code: 500,
+          };
         }
-      })
+      });
   },
 });
 

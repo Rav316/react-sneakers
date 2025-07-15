@@ -9,6 +9,5 @@ export const EmptyResult: React.FC = () => {
       <img src={pensiveFace} alt={"pensive face"}/>
       <span>По заданным фильтрам ничего не найдено</span>
     </div>
-
   )
 }

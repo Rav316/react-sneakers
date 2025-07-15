@@ -9,12 +9,13 @@ import { SneakerCardSkeleton } from "../../components/shared/sneaker-card/skelet
 import { useDebounce } from "use-debounce";
 import { EmptyResult } from "../../components/shared/empty-result/empty-result.tsx";
 import { Pagination } from "../../components/shared/pagination/pagination.tsx";
+import { ErrorResult } from "../../components/shared/error-result/error-result.tsx";
 
 const HomePage = () => {
   const dispatch = useDispatch<AppDispatch>();
   const searchValue = useSelector((state: RootState) => state.search.value);
   const [debouncedSearch] = useDebounce(searchValue, 300);
-  const { sneakers, loading } = useSelector(
+  const { sneakers, loading, error } = useSelector(
     (state: RootState) => state.sneaker,
   );
   const [currentPage, setCurrentPage] = useState(1);
@@ -34,6 +35,15 @@ const HomePage = () => {
   const totalPages = Math.ceil(
     sneakers.metadata.totalElements / sneakers.metadata.size,
   );
+
+  if(error) {
+    return (
+      <div className={styles.root}>
+        <ErrorResult/>
+      </div>
+    )
+  }
+
   return (
     <div className={styles.root}>
       <div className={styles.titleWrapper}>

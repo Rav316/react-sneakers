@@ -1,12 +1,17 @@
-import type { PageResponse, SneakerListItem } from "../../service/model.ts";
+import type {
+  ErrorResponse,
+  PageResponse,
+  SneakerListItem,
+} from "../../service/model.ts";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import type { SearchParams } from "../../service/sneakers.ts";
 import { Api } from "../../service/api-client.ts";
+import type { AxiosError } from "axios";
 
 interface SneakerSlice {
   sneakers: PageResponse<SneakerListItem>;
   loading: boolean;
-  error: string;
+  error?: ErrorResponse;
 }
 
 const initialState: SneakerSlice = {
@@ -15,19 +20,31 @@ const initialState: SneakerSlice = {
     metadata: {
       page: 0,
       size: 0,
-      totalElements: 0
+      totalElements: 0,
     },
   },
   loading: true,
-  error: ""
-}
+};
 
-export const fetchSneakers = createAsyncThunk<PageResponse<SneakerListItem>, SearchParams>(
+export const fetchSneakers = createAsyncThunk<
+  PageResponse<SneakerListItem>,
+  SearchParams,
+  { rejectValue: ErrorResponse }
+>(
   "sneaker/fetchSneakers",
-  async (params: SearchParams) => {
-    return await Api.sneakers.findAll(params)
-  }
-)
+  async (params: SearchParams, { rejectWithValue }) => {
+    try {
+      return await Api.sneakers.findAll(params);
+    } catch (err) {
+      const error = err as AxiosError<{ message: string }>;
+
+      const message = error.response?.data?.message || "Unexpected error";
+      const code = error.response?.status || 500;
+
+      return rejectWithValue({ message, code });
+    }
+  },
+);
 
 const sneakerSlice = createSlice({
   name: "sneaker",
@@ -42,10 +59,17 @@ const sneakerSlice = createSlice({
       state.loading = false;
     });
     builder.addCase(fetchSneakers.rejected, (state, action) => {
-      state.error = action.error.message || "";
       state.loading = false;
+      if(action.payload) {
+        state.error = action.payload;
+      } else {
+        state.error = {
+          message: action.error.message || "Unknown error",
+          code: 500,
+        };
+      }
     });
-  }
+  },
 });
 
 export default sneakerSlice.reducer;

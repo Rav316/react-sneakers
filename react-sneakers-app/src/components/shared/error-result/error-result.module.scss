@@ -5,6 +5,7 @@
   align-items: center;
   flex-direction: column;
   text-align: center;
+  padding-top: 80px;
   padding-bottom: 80px;
   row-gap: 10px;
 
@@ -14,9 +15,9 @@
     width: 60px;
     height: 60px;
   }
-  
+
   @media (max-width: 841px) {
     font-size: 20px;
-    
+
   }
 }
