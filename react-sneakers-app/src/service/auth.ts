@@ -16,3 +16,8 @@ export const login = async (
   );
   return response.data;
 };
+
+export const refreshToken = async (): Promise<AuthResponse> => {
+  const response = await axiosInstance.put<AuthResponse>(`${ApiRoutes.AUTH}/refresh-token`);
+  return response.data;
+}

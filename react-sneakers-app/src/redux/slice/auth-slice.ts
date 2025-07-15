@@ -35,11 +35,11 @@ export const login = createAsyncThunk<
   }
 });
 
-export const checkAuth = createAsyncThunk(
+export const checkAuth = createAsyncThunk<AuthResponse, void>(
   "auth/checkAuth",
   async (_, thunkAPI) => {
     try {
-      return await Api.users.profile();
+      return await Api.auth.refreshToken();
     } catch {
       localStorage.removeItem("token");
       return thunkAPI.rejectWithValue("Unauthorized");
@@ -83,6 +83,10 @@ const authSlice = createSlice({
             code: 500,
           };
         }
+      })
+      .addCase(checkAuth.rejected, (state) => {
+        state.user = {};
+        state.token = undefined;
       });
   },
 });
