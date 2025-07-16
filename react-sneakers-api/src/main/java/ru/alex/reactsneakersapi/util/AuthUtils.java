@@ -7,6 +7,11 @@ import ru.alex.reactsneakersapi.dto.user.UserDetailsDto;
 
 @UtilityClass
 public class AuthUtils {
+
+    public static boolean isUserAuthorized() {
+        return SecurityContextHolder.getContext().getAuthentication().getPrincipal() instanceof UserDetailsDto;
+    }
+
     public static Integer getAuthorizedUserId() {
         return ((UserDetailsDto)SecurityContextHolder.getContext().getAuthentication().getPrincipal()).id();
     }

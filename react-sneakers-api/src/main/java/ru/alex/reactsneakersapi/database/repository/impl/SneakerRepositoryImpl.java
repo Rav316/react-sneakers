@@ -1,16 +1,25 @@
 package ru.alex.reactsneakersapi.database.repository.impl;
 
+import com.querydsl.core.Tuple;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.Expressions;
+import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.jdbc.core.namedparam.SqlParameterSource;
+import org.springframework.jdbc.core.namedparam.SqlParameterSourceUtils;
 import org.springframework.stereotype.Component;
+import ru.alex.reactsneakersapi.database.entity.QUser;
 import ru.alex.reactsneakersapi.database.entity.Sneaker;
 import ru.alex.reactsneakersapi.database.repository.SneakerRepositoryCustom;
+import ru.alex.reactsneakersapi.dto.favorites.FavoritesCreateDto;
 import ru.alex.reactsneakersapi.dto.filter.SneakerFilter;
+import ru.alex.reactsneakersapi.dto.sneaker.SneakerListDto;
+import ru.alex.reactsneakersapi.mapper.sneaker.SneakerListMapper;
 
 import java.util.List;
 import java.util.Objects;
@@ -21,18 +30,39 @@ import static ru.alex.reactsneakersapi.database.entity.QSneaker.sneaker;
 @RequiredArgsConstructor
 public class SneakerRepositoryImpl implements SneakerRepositoryCustom {
     private final JPAQueryFactory queryFactory;
+    private final NamedParameterJdbcTemplate jdbcTemplate;
+    private final SneakerListMapper sneakerListMapper;
 
     @Override
-    public Page<Sneaker> findAllListItems(SneakerFilter filter, Pageable pageable) {
+    public Page<SneakerListDto> findAllListItems(Integer userId, SneakerFilter filter, Pageable pageable) {
 
         BooleanExpression predicate = buildPredicate(filter);
-        List<Sneaker> sneakers = queryFactory
-                .selectFrom(sneaker)
+        QUser userSub = new QUser("userSub");
+        List<Tuple> result = queryFactory
+                .select(
+                        sneaker,
+                        JPAExpressions.selectOne()
+                                .from(userSub)
+                                .where(
+                                        userId != null
+                                                ? userSub.id.eq(userId).and(userSub.favoriteSneakers.contains(sneaker))
+                                                : Expressions.FALSE
+                                )
+                                .exists()
+                )
+                .from(sneaker)
                 .where(predicate)
                 .orderBy(sneaker.id.asc())
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();
+
+        List<SneakerListDto> sneakers = result
+                .stream()
+                .map(tuple -> {
+                    Sneaker s = tuple.get(sneaker);
+                    return sneakerListMapper.toDto(Objects.requireNonNull(s), Objects.requireNonNull(tuple.get(1, Boolean.class)));
+                }).toList();
 
         Long total = queryFactory
                 .select(sneaker.count())
@@ -40,6 +70,21 @@ public class SneakerRepositoryImpl implements SneakerRepositoryCustom {
                 .where(predicate)
                 .fetchOne();
         return new PageImpl<>(sneakers, pageable, Objects.requireNonNull(total));
+    }
+
+    @Override
+    public void addFavoritesBatch(List<Integer> sneakerIds, Integer userId) {
+        List<FavoritesCreateDto> batch = sneakerIds
+                .stream()
+                .map(id -> new FavoritesCreateDto(id, userId))
+                .toList();
+        String sql = """
+                INSERT INTO favorites (sneaker_id, user_id)
+                VALUES (:sneakerId, :userId)
+                ON CONFLICT DO NOTHING
+                """;
+        SqlParameterSource[] batchParams = SqlParameterSourceUtils.createBatch(batch.toArray());
+        jdbcTemplate.batchUpdate(sql, batchParams);
     }
 
     private BooleanExpression buildPredicate(SneakerFilter filter) {

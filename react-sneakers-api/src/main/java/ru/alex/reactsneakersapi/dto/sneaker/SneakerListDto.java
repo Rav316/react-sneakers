@@ -8,6 +8,7 @@ public record SneakerListDto(
         String imageUrl,
         BigDecimal price,
         String description,
-        Integer firm
+        Integer firm,
+        Boolean isFavorite
 ) {
 }
