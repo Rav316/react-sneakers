@@ -1,8 +1,8 @@
 import styles from './pagination.module.scss';
-import * as React from "react";
+import * as React from 'react';
 
-import arrowNextIcon from "../../../assets/arrow-next/arrow-next-green.svg";
-import arrowPrevIcon from '../../../assets/arrow-back/arrow-back-green.svg'
+import arrowNextIcon from '../../../assets/arrow-next/arrow-next-green.svg';
+import arrowPrevIcon from '../../../assets/arrow-back/arrow-back-green.svg';
 
 interface Props {
   selectedPage: number;
@@ -10,9 +10,11 @@ interface Props {
   onPageChange?: (page: number) => void;
 }
 
-export const Pagination: React.FC<Props> = ({selectedPage, totalPages, onPageChange}) => {
-
-
+export const Pagination: React.FC<Props> = ({
+  selectedPage,
+  totalPages,
+  onPageChange,
+}) => {
   const handleClick = (page: number) => {
     if (page < 1 || page > totalPages || page === selectedPage) return;
     onPageChange?.(page);
@@ -51,7 +53,7 @@ export const Pagination: React.FC<Props> = ({selectedPage, totalPages, onPageCha
     <div className={styles.root}>
       <ul className={styles.paginationList}>
         <li onClick={() => handleClick(selectedPage - 1)}>
-          <img src={arrowPrevIcon} alt={"previous page"} />
+          <img src={arrowPrevIcon} alt={'previous page'} />
         </li>
         {visiblePages.map((page) => (
           <li
@@ -63,7 +65,7 @@ export const Pagination: React.FC<Props> = ({selectedPage, totalPages, onPageCha
           </li>
         ))}
         <li onClick={() => handleClick(selectedPage + 1)}>
-          <img src={arrowNextIcon} alt={"next page"} />
+          <img src={arrowNextIcon} alt={'next page'} />
         </li>
       </ul>
     </div>

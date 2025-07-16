@@ -126,7 +126,7 @@ const authSlice = createSlice({
             code: 500,
           };
         }
-      })
+      });
   },
 });
 

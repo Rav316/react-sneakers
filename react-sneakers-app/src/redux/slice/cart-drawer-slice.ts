@@ -1,11 +1,11 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice } from '@reduxjs/toolkit';
 
 interface CartDrawerSlice {
   isOpen: boolean;
 }
 
 const initialState: CartDrawerSlice = {
-  isOpen: false
+  isOpen: false,
 };
 
 const cartDrawerSlice = createSlice({
@@ -14,8 +14,8 @@ const cartDrawerSlice = createSlice({
   reducers: {
     setIsDrawerOpen: (state, action) => {
       state.isOpen = action.payload;
-    }
-  }
+    },
+  },
 });
 
 export default cartDrawerSlice.reducer;

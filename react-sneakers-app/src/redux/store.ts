@@ -1,4 +1,4 @@
-import { configureStore } from "@reduxjs/toolkit";
+import { configureStore } from '@reduxjs/toolkit';
 
 import cartDrawerReducer from './slice/cart-drawer-slice';
 import authModalReducer from './slice/auth-modal-slice';
@@ -12,8 +12,8 @@ export const store = configureStore({
     authModal: authModalReducer,
     sneaker: sneakerReducer,
     search: searchReducer,
-    auth: authReducer
-  }
+    auth: authReducer,
+  },
 });
 
 export type AppDispatch = typeof store.dispatch;

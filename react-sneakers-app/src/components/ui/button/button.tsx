@@ -1,6 +1,6 @@
-import * as React from "react";
-import styles from "./button.module.scss";
-import clsx from "clsx";
+import * as React from 'react';
+import styles from './button.module.scss';
+import clsx from 'clsx';
 
 interface Props {
   content: string;
@@ -8,7 +8,7 @@ interface Props {
   height?: number | string;
   onClick?: () => void;
   alt?: boolean;
-  type?: "submit" | "button";
+  type?: 'submit' | 'button';
   disabled?: boolean;
 }
 
@@ -18,8 +18,8 @@ export const Button: React.FC<Props> = ({
   height = 55,
   onClick,
   alt,
-  type = "button",
-  disabled = false
+  type = 'button',
+  disabled = false,
 }) => {
   return (
     <button

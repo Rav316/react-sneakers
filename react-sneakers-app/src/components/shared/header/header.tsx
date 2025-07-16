@@ -3,12 +3,12 @@ import styles from './header.module.scss';
 import cartIcon from '../../../assets/cart.svg';
 import favoritesIcon from '../../../assets/favorites/favorites.svg';
 import profileIcon from '../../../assets/profile.svg';
-import { HeaderLogo } from "../../ui/header-logo/header-logo.tsx";
-import { useDispatch, useSelector } from "react-redux";
-import type { AppDispatch, RootState } from "../../../redux/store.ts";
-import { setIsModalOpen } from "../../../redux/slice/auth-modal-slice.ts";
-import { useNavigate } from "react-router";
-import { setIsDrawerOpen } from "../../../redux/slice/cart-drawer-slice.ts";
+import { HeaderLogo } from '../../ui/header-logo/header-logo.tsx';
+import { useDispatch, useSelector } from 'react-redux';
+import type { AppDispatch, RootState } from '../../../redux/store.ts';
+import { setIsModalOpen } from '../../../redux/slice/auth-modal-slice.ts';
+import { useNavigate } from 'react-router';
+import { setIsDrawerOpen } from '../../../redux/slice/cart-drawer-slice.ts';
 
 export const Header = () => {
   const token = useSelector((state: RootState) => state.auth.token);
@@ -16,31 +16,34 @@ export const Header = () => {
   const navigate = useNavigate();
 
   const onProfileClick = () => {
-    if(token) {
-      navigate("/profile");
+    if (token) {
+      navigate('/profile');
     } else {
       dispatch(setIsModalOpen(true));
     }
-  }
+  };
 
   return (
     <header className={styles.root}>
-      <HeaderLogo/>
+      <HeaderLogo />
 
       <div className={styles.menu}>
-        <div onClick={() => dispatch(setIsDrawerOpen(true))} className={styles.menuItem}>
-          <img src={cartIcon} alt={"cart icon"}/>
+        <div
+          onClick={() => dispatch(setIsDrawerOpen(true))}
+          className={styles.menuItem}
+        >
+          <img src={cartIcon} alt={'cart icon'} />
           <span>1205 руб.</span>
         </div>
         <div className={styles.menuItem}>
-          <img src={favoritesIcon} alt={"favorites icon"}/>
+          <img src={favoritesIcon} alt={'favorites icon'} />
           <span>Закладки</span>
         </div>
         <div className={styles.menuItem} onClick={onProfileClick}>
-          <img src={profileIcon} alt={"profile icon"}/>
+          <img src={profileIcon} alt={'profile icon'} />
           <span>Профиль</span>
         </div>
       </div>
     </header>
-  )
-}
+  );
+};

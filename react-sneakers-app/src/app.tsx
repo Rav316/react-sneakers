@@ -1,20 +1,20 @@
-import "./app.scss";
-import { MainLayout } from "./hoc/main-layout/main-layout.tsx";
-import HomePage from "./pages/home-page/home-page.tsx";
-import { CartDrawer } from "./components/shared/drawer/cart-drawer.tsx";
-import { useEffect } from "react";
-import { AuthModal } from "./modal/auth-modal/auth-modal.tsx";
-import { useDispatch, useSelector } from "react-redux";
-import type { AppDispatch, RootState } from "./redux/store.ts";
-import { Toaster } from "react-hot-toast";
-import { Route, Routes } from "react-router";
-import { OutletLayout } from "./hoc/outlet-layout.tsx";
-import { ProfilePage } from "./pages/profile-page/profile-page.tsx";
-import { ErrorPage } from "./pages/not-found-page/error-page.tsx";
+import './app.scss';
+import { MainLayout } from './hoc/main-layout/main-layout.tsx';
+import HomePage from './pages/home-page/home-page.tsx';
+import { CartDrawer } from './components/shared/drawer/cart-drawer.tsx';
+import { useEffect } from 'react';
+import { AuthModal } from './modal/auth-modal/auth-modal.tsx';
+import { useDispatch, useSelector } from 'react-redux';
+import type { AppDispatch, RootState } from './redux/store.ts';
+import { Toaster } from 'react-hot-toast';
+import { Route, Routes } from 'react-router';
+import { OutletLayout } from './hoc/outlet-layout.tsx';
+import { ProfilePage } from './pages/profile-page/profile-page.tsx';
+import { ErrorPage } from './pages/not-found-page/error-page.tsx';
 
-import img404 from "./assets/404.svg";
-import { RequireAuth } from "./hoc/require-auth.tsx";
-import { checkAuth } from "./redux/slice/auth-slice.ts";
+import img404 from './assets/404.svg';
+import { RequireAuth } from './hoc/require-auth.tsx';
+import { checkAuth } from './redux/slice/auth-slice.ts';
 
 const App = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -26,20 +26,19 @@ const App = () => {
 
   useEffect(() => {
     if (isDrawerOpen || isModalOpen) {
-      document.body.style.overflow = "hidden";
+      document.body.style.overflow = 'hidden';
     } else {
-      document.body.style.overflow = "";
+      document.body.style.overflow = '';
     }
 
     return () => {
-      document.body.style.overflow = "";
+      document.body.style.overflow = '';
     };
   }, [isDrawerOpen, isModalOpen]);
 
   useEffect(() => {
-    if(token) {
-      dispatch(checkAuth())
-
+    if (token) {
+      dispatch(checkAuth());
     }
   }, [dispatch, token]);
 
@@ -51,9 +50,9 @@ const App = () => {
       <MainLayout>
         <Routes>
           <Route element={<OutletLayout />}>
-            <Route path={"/"} element={<HomePage />} />
+            <Route path={'/'} element={<HomePage />} />
             <Route
-              path={"/profile"}
+              path={'/profile'}
               element={
                 <RequireAuth>
                   <ProfilePage />
@@ -61,13 +60,13 @@ const App = () => {
               }
             />
             <Route
-              path={"*"}
+              path={'*'}
               element={
                 <ErrorPage
                   image={img404}
-                  title={"Страница не найдена"}
+                  title={'Страница не найдена'}
                   description={
-                    "Проверьте корректность введённого адреса или повторите попытку позже"
+                    'Проверьте корректность введённого адреса или повторите попытку позже'
                   }
                 />
               }

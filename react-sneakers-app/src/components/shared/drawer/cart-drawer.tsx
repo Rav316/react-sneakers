@@ -1,18 +1,18 @@
-import arrowNextIcon from "../../../assets/arrow-next/arrow-next.svg";
-import closeIcon from "../../../assets/close.svg";
-import styles from "./drawer.module.scss";
-import { DrawerItem } from "../drawer-item/drawer-item.tsx";
-import clsx from "clsx";
-import { useDispatch, useSelector } from "react-redux";
-import type { AppDispatch, RootState } from "../../../redux/store.ts";
-import { setIsDrawerOpen } from "../../../redux/slice/cart-drawer-slice.ts";
+import arrowNextIcon from '../../../assets/arrow-next/arrow-next.svg';
+import closeIcon from '../../../assets/close.svg';
+import styles from './drawer.module.scss';
+import { DrawerItem } from '../drawer-item/drawer-item.tsx';
+import clsx from 'clsx';
+import { useDispatch, useSelector } from 'react-redux';
+import type { AppDispatch, RootState } from '../../../redux/store.ts';
+import { setIsDrawerOpen } from '../../../redux/slice/cart-drawer-slice.ts';
 
 export const CartDrawer = () => {
   const dispatch = useDispatch<AppDispatch>();
-  const {isOpen} = useSelector((state: RootState) => state.cartDrawer);
+  const { isOpen } = useSelector((state: RootState) => state.cartDrawer);
 
   const onCloseDrawer = () => {
-    dispatch(setIsDrawerOpen(false))
+    dispatch(setIsDrawerOpen(false));
   };
 
   return (
@@ -25,12 +25,9 @@ export const CartDrawer = () => {
         <div className={styles.infoWrapper}>
           <div className={styles.titleWrapper}>
             <h1>Корзина</h1>
-            <div
-              className={styles.removeButton}
-              onClick={onCloseDrawer}
-            >
+            <div className={styles.removeButton} onClick={onCloseDrawer}>
               <div>
-                <img src={closeIcon} alt={"close icon"} />
+                <img src={closeIcon} alt={'close icon'} />
               </div>
             </div>
           </div>
@@ -57,7 +54,7 @@ export const CartDrawer = () => {
             </div>
             <div className={styles.placeOrderButton}>
               <span>Оформить заказ</span>
-              <img src={arrowNextIcon} alt={"arrow next icon"} />
+              <img src={arrowNextIcon} alt={'arrow next icon'} />
             </div>
           </div>
         </div>

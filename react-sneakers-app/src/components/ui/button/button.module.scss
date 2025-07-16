@@ -5,28 +5,28 @@ button {
   align-items: center;
   cursor: pointer;
   border: none;
-  background-color: #9DD558;
+  background-color: #9dd558;
   transition: background-color 0.3s ease-in-out;
   border-radius: 10px;
   font-size: 16px;
   font-weight: 600;
 
   &:hover {
-    background-color: #8CC644;
+    background-color: #8cc644;
   }
 
   &.alt {
     background-color: white;
-    color: #9DD558;
-    border: 1px solid #9DD558;
+    color: #9dd558;
+    border: 1px solid #9dd558;
 
     &:hover {
-      background-color: #F3F3F3;
+      background-color: #f3f3f3;
     }
   }
 
   &:disabled {
-    background-color: #C4C4C4;
+    background-color: #c4c4c4;
     cursor: default;
   }
 }

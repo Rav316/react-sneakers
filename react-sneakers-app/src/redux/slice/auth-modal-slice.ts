@@ -1,21 +1,21 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice } from '@reduxjs/toolkit';
 
 interface AuthModalSlice {
   isOpen: boolean;
 }
 
 const initialState: AuthModalSlice = {
-  isOpen: false
-}
+  isOpen: false,
+};
 
 const authModalSlice = createSlice({
-  name: "authModal",
+  name: 'authModal',
   initialState,
   reducers: {
     setIsModalOpen: (state, action) => {
       state.isOpen = action.payload;
-    }
-  }
+    },
+  },
 });
 
 export default authModalSlice.reducer;

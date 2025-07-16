@@ -1,9 +1,9 @@
-import styles from "./search.module.scss";
-import closeIcon from "../../../assets/close.svg";
-import { useRef } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import type { AppDispatch, RootState } from "../../../redux/store.ts";
-import { setSearchValue } from "../../../redux/slice/search-slice.ts";
+import styles from './search.module.scss';
+import closeIcon from '../../../assets/close.svg';
+import { useRef } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import type { AppDispatch, RootState } from '../../../redux/store.ts';
+import { setSearchValue } from '../../../redux/slice/search-slice.ts';
 
 export const Search = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -12,9 +12,9 @@ export const Search = () => {
   const inputRef = useRef<HTMLInputElement>(null);
 
   const onClickClear = () => {
-    dispatch(setSearchValue(""));
+    dispatch(setSearchValue(''));
     inputRef.current?.focus();
-  }
+  };
 
   return (
     <div className={styles.searchWrapper}>
@@ -23,14 +23,14 @@ export const Search = () => {
         value={searchValue}
         ref={inputRef}
         className={styles.searchInput}
-        placeholder={"Поиск..."}
+        placeholder={'Поиск...'}
       />
       {searchValue && (
         <img
           onClick={onClickClear}
           className={styles.clearButton}
           src={closeIcon}
-          alt={"clear button"}
+          alt={'clear button'}
         />
       )}
     </div>

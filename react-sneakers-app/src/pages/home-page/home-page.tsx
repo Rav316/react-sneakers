@@ -1,15 +1,15 @@
-import styles from "./home-page.module.scss";
-import { Search } from "../../components/shared/search/search.tsx";
-import { SneakerCard } from "../../components/shared/sneaker-card/sneaker-card.tsx";
-import { useDispatch, useSelector } from "react-redux";
-import type { AppDispatch, RootState } from "../../redux/store.ts";
-import { useEffect, useState } from "react";
-import { fetchSneakers } from "../../redux/slice/sneaker-slice.ts";
-import { SneakerCardSkeleton } from "../../components/shared/sneaker-card/skeleton/sneaker-card-skeleton.tsx";
-import { useDebounce } from "use-debounce";
-import { EmptyResult } from "../../components/shared/empty-result/empty-result.tsx";
-import { Pagination } from "../../components/shared/pagination/pagination.tsx";
-import { ErrorResult } from "../../components/shared/error-result/error-result.tsx";
+import styles from './home-page.module.scss';
+import { Search } from '../../components/shared/search/search.tsx';
+import { SneakerCard } from '../../components/shared/sneaker-card/sneaker-card.tsx';
+import { useDispatch, useSelector } from 'react-redux';
+import type { AppDispatch, RootState } from '../../redux/store.ts';
+import { useEffect, useState } from 'react';
+import { fetchSneakers } from '../../redux/slice/sneaker-slice.ts';
+import { SneakerCardSkeleton } from '../../components/shared/sneaker-card/skeleton/sneaker-card-skeleton.tsx';
+import { useDebounce } from 'use-debounce';
+import { EmptyResult } from '../../components/shared/empty-result/empty-result.tsx';
+import { Pagination } from '../../components/shared/pagination/pagination.tsx';
+import { ErrorResult } from '../../components/shared/error-result/error-result.tsx';
 
 const HomePage = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -36,12 +36,12 @@ const HomePage = () => {
     sneakers.metadata.totalElements / sneakers.metadata.size,
   );
 
-  if(error) {
+  if (error) {
     return (
       <div className={styles.root}>
-        <ErrorResult/>
+        <ErrorResult />
       </div>
-    )
+    );
   }
 
   return (

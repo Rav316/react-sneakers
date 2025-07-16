@@ -2,11 +2,11 @@ import type {
   ErrorResponse,
   PageResponse,
   SneakerListItem,
-} from "../../service/model.ts";
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import type { SearchParams } from "../../service/sneakers.ts";
-import { Api } from "../../service/api-client.ts";
-import type { AxiosError } from "axios";
+} from '../../service/model.ts';
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import type { SearchParams } from '../../service/sneakers.ts';
+import { Api } from '../../service/api-client.ts';
+import type { AxiosError } from 'axios';
 
 interface SneakerSlice {
   sneakers: PageResponse<SneakerListItem>;
@@ -31,14 +31,14 @@ export const fetchSneakers = createAsyncThunk<
   SearchParams,
   { rejectValue: ErrorResponse }
 >(
-  "sneaker/fetchSneakers",
+  'sneaker/fetchSneakers',
   async (params: SearchParams, { rejectWithValue }) => {
     try {
       return await Api.sneakers.findAll(params);
     } catch (err) {
       const error = err as AxiosError<{ message: string }>;
 
-      const message = error.response?.data?.message || "Unexpected error";
+      const message = error.response?.data?.message || 'Unexpected error';
       const code = error.response?.status || 500;
 
       return rejectWithValue({ message, code });
@@ -47,7 +47,7 @@ export const fetchSneakers = createAsyncThunk<
 );
 
 const sneakerSlice = createSlice({
-  name: "sneaker",
+  name: 'sneaker',
   initialState,
   reducers: {},
   extraReducers: (builder) => {
@@ -60,11 +60,11 @@ const sneakerSlice = createSlice({
     });
     builder.addCase(fetchSneakers.rejected, (state, action) => {
       state.loading = false;
-      if(action.payload) {
+      if (action.payload) {
         state.error = action.payload;
       } else {
         state.error = {
-          message: action.error.message || "Unknown error",
+          message: action.error.message || 'Unknown error',
           code: 500,
         };
       }

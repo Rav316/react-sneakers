@@ -50,7 +50,7 @@ export const LoginTab: React.FC<Props> = ({ onClickRegister }) => {
   useEffect(() => {
     return () => {
       dispatch(clearError());
-    }
+    };
   }, [dispatch]);
   return (
     <>

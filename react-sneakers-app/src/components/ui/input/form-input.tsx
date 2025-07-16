@@ -1,5 +1,5 @@
-import styles from "./form-input.module.scss";
-import * as React from "react";
+import styles from './form-input.module.scss';
+import * as React from 'react';
 
 interface Props {
   id: string;
