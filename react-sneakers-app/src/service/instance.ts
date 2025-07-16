@@ -28,7 +28,6 @@ axiosInstance.interceptors.response.use(
     if (error.response.status === 410 && error.config && !error.config._retry) {
       try {
         error.config._retry = true;
-        console.log('refresh...');
         const response = await axiosInstance.put<AuthResponse>(
           '/auth/refresh-token',
         );

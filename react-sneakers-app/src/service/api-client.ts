@@ -5,5 +5,5 @@ import * as users from './users';
 export const Api = {
   sneakers,
   auth,
-  users,
+  users
 };

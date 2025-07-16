@@ -17,3 +17,20 @@ export const findAll = async (
   );
   return response.data;
 };
+
+export const addToFavorites = async (id: number): Promise<void> => {
+  await axiosInstance.put(`${ApiRoutes.SNEAKERS}/${id}/favorite`);
+};
+
+export const removeFromFavorites = async (id: number): Promise<void> => {
+  await axiosInstance.delete(`${ApiRoutes.SNEAKERS}/${id}/favorite`);
+};
+
+export const syncGuestFavorites = async (
+  data: number[],
+): Promise<void> => {
+  await axiosInstance.put(
+    `${ApiRoutes.SNEAKERS}/sync-favorites`,
+    data
+  );
+};

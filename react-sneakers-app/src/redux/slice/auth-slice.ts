@@ -3,6 +3,7 @@ import type { AuthResponse, ErrorResponse, User } from '../../service/model.ts';
 import { Api } from '../../service/api-client.ts';
 import type { LoginData, RegisterData } from '../../service/auth.ts';
 import type { AxiosError } from 'axios';
+import { callApiWithErrorHandling } from '../../util/call-api-with-error-handling.ts';
 
 interface AuthSlice {
   user?: User;
@@ -40,16 +41,11 @@ export const login = createAsyncThunk<
   LoginData,
   { rejectValue: ErrorResponse }
 >('auth/login', async (loginData: LoginData, { rejectWithValue }) => {
-  try {
-    return await Api.auth.login(loginData);
-  } catch (err) {
-    const error = err as AxiosError<{ message: string }>;
-
-    const message = error.response?.data?.message || 'Unexpected error';
-    const code = error.response?.status || 500;
-
-    return rejectWithValue({ message, code });
-  }
+  return await callApiWithErrorHandling(
+    Api.auth.login,
+    loginData,
+    rejectWithValue,
+  );
 });
 
 export const checkAuth = createAsyncThunk<AuthResponse, void>(

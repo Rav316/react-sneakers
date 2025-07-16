@@ -5,6 +5,7 @@ import authModalReducer from './slice/auth-modal-slice';
 import sneakerReducer from './slice/sneaker-slice';
 import searchReducer from './slice/search-slice';
 import authReducer from './slice/auth-slice';
+import favoriteReducer from './slice/favorite-slice';
 
 export const store = configureStore({
   reducer: {
@@ -13,6 +14,7 @@ export const store = configureStore({
     sneaker: sneakerReducer,
     search: searchReducer,
     auth: authReducer,
+    favorites: favoriteReducer
   },
 });
 

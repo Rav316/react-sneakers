@@ -16,6 +16,7 @@ export interface SneakerListItem {
   price: number;
   description: string;
   firm: number;
+  isFavorite: boolean;
 }
 
 export interface User {

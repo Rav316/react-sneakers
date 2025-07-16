@@ -10,6 +10,7 @@ import type { AppDispatch, RootState } from '../../../../redux/store.ts';
 import { useNavigate } from 'react-router';
 import toast from 'react-hot-toast';
 import { setIsModalOpen } from '../../../../redux/slice/auth-modal-slice.ts';
+import { syncGuestFavorites } from '../../../../redux/slice/favorite-slice.ts';
 
 interface Props {
   onClickRegister: () => void;
@@ -20,6 +21,7 @@ export const LoginTab: React.FC<Props> = ({ onClickRegister }) => {
   const { loading, error, token } = useSelector(
     (state: RootState) => state.auth,
   );
+  const favorites = useSelector((state: RootState) => state.favorites.items);
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
 
@@ -32,12 +34,12 @@ export const LoginTab: React.FC<Props> = ({ onClickRegister }) => {
     if (token) {
       toast.success('Вы успешно вошли в аккаунт');
       dispatch(setIsModalOpen(false));
+      dispatch(syncGuestFavorites(favorites))
       navigate('/profile');
     }
-  }, [dispatch, navigate, token]);
+  }, [dispatch, favorites, navigate, token]);
 
   useEffect(() => {
-    console.log(error);
     if (error) {
       if (error.code === 403) {
         toast.error('Неправильный логин или пароль');
