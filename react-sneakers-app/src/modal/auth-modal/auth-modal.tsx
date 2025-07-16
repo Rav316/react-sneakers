@@ -1,49 +1,20 @@
-import styles from "./auth-modal.module.scss";
-import { HeaderLogo } from "../../components/ui/header-logo/header-logo.tsx";
-import { FormInput } from "../../components/ui/input/form-input.tsx";
-import { Button } from "../../components/ui/button/button.tsx";
+import styles from './auth-modal.module.scss';
+import { HeaderLogo } from '../../components/ui/header-logo/header-logo.tsx';
 
-import closeIcon from "../../assets/close.svg";
-import * as React from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { setIsModalOpen } from "../../redux/slice/auth-modal-slice.ts";
-import type { AppDispatch, RootState } from "../../redux/store.ts";
-import { useEffect, useState } from "react";
-import type { LoginData } from "../../service/auth.ts";
-import { clearError, login } from "../../redux/slice/auth-slice.ts";
-import toast from "react-hot-toast";
-import { useNavigate } from "react-router";
+import closeIcon from '../../assets/close.svg';
+import arrowBackIcon from '../../assets/arrow-back/arrow-back.svg';
+import * as React from 'react';
+import { useDispatch } from 'react-redux';
+import { setIsModalOpen } from '../../redux/slice/auth-modal-slice.ts';
+import type { AppDispatch } from '../../redux/store.ts';
+import { useState } from 'react';
+import { LoginTab } from './tabs/login-tab/login-tab.tsx';
+import { RegisterTab } from './tabs/register-tab/register-tab.tsx';
 
 export const AuthModal = () => {
   const dispatch = useDispatch<AppDispatch>();
-  const [form, setForm] = useState<LoginData>({ email: "", password: "" });
-  const { loading, error, token } = useSelector(
-    (state: RootState) => state.auth,
-  );
-  const navigate = useNavigate();
   const [mouseDownOnRoot, setMouseDownOnRoot] = useState(false);
-
-  useEffect(() => {
-    if (token) {
-      toast.success("Вы успешно вошли в аккаунт");
-      dispatch(setIsModalOpen(false));
-      navigate("/profile");
-    }
-  }, [dispatch, navigate, token]);
-
-  useEffect(() => {
-    if (error) {
-      if (error.code === 403) {
-        toast.error("Неправильный логин или пароль");
-      } else {
-        toast.error(`Произошла ошибка: ${error.message}`);
-      }
-    }
-  }, [error]);
-
-  useEffect(() => {
-    dispatch(clearError());
-  });
+  const [isLoginTab, setIsLoginTab] = useState(true);
 
   const onModalClose = () => {
     dispatch(setIsModalOpen(false));
@@ -66,11 +37,6 @@ export const AuthModal = () => {
     setMouseDownOnRoot(false);
   };
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    dispatch(login(form));
-  };
-
   return (
     <div
       className={styles.root}
@@ -83,35 +49,22 @@ export const AuthModal = () => {
           onClick={() => onModalClose()}
           className={styles.closeButton}
           src={closeIcon}
-          alt={"close icon"}
+          alt={'close icon'}
         />
+        {!isLoginTab && (
+          <img
+            onClick={() => setIsLoginTab(true)}
+            className={styles.backButton}
+            src={arrowBackIcon}
+            alt={'back icon'}
+          />
+        )}
         <HeaderLogo />
-        <h1>Вход</h1>
-        <form className={styles.elementWrapper} onSubmit={handleSubmit}>
-          <FormInput
-            placeholder={"Введите e-mail..."}
-            id={"email"}
-            label={"E-mail"}
-            value={form.email}
-            onChange={(e) => setForm({ ...form, email: e.target.value })}
-          />
-          <FormInput
-            placeholder={"Введите пароль..."}
-            id={"password"}
-            label={"Пароль"}
-            value={form.password}
-            onChange={(e) => setForm({ ...form, password: e.target.value })}
-          />
-          <Button
-            width={"100%"}
-            content={"Войти"}
-            type={"submit"}
-            disabled={loading}
-          />
-        </form>
-        <div className={styles.elementWrapper}>
-          <Button width={"100%"} content={"Регистрация"} alt={true} />
-        </div>
+        {isLoginTab ? (
+          <LoginTab onClickRegister={() => setIsLoginTab(false)} />
+        ) : (
+          <RegisterTab />
+        )}
       </div>
     </div>
   );

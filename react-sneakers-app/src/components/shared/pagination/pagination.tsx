@@ -1,8 +1,8 @@
 import styles from './pagination.module.scss';
 import * as React from "react";
 
-import arrowNextIcon from "../../../assets/arrow-next-green.svg";
-import arrowPrevIcon from '../../../assets/arrow-back-green.svg'
+import arrowNextIcon from "../../../assets/arrow-next/arrow-next-green.svg";
+import arrowPrevIcon from '../../../assets/arrow-back/arrow-back-green.svg'
 
 interface Props {
   selectedPage: number;

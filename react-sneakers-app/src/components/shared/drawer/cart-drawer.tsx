@@ -1,4 +1,4 @@
-import arrowNextIcon from "../../../assets/arrow-next.svg";
+import arrowNextIcon from "../../../assets/arrow-next/arrow-next.svg";
 import closeIcon from "../../../assets/close.svg";
 import styles from "./drawer.module.scss";
 import { DrawerItem } from "../drawer-item/drawer-item.tsx";

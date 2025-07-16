@@ -13,7 +13,7 @@
   .modal {
     position: relative;
     width: 400px;
-    height: 550px;
+    min-height: 500px;
     background-color: white;
     border-radius: 20px;
     display: flex;
@@ -33,12 +33,14 @@
       width: 15px;
       height: 15px
     }
-  }
 
-  .elementWrapper {
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    row-gap: 15px;
+    .backButton {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      cursor: pointer;
+      width: 19px;
+      height: 19px
+    }
   }
 }
