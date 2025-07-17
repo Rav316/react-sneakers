@@ -1,6 +1,7 @@
 package ru.alex.reactsneakersapi.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -21,6 +22,7 @@ public class UserService implements UserDetailsService {
     private final UserDetailsMapper userDetailsMapper;
     private final UserReadMapper userReadMapper;
 
+    @Cacheable(value = "users", key = "#email")
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         return userRepository.findByEmail(email)

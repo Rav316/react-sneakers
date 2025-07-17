@@ -4,6 +4,7 @@ ext {
             'openapi':'2.8.9',
             'querydsl': '5.1.0',
             'hibernate': '7.0.3.Final',
-            'jakarta': '3.2.0'
+            'jakarta': '3.2.0',
+            'caffeine': '3.2.1'
     ]
 }
