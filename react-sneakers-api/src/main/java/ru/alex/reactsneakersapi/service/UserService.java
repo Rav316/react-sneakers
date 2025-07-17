@@ -31,9 +31,9 @@ public class UserService implements UserDetailsService {
     }
 
     public UserReadDto getProfile() {
-        Integer authorizedUserId = AuthUtils.getAuthorizedUserId();
-        return userRepository.findById(authorizedUserId)
+        String authorizedUserEmail = AuthUtils.getAuthorizedUser().email();
+        return userRepository.findByEmail(authorizedUserEmail)
                 .map(userReadMapper::toDto)
-                .orElseThrow(() -> new UserNotFoundException(authorizedUserId));
+                .orElseThrow(() -> new UserNotFoundException(authorizedUserEmail));
     }
 }

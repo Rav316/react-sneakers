@@ -10,6 +10,7 @@ import ru.alex.reactsneakersapi.dto.response.PageResponse;
 import ru.alex.reactsneakersapi.dto.sneaker.SneakerListDto;
 import ru.alex.reactsneakersapi.service.SneakerService;
 
+import java.util.Collections;
 import java.util.List;
 
 import static org.springframework.http.HttpStatus.OK;
@@ -23,6 +24,19 @@ public class SneakerController {
     @GetMapping
     public PageResponse<SneakerListDto> findAll(@ModelAttribute SneakerFilter filter, Pageable pageable) {
         return PageResponse.of(sneakerService.findAll(filter, pageable));
+    }
+
+    @GetMapping("/favorites")
+    public List<SneakerListDto> findAllFavorites() {
+        return sneakerService.findAllFavorites();
+    }
+
+    @GetMapping("/by-ids")
+    public List<SneakerListDto> findAllByIds(@RequestParam(required = false) List<Integer> sneakerIds) {
+        if (sneakerIds == null) {
+            sneakerIds = Collections.emptyList();
+        }
+        return sneakerService.findAllByIds(sneakerIds);
     }
 
     @PutMapping("/sync-favorites")

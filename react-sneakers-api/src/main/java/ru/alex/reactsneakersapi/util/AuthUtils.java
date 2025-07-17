@@ -12,8 +12,8 @@ public class AuthUtils {
         return SecurityContextHolder.getContext().getAuthentication().getPrincipal() instanceof UserDetailsDto;
     }
 
-    public static Integer getAuthorizedUserId() {
-        return ((UserDetailsDto)SecurityContextHolder.getContext().getAuthentication().getPrincipal()).id();
+    public static UserDetailsDto getAuthorizedUser() {
+        return (UserDetailsDto)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
     }
 
     public static String getJwtFromAuthHeader(String authHeader) {

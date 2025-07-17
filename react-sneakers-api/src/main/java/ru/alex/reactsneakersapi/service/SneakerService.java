@@ -13,6 +13,7 @@ import ru.alex.reactsneakersapi.dto.filter.SneakerFilter;
 import ru.alex.reactsneakersapi.dto.sneaker.SneakerListDto;
 import ru.alex.reactsneakersapi.exception.SneakerNotFoundException;
 import ru.alex.reactsneakersapi.exception.UserNotFoundException;
+import ru.alex.reactsneakersapi.mapper.sneaker.SneakerListMapper;
 
 import java.util.List;
 
@@ -24,22 +25,38 @@ import static ru.alex.reactsneakersapi.util.AuthUtils.*;
 public class SneakerService {
     private final SneakerRepository sneakerRepository;
     private final UserRepository userRepository;
+    private final SneakerListMapper sneakerListMapper;
 
     public Page<SneakerListDto> findAll(SneakerFilter filter, Pageable pageable) {
-        return sneakerRepository.findAllListItems(isUserAuthorized() ? getAuthorizedUserId() : null, filter, pageable);
+        return sneakerRepository.findAllListItems(isUserAuthorized() ? getAuthorizedUser().id() : null, filter, pageable);
+    }
+
+    public List<SneakerListDto> findAllFavorites() {
+        return sneakerRepository.findAllFavorites(isUserAuthorized() ? getAuthorizedUser().id() : null)
+                .stream()
+                .map(sneaker -> sneakerListMapper.toDto(sneaker, true))
+                .toList();
+    }
+
+    public List<SneakerListDto> findAllByIds(List<Integer> sneakerIds) {
+        return sneakerRepository.findAllById(sneakerIds)
+                .stream()
+                .map(sneaker -> sneakerListMapper.toDto(sneaker, false))
+                .toList();
     }
 
     @Transactional
     public void syncGuestFavorites(List<Integer> sneakerIds) {
-        sneakerRepository.addFavoritesBatch(sneakerIds, getAuthorizedUserId());
+        sneakerRepository.addFavoritesBatch(sneakerIds, getAuthorizedUser().id());
     }
 
     @Transactional
     public void addToFavorite(Integer id) {
         Sneaker sneaker = sneakerRepository.findById(id)
                 .orElseThrow(() -> new SneakerNotFoundException(id));
-        User user = userRepository.findById(getAuthorizedUserId())
-                .orElseThrow(() -> new UserNotFoundException(id));
+        String authorizedUserEmail = getAuthorizedUser().email();
+        User user = userRepository.findByEmail(authorizedUserEmail)
+                .orElseThrow(() -> new UserNotFoundException(authorizedUserEmail));
         user.getFavoriteSneakers().add(sneaker);
         userRepository.save(user);
     }
@@ -48,8 +65,9 @@ public class SneakerService {
     public void removeFromFavorites(Integer id) {
         Sneaker sneaker = sneakerRepository.findById(id)
                 .orElseThrow(() -> new SneakerNotFoundException(id));
-        User user = userRepository.findById(getAuthorizedUserId())
-                .orElseThrow(() -> new UserNotFoundException(id));
+        String authorizedUserEmail = getAuthorizedUser().email();
+        User user = userRepository.findByEmail(authorizedUserEmail)
+                .orElseThrow(() -> new UserNotFoundException(authorizedUserEmail));
         user.getFavoriteSneakers().remove(sneaker);
         userRepository.save(user);
     }
