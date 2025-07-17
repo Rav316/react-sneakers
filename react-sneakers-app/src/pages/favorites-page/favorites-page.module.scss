@@ -10,7 +10,19 @@
     display: flex;
     margin-top: 40px;
     margin-bottom: 40px;
-    column-gap: 21px;
+    align-items: center;
+    justify-content: space-between;
+    @media (max-width: 571px) {
+      flex-direction: column;
+      row-gap: 10px;
+      align-items: start;
+    }
+
+    .title {
+      display: flex;
+      align-items: center;
+      column-gap: 21px;
+    }
 
     .backButton {
       cursor: pointer;
@@ -26,6 +38,34 @@
     h1 {
       font-size: 32px;
       font-weight: 700;
+    }
+  }
+
+  .clearFavorites {
+    transition: color 0.3s ease-in-out;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    column-gap: 7px;
+    color: #999999;
+    &:hover {
+      color: #525252;
+    }
+    span {
+      transition: color 0.3s ease-in-out;
+    }
+
+    svg {
+      stroke: currentColor;
+      transition: stroke 0.3s ease-in-out;
+    }
+
+    @media (max-width: 571px) {
+      flex-direction: row-reverse;
+      justify-content: start;
+      &:hover {
+        color: #999999;
+      }
     }
   }
 

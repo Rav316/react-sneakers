@@ -11,7 +11,7 @@ interface SneakerFavoritesSlice {
 
 const initialState: SneakerFavoritesSlice = {
   items: [],
-  loading: false,
+  loading: true,
 };
 
 export const fetchFavoriteSneakers = createAsyncThunk<
@@ -38,25 +38,43 @@ export const fetchSneakersByIds = createAsyncThunk<
   );
 });
 
+export const removeAllFavorites = createAsyncThunk<
+  void,
+  void,
+  { rejectValue: ErrorResponse }
+>(
+  'sneaker/removeFavoriteSneakers',
+  async (_, { rejectWithValue }) => {
+    return callApiWithErrorHandling(
+      Api.sneakers.removeAllFavorites,
+      {},
+      rejectWithValue,
+    );
+  },
+);
+
 const sneakerFavoritesSlice = createSlice({
   name: 'sneakerFavorites',
   initialState,
   reducers: {},
   extraReducers: (builder) => {
     builder
+      .addCase(removeAllFavorites.fulfilled, state => {
+        state.items = [];
+      })
       .addMatcher(
         isAnyOf(fetchFavoriteSneakers.pending, fetchSneakersByIds.pending),
         (state) => {
           state.loading = true;
           state.error = undefined;
-        }
+        },
       )
       .addMatcher(
         isAnyOf(fetchFavoriteSneakers.fulfilled, fetchSneakersByIds.fulfilled),
         (state, action) => {
           state.items = action.payload;
           state.loading = false;
-        }
+        },
       )
       .addMatcher(
         isAnyOf(fetchFavoriteSneakers.rejected, fetchSneakersByIds.rejected),
@@ -70,7 +88,7 @@ const sneakerFavoritesSlice = createSlice({
               code: 500,
             };
           }
-        }
+        },
       );
   },
 });

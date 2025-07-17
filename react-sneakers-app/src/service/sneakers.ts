@@ -39,6 +39,10 @@ export const findAllByIds = async (
   return response.data;
 };
 
+export const removeAllFavorites = async (): Promise<void> => {
+  await axiosInstance.delete(`${ApiRoutes.SNEAKERS}/favorites`);
+};
+
 export const addToFavorites = async (id: number): Promise<void> => {
   await axiosInstance.put(`${ApiRoutes.SNEAKERS}/${id}/favorite`);
 };
