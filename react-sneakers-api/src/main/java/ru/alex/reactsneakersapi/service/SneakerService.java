@@ -71,4 +71,9 @@ public class SneakerService {
         user.getFavoriteSneakers().remove(sneaker);
         userRepository.save(user);
     }
+
+    @Transactional
+    public void removeAllFavorites() {
+        sneakerRepository.removeAllFavorites(getAuthorizedUser().id());
+    }
 }

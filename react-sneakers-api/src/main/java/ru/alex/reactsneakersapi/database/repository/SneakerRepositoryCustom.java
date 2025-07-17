@@ -10,4 +10,5 @@ import java.util.List;
 public interface SneakerRepositoryCustom {
     Page<SneakerListDto> findAllListItems(Integer userId, SneakerFilter filter, Pageable pageable);
     void addFavoritesBatch(List<Integer> sneakerIds, Integer userId);
+    void removeAllFavorites(Integer userId);
 }

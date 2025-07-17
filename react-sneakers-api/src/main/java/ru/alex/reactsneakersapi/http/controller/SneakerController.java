@@ -13,6 +13,7 @@ import ru.alex.reactsneakersapi.service.SneakerService;
 import java.util.Collections;
 import java.util.List;
 
+import static org.springframework.http.HttpStatus.NO_CONTENT;
 import static org.springframework.http.HttpStatus.OK;
 
 @RestController
@@ -29,6 +30,12 @@ public class SneakerController {
     @GetMapping("/favorites")
     public List<SneakerListDto> findAllFavorites() {
         return sneakerService.findAllFavorites();
+    }
+
+    @DeleteMapping("/favorites")
+    public ResponseEntity<HttpStatus> removeAllFavorites() {
+        sneakerService.removeAllFavorites();
+        return new ResponseEntity<>(NO_CONTENT);
     }
 
     @GetMapping("/by-ids")
@@ -54,6 +61,6 @@ public class SneakerController {
     @DeleteMapping("/{id}/favorite")
     public ResponseEntity<HttpStatus> removeFromFavorites(@PathVariable("id") Integer id) {
         sneakerService.removeFromFavorites(id);
-        return new ResponseEntity<>(OK);
+        return new ResponseEntity<>(NO_CONTENT);
     }
 }

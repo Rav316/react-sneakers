@@ -21,6 +21,7 @@ import ru.alex.reactsneakersapi.dto.filter.SneakerFilter;
 import ru.alex.reactsneakersapi.dto.sneaker.SneakerListDto;
 import ru.alex.reactsneakersapi.mapper.sneaker.SneakerListMapper;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
@@ -85,6 +86,11 @@ public class SneakerRepositoryImpl implements SneakerRepositoryCustom {
                 """;
         SqlParameterSource[] batchParams = SqlParameterSourceUtils.createBatch(batch.toArray());
         jdbcTemplate.batchUpdate(sql, batchParams);
+    }
+
+    @Override
+    public void removeAllFavorites(Integer userId) {
+        jdbcTemplate.update("DELETE FROM favorites WHERE user_id = :userId", Collections.singletonMap("userId", userId));
     }
 
     private BooleanExpression buildPredicate(SneakerFilter filter) {
