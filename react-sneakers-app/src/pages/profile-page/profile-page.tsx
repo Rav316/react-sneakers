@@ -3,6 +3,7 @@ import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router';
 import { logout } from '../../redux/slice/auth-slice.ts';
 import toast from 'react-hot-toast';
+import { clearFavorites } from '../../redux/slice/favorite-slice.ts';
 
 export const ProfilePage = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -10,6 +11,7 @@ export const ProfilePage = () => {
   const onClickLogout = () => {
     toast('Вы успешно вышли из аккаунта', { icon: '👋' });
     dispatch(logout());
+    dispatch(clearFavorites());
     navigate('/');
   };
   return (

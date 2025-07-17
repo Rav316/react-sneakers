@@ -1,4 +1,3 @@
-import arrowNextIcon from '../../../assets/arrow-next/arrow-next.svg';
 import closeIcon from '../../../assets/close.svg';
 import styles from './drawer.module.scss';
 import { DrawerItem } from '../drawer-item/drawer-item.tsx';
@@ -6,6 +5,7 @@ import clsx from 'clsx';
 import { useDispatch, useSelector } from 'react-redux';
 import type { AppDispatch, RootState } from '../../../redux/store.ts';
 import { setIsDrawerOpen } from '../../../redux/slice/cart-drawer-slice.ts';
+import { Arrow } from '../../ui/arrow.tsx';
 
 export const CartDrawer = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -54,7 +54,7 @@ export const CartDrawer = () => {
             </div>
             <div className={styles.placeOrderButton}>
               <span>Оформить заказ</span>
-              <img src={arrowNextIcon} alt={'arrow next icon'} />
+              <Arrow className={styles.arrowNext} direction={'right'} />
             </div>
           </div>
         </div>

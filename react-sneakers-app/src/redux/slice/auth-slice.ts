@@ -53,9 +53,13 @@ export const checkAuth = createAsyncThunk<AuthResponse, void>(
   async (_, thunkAPI) => {
     try {
       return await Api.auth.refreshToken();
-    } catch {
-      localStorage.removeItem('token');
-      return thunkAPI.rejectWithValue('Unauthorized');
+    } catch (err) {
+      const error = err as AxiosError<{ message: string }>;
+      const code = error.response?.status || 500;
+      if(code === 401) {
+        localStorage.removeItem('token');
+      }
+      return thunkAPI.rejectWithValue(code);
     }
   },
 );
@@ -97,9 +101,12 @@ const authSlice = createSlice({
           };
         }
       })
-      .addCase(checkAuth.rejected, (state) => {
-        state.user = {};
-        state.token = undefined;
+      .addCase(checkAuth.rejected, (state, action) => {
+        const errorCode = action.payload as number | undefined;
+        if(errorCode && errorCode === 401) {
+          state.user = {};
+          state.token = undefined;
+        }
       })
       .addCase(register.pending, (state) => {
         state.loading = true;

@@ -2,7 +2,6 @@ import styles from './auth-modal.module.scss';
 import { HeaderLogo } from '../../components/ui/header-logo/header-logo.tsx';
 
 import closeIcon from '../../assets/close.svg';
-import arrowBackIcon from '../../assets/arrow-back/arrow-back.svg';
 import * as React from 'react';
 import { useDispatch } from 'react-redux';
 import { setIsModalOpen } from '../../redux/slice/auth-modal-slice.ts';
@@ -10,6 +9,7 @@ import type { AppDispatch } from '../../redux/store.ts';
 import { useState } from 'react';
 import { LoginTab } from './tabs/login-tab/login-tab.tsx';
 import { RegisterTab } from './tabs/register-tab/register-tab.tsx';
+import { Arrow } from '../../components/ui/arrow.tsx';
 
 export const AuthModal = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -52,12 +52,7 @@ export const AuthModal = () => {
           alt={'close icon'}
         />
         {!isLoginTab && (
-          <img
-            onClick={() => setIsLoginTab(true)}
-            className={styles.backButton}
-            src={arrowBackIcon}
-            alt={'back icon'}
-          />
+          <Arrow className={styles.backButton} color={'#D3D3D3'} onClick={() => setIsLoginTab(true)} />
         )}
         <HeaderLogo />
         {isLoginTab ? (

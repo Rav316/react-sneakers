@@ -15,6 +15,7 @@ import { ErrorPage } from './pages/not-found-page/error-page.tsx';
 import img404 from './assets/404.svg';
 import { RequireAuth } from './hoc/require-auth.tsx';
 import { checkAuth } from './redux/slice/auth-slice.ts';
+import { FavoritesPage } from './pages/favorites-page/favorites-page.tsx';
 
 const App = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -59,6 +60,7 @@ const App = () => {
                 </RequireAuth>
               }
             />
+            <Route path={'/favorites'} element={<FavoritesPage />} />
             <Route
               path={'*'}
               element={

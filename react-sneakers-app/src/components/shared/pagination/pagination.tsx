@@ -1,8 +1,7 @@
 import styles from './pagination.module.scss';
 import * as React from 'react';
 
-import arrowNextIcon from '../../../assets/arrow-next/arrow-next-green.svg';
-import arrowPrevIcon from '../../../assets/arrow-back/arrow-back-green.svg';
+import { Arrow } from '../../ui/arrow.tsx';
 
 interface Props {
   selectedPage: number;
@@ -53,7 +52,7 @@ export const Pagination: React.FC<Props> = ({
     <div className={styles.root}>
       <ul className={styles.paginationList}>
         <li onClick={() => handleClick(selectedPage - 1)}>
-          <img src={arrowPrevIcon} alt={'previous page'} />
+          <Arrow className={styles.arrow} color={'#8CC644'}/>
         </li>
         {visiblePages.map((page) => (
           <li
@@ -65,7 +64,8 @@ export const Pagination: React.FC<Props> = ({
           </li>
         ))}
         <li onClick={() => handleClick(selectedPage + 1)}>
-          <img src={arrowNextIcon} alt={'next page'} />
+          {/*<img className={styles.arrow} src={arrowNextIcon} alt={'next page'} />*/}
+          <Arrow className={styles.arrow} color={'#8CC644'} direction={'right'}/>
         </li>
       </ul>
     </div>

@@ -1,0 +1,35 @@
+@use '../../scss/shared' as *;
+
+.root {
+  display: flex;
+  flex-direction: column;
+  padding-left: 43px;
+  padding-right: 43px;
+
+  .titleWrapper {
+    display: flex;
+    margin-top: 40px;
+    margin-bottom: 40px;
+    column-gap: 21px;
+
+    .backButton {
+      cursor: pointer;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 35px;
+      height: 35px;
+      border: 1px solid #F2F2F2;
+      border-radius: 8px;
+    }
+
+    h1 {
+      font-size: 32px;
+      font-weight: 700;
+    }
+  }
+
+  .sneakerCardsWrapper {
+    @include sneaker-cards-grid;
+  }
+}

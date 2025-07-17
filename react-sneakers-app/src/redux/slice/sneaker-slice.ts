@@ -52,6 +52,7 @@ const sneakerSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder.addCase(fetchSneakers.pending, (state) => {
+      state.error = undefined;
       state.loading = true;
     });
     builder.addCase(fetchSneakers.fulfilled, (state, action) => {

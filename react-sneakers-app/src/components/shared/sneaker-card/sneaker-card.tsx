@@ -16,7 +16,7 @@ import {
   removeFromFavorites,
 } from '../../../redux/slice/favorite-slice.ts';
 import { useDebouncedCallback } from 'use-debounce';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 interface Props {
   sneaker: SneakerListItem;
@@ -31,9 +31,11 @@ export const SneakerCard: React.FC<Props> = ({
   const dispatch = useDispatch<AppDispatch>();
   const favorites = useSelector((state: RootState) => state.favorites.items);
   const token = useSelector((state: RootState) => state.auth.token);
-  const [isFavoriteLocal, setIsFavoriteLocal] = useState(
-    token ? isFavorite : favorites.includes(id),
-  );
+  const [isFavoriteLocal, setIsFavoriteLocal] = useState(false);
+
+  useEffect(() => {
+    setIsFavoriteLocal(token ? isFavorite : favorites.includes(id));
+  }, [token, isFavorite, favorites, id]);
 
   const onClickAddToCart = () => {
     setInCart((prev) => !prev);

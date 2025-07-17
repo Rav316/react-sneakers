@@ -7,7 +7,7 @@ import { HeaderLogo } from '../../ui/header-logo/header-logo.tsx';
 import { useDispatch, useSelector } from 'react-redux';
 import type { AppDispatch, RootState } from '../../../redux/store.ts';
 import { setIsModalOpen } from '../../../redux/slice/auth-modal-slice.ts';
-import { useNavigate } from 'react-router';
+import { Link, useNavigate } from 'react-router';
 import { setIsDrawerOpen } from '../../../redux/slice/cart-drawer-slice.ts';
 
 export const Header = () => {
@@ -35,10 +35,12 @@ export const Header = () => {
           <img src={cartIcon} alt={'cart icon'} />
           <span>1205 руб.</span>
         </div>
-        <div className={styles.menuItem}>
-          <img src={favoritesIcon} alt={'favorites icon'} />
-          <span>Закладки</span>
-        </div>
+        <Link to={'/favorites'}>
+          <div className={styles.menuItem}>
+            <img src={favoritesIcon} alt={'favorites icon'} />
+            <span>Закладки</span>
+          </div>
+        </Link>
         <div className={styles.menuItem} onClick={onProfileClick}>
           <img src={profileIcon} alt={'profile icon'} />
           <span>Профиль</span>

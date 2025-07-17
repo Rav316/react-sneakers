@@ -1,0 +1,27 @@
+@mixin sneaker-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: clamp(5px, 2vw, 40px);
+
+  @media (max-width: 1874px) {
+    grid-template-columns: repeat(5, 1fr);
+  }
+
+  @media (max-width: 1592px) {
+    grid-template-columns: repeat(4, 1fr);
+  }
+
+  @media (max-width: 1300px) {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  @media (max-width: 1012px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  @media (max-width: 751px) {
+    grid-template-columns: repeat(1, 1fr);
+  }
+
+  margin-bottom: 50px;
+}
