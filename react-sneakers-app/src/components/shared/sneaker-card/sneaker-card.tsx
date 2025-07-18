@@ -76,7 +76,7 @@ export const SneakerCard: React.FC<Props> = ({
         />
       </div>
       <img src={`${staticUrl}${imageUrl}`} alt={'sneaker image'} />
-      <span>{name}</span>
+      <span className={styles.name}>{name}</span>
       <div className={styles.priceInfo}>
         <div>
           <span className={styles.priceLabel}>ЦЕНА:</span>

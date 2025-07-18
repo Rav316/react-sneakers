@@ -1,11 +1,14 @@
 import type { PageResponse, SneakerListItem } from './model.ts';
 import { axiosInstance } from './instance.ts';
 import { ApiRoutes } from './constants.ts';
+import type { Order } from '../constants/order.ts';
 
 export interface SearchParams {
   page?: number;
   size?: number;
   search?: string;
+  sort?: string;
+  order?: Order;
 }
 
 export const findAll = async (

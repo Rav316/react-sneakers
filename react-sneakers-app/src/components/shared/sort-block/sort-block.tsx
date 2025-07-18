@@ -4,13 +4,18 @@ import sortOrderIcon from '../../../assets/sort-order.svg';
 import { useEffect, useRef, useState } from 'react';
 import * as React from 'react';
 import clsx from 'clsx';
+import { type SortOption, sortOptions } from '../../../constants/sort.ts';
+import type { Order } from '../../../constants/order.ts';
 
-const sortOptions = ['цене', 'алфавиту'];
+interface Props {
+  order: Order;
+  setOrder: React.Dispatch<React.SetStateAction<Order>>;
+  sortOption: SortOption;
+  setSortOption: React.Dispatch<React.SetStateAction<SortOption>>;
+}
 
-export const SortBlock = () => {
+export const SortBlock: React.FC<Props> = ({ order, setOrder, sortOption, setSortOption }) => {
   const [open, setOpen] = useState(false);
-  const [selectedOption, setSelectedOption] = useState(sortOptions[0]);
-  const [order, setOrder] = useState<'asc' | 'desc'>('desc');
   const selectedRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -28,7 +33,9 @@ export const SortBlock = () => {
 
   const handleSelect = (option: string, e: React.MouseEvent) => {
     e.stopPropagation();
-    setSelectedOption(option);
+    setSortOption(
+      sortOptions.find((o) => o.value === option) || sortOptions[0],
+    );
     setOpen(false);
   };
 
@@ -41,23 +48,25 @@ export const SortBlock = () => {
     <div className={styles.sortWrapper} onClick={onClickRoot}>
       <img
         onClick={() => setOrder((prev) => (prev === 'asc' ? 'desc' : 'asc'))}
-        className={clsx(styles.sortIcon, {[styles.rotated]: order === 'asc'})}
+        className={clsx(styles.sortIcon, {
+          [styles.rotated]: order === 'desc',
+        })}
         src={sortOrderIcon}
         alt={'sort order icon'}
       />
       <span>Сортировать по:</span>
       <div className={`${styles.customSelect} ${open ? styles.open : ''}`}>
         <div ref={selectedRef} className={styles.selected}>
-          {selectedOption}
+          {sortOption.label}
         </div>
         <ul className={styles.options}>
           {sortOptions.map((option) => (
             <li
-              key={option}
-              className={option === selectedOption ? styles.active : ''}
-              onClick={(e) => handleSelect(option, e)}
+              key={option.value}
+              className={option.value === sortOption.value ? styles.active : ''}
+              onClick={(e) => handleSelect(option.value, e)}
             >
-              {option}
+              {option.label}
             </li>
           ))}
         </ul>

@@ -11,6 +11,8 @@ import { EmptyResult } from '../../components/shared/empty-result/empty-result.t
 import { Pagination } from '../../components/shared/pagination/pagination.tsx';
 import { ErrorResult } from '../../components/shared/error-result/error-result.tsx';
 import { SortBlock } from '../../components/shared/sort-block/sort-block.tsx';
+import type { Order } from '../../constants/order.ts';
+import { type SortOption, sortOptions } from '../../constants/sort.ts';
 
 const HomePage = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -20,15 +22,19 @@ const HomePage = () => {
     (state: RootState) => state.sneaker,
   );
   const [currentPage, setCurrentPage] = useState(1);
+  const [order, setOrder] = useState<Order>('asc');
+  const [sortOption, setSortOption] = useState<SortOption>(sortOptions[0]);
   useEffect(() => {
     dispatch(
       fetchSneakers({
         search: debouncedSearch,
         page: currentPage - 1,
         size: 12,
+        order,
+        sort: sortOption.value
       }),
     );
-  }, [dispatch, debouncedSearch, currentPage]);
+  }, [dispatch, debouncedSearch, currentPage, order, sortOption]);
 
   useEffect(() => {
     setCurrentPage(1);
@@ -51,7 +57,12 @@ const HomePage = () => {
         <h1>Все кроссовки</h1>
         <div className={styles.searchWrapper}>
           <Search />
-          <SortBlock/>
+          <SortBlock
+            order={order}
+            setOrder={setOrder}
+            sortOption={sortOption}
+            setSortOption={setSortOption}
+          />
         </div>
       </div>
       {!loading && sneakers.content.length === 0 ? (
