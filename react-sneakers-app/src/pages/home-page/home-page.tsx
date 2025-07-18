@@ -10,6 +10,7 @@ import { useDebounce } from 'use-debounce';
 import { EmptyResult } from '../../components/shared/empty-result/empty-result.tsx';
 import { Pagination } from '../../components/shared/pagination/pagination.tsx';
 import { ErrorResult } from '../../components/shared/error-result/error-result.tsx';
+import { SortBlock } from '../../components/shared/sort-block/sort-block.tsx';
 
 const HomePage = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -48,7 +49,10 @@ const HomePage = () => {
     <div className={styles.root}>
       <div className={styles.titleWrapper}>
         <h1>Все кроссовки</h1>
-        <Search />
+        <div className={styles.searchWrapper}>
+          <Search />
+          <SortBlock/>
+        </div>
       </div>
       {!loading && sneakers.content.length === 0 ? (
         <EmptyResult />

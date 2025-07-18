@@ -11,10 +11,22 @@
     margin-bottom: 40px;
     align-items: end;
 
-    @media (max-width: 841px) {
+    @media (max-width: 900px) {
       flex-direction: column;
       align-items: start;
       gap: 10px;
+    }
+  }
+
+  .searchWrapper {
+    display: flex;
+    column-gap: 20px;
+
+
+    @media (max-width: 700px) {
+      width: 100%;
+      flex-direction: column;
+      row-gap: 10px;
     }
   }
 

@@ -1,7 +1,7 @@
 .searchWrapper {
   position: relative;
 
-  @media (max-width: 841px) {
+  @media (max-width: 900px) {
     width: 100%;
   }
 
@@ -17,7 +17,7 @@
     transition: border-color 0.3s ease;
     box-sizing: border-box;
 
-    @media (max-width: 841px) {
+    @media (max-width: 900px) {
       width: 100%;
     }
 
