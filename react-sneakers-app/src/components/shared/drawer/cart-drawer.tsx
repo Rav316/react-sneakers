@@ -43,14 +43,14 @@ export const CartDrawer = () => {
         <div className={styles.resultWrapper}>
           <div className={styles.resultInfoWrapper}>
             <div className={styles.resultInfo}>
-              <span>Итого:</span>
-              <div />
-              <span className={styles.price}>21 498 руб.</span>
-            </div>
-            <div className={styles.resultInfo}>
               <span>Налог 5%:</span>
               <div />
               <span className={styles.price}>1074 руб.</span>
+            </div>
+            <div className={styles.resultInfo}>
+              <span>Итого:</span>
+              <div />
+              <span className={styles.price}>21 498 руб.</span>
             </div>
             <div className={styles.placeOrderButton}>
               <span>Оформить заказ</span>

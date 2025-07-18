@@ -1,5 +1,5 @@
 import styles from './drawer-item.module.scss';
-import sneakerExampleImg from '../../../assets/sneaker-example.png';
+import sneakerExampleImg from '../../../assets/sneaker-example.jpg';
 import closeIcon from '../../../assets/close.svg';
 
 export const DrawerItem = () => {

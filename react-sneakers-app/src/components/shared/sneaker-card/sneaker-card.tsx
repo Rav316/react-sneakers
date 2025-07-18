@@ -4,8 +4,6 @@ import clsx from 'clsx';
 
 import favoritesIcon from '../../../assets/favorites/favorites-light.svg';
 import selectedFavoritesIcon from '../../../assets/favorites/selected-favorites.svg';
-import plusIcon from '../../../assets/plus.svg';
-import checkIcon from '../../../assets/check.svg';
 import type { SneakerListItem } from '../../../service/model.ts';
 import { useDispatch, useSelector } from 'react-redux';
 import type { AppDispatch, RootState } from '../../../redux/store.ts';
@@ -17,6 +15,7 @@ import {
 } from '../../../redux/slice/favorite-slice.ts';
 import { useDebouncedCallback } from 'use-debounce';
 import { useEffect, useState } from 'react';
+import { Link } from 'react-router';
 
 interface Props {
   sneaker: SneakerListItem;
@@ -26,7 +25,6 @@ export const SneakerCard: React.FC<Props> = ({
   sneaker: { imageUrl, price, name, id, isFavorite },
 }) => {
   const staticUrl: string = import.meta.env.VITE_STATIC_URL;
-  const [inCart, setInCart] = React.useState(false);
 
   const dispatch = useDispatch<AppDispatch>();
   const favorites = useSelector((state: RootState) => state.favorites.items);
@@ -36,10 +34,6 @@ export const SneakerCard: React.FC<Props> = ({
   useEffect(() => {
     setIsFavoriteLocal(token ? isFavorite : favorites.includes(id));
   }, [token, isFavorite, favorites, id]);
-
-  const onClickAddToCart = () => {
-    setInCart((prev) => !prev);
-  };
 
   const onClickFavorite = useDebouncedCallback(
     () => {
@@ -75,18 +69,14 @@ export const SneakerCard: React.FC<Props> = ({
           alt="favorites icon"
         />
       </div>
-      <img src={`${staticUrl}${imageUrl}`} alt={'sneaker image'} />
+      <Link to={`/sneakers/${id}`}>
+        <img src={`${staticUrl}${imageUrl}`} alt={'sneaker image'} />
+      </Link>
       <span className={styles.name}>{name}</span>
       <div className={styles.priceInfo}>
         <div>
           <span className={styles.priceLabel}>ЦЕНА:</span>
           <span className={styles.price}>{price} руб.</span>
-        </div>
-        <div
-          className={clsx(styles.cartButton, { [styles.selected]: inCart })}
-          onClick={onClickAddToCart}
-        >
-          <img src={inCart ? checkIcon : plusIcon} alt={'add to cart'} />
         </div>
       </div>
     </div>

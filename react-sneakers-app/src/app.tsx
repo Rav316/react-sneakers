@@ -16,6 +16,7 @@ import img404 from './assets/404.svg';
 import { RequireAuth } from './hoc/require-auth.tsx';
 import { checkAuth } from './redux/slice/auth-slice.ts';
 import { FavoritesPage } from './pages/favorites-page/favorites-page.tsx';
+import { SneakerDetailsPage } from './pages/sneaker-details-page/sneaker-details-page.tsx';
 
 const App = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -52,6 +53,7 @@ const App = () => {
         <Routes>
           <Route element={<OutletLayout />}>
             <Route path={'/'} element={<HomePage />} />
+            <Route path={'/sneakers/:id'} element={<SneakerDetailsPage />} />
             <Route
               path={'/profile'}
               element={
