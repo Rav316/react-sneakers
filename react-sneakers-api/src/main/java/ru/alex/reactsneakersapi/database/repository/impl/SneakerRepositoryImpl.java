@@ -1,6 +1,7 @@
 package ru.alex.reactsneakersapi.database.repository.impl;
 
 import com.querydsl.core.Tuple;
+import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.JPAExpressions;
@@ -21,6 +22,7 @@ import ru.alex.reactsneakersapi.dto.filter.SneakerFilter;
 import ru.alex.reactsneakersapi.dto.sneaker.SneakerListDto;
 import ru.alex.reactsneakersapi.mapper.sneaker.SneakerListMapper;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
@@ -53,7 +55,7 @@ public class SneakerRepositoryImpl implements SneakerRepositoryCustom {
                 )
                 .from(sneaker)
                 .where(predicate)
-                .orderBy(sneaker.id.asc())
+                .orderBy(getSortOrder(filter))
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();
@@ -99,5 +101,26 @@ public class SneakerRepositoryImpl implements SneakerRepositoryCustom {
             predicate = predicate.and(sneaker.name.containsIgnoreCase(filter.search()));
         }
         return predicate;
+    }
+
+    private OrderSpecifier<?>[] getSortOrder(SneakerFilter filter) {
+        boolean desc = filter.order() != null && filter.order().equalsIgnoreCase("desc");
+        OrderSpecifier<?> primarySort;
+        if (filter.sort() == null) {
+            primarySort = null;
+        } else {
+            primarySort = switch (filter.sort()) {
+                case "price" -> desc ? sneaker.price.desc() : sneaker.price.asc();
+                case "alphabet" -> desc ? sneaker.name.desc() : sneaker.name.asc();
+                default -> null;
+            };
+        }
+        List<OrderSpecifier<?>> orderSpecifiers = new ArrayList<>();
+
+        if (primarySort != null) {
+            orderSpecifiers.add(primarySort);
+        }
+        orderSpecifiers.add(desc ? sneaker.id.desc() : sneaker.id.asc());
+        return orderSpecifiers.toArray(new OrderSpecifier[0]);
     }
 }
