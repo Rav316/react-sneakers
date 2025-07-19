@@ -48,7 +48,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorResponse> handleNotFoundException(EntityNotFoundException ex) {
         ErrorResponse errorResponse = new ErrorResponse(
                 Instant.now(),
-                ExceptionUtils.getSqlExceptionMessage(ex)
+                ex.getMessage()
         );
         return new ResponseEntity<>(errorResponse, NOT_FOUND);
     }

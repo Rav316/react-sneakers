@@ -1,13 +1,13 @@
-package ru.alex.reactsneakersapi.dto.sneaker;
+package ru.alex.reactsneakersapi.dto.cartItem;
 
 import java.math.BigDecimal;
 
-public record SneakerListDto(
+public record CartItemReadDto(
         Integer id,
         String name,
         String imageUrl,
         BigDecimal price,
-        Integer firm,
-        Boolean isFavorite
+        Integer size,
+        Integer quantity
 ) {
 }

@@ -11,9 +11,11 @@ import ru.alex.reactsneakersapi.database.repository.SneakerRepository;
 import ru.alex.reactsneakersapi.database.repository.UserRepository;
 import ru.alex.reactsneakersapi.dto.filter.SneakerFilter;
 import ru.alex.reactsneakersapi.dto.sneaker.SneakerListDto;
+import ru.alex.reactsneakersapi.dto.sneaker.SneakerReadDto;
 import ru.alex.reactsneakersapi.exception.SneakerNotFoundException;
 import ru.alex.reactsneakersapi.exception.UserNotFoundException;
 import ru.alex.reactsneakersapi.mapper.sneaker.SneakerListMapper;
+import ru.alex.reactsneakersapi.mapper.sneaker.SneakerReadMapper;
 
 import java.util.List;
 
@@ -26,6 +28,7 @@ public class SneakerService {
     private final SneakerRepository sneakerRepository;
     private final UserRepository userRepository;
     private final SneakerListMapper sneakerListMapper;
+    private final SneakerReadMapper sneakerReadMapper;
 
     public Page<SneakerListDto> findAll(SneakerFilter filter, Pageable pageable) {
         return sneakerRepository.findAllListItems(isUserAuthorized() ? getAuthorizedUser().id() : null, filter, pageable);
@@ -43,6 +46,12 @@ public class SneakerService {
                 .stream()
                 .map(sneaker -> sneakerListMapper.toDto(sneaker, false))
                 .toList();
+    }
+
+    public SneakerReadDto findById(Integer id) {
+        return sneakerRepository.findByIdWithItems(id)
+                .map(sneakerReadMapper::toDto)
+                .orElseThrow(() -> new SneakerNotFoundException(id));
     }
 
     @Transactional

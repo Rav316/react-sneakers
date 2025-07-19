@@ -13,7 +13,6 @@ public class SneakerListMapper implements Mapper {
                 entity.getName(),
                 entity.getImageUrl(),
                 entity.getPrice(),
-                entity.getDescription(),
                 entity.getFirm().getId(),
                 isFavorite
         );

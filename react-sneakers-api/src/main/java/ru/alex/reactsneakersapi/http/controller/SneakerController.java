@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import ru.alex.reactsneakersapi.dto.filter.SneakerFilter;
 import ru.alex.reactsneakersapi.dto.response.PageResponse;
 import ru.alex.reactsneakersapi.dto.sneaker.SneakerListDto;
+import ru.alex.reactsneakersapi.dto.sneaker.SneakerReadDto;
 import ru.alex.reactsneakersapi.service.SneakerService;
 
 import java.util.Collections;
@@ -32,18 +33,17 @@ public class SneakerController {
         return sneakerService.findAllFavorites();
     }
 
-    @DeleteMapping("/favorites")
-    public ResponseEntity<HttpStatus> removeAllFavorites() {
-        sneakerService.removeAllFavorites();
-        return new ResponseEntity<>(NO_CONTENT);
-    }
-
     @GetMapping("/by-ids")
     public List<SneakerListDto> findAllByIds(@RequestParam(required = false) List<Integer> sneakerIds) {
         if (sneakerIds == null) {
             sneakerIds = Collections.emptyList();
         }
         return sneakerService.findAllByIds(sneakerIds);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<SneakerReadDto> findById(@PathVariable("id") Integer id) {
+        return new ResponseEntity<>(sneakerService.findById(id), OK);
     }
 
     @PutMapping("/sync-favorites")
@@ -57,6 +57,13 @@ public class SneakerController {
         sneakerService.addToFavorite(id);
         return new ResponseEntity<>(OK);
     }
+
+    @DeleteMapping("/favorites")
+    public ResponseEntity<HttpStatus> removeAllFavorites() {
+        sneakerService.removeAllFavorites();
+        return new ResponseEntity<>(NO_CONTENT);
+    }
+
 
     @DeleteMapping("/{id}/favorite")
     public ResponseEntity<HttpStatus> removeFromFavorites(@PathVariable("id") Integer id) {

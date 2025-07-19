@@ -25,4 +25,6 @@ public class SneakerItem {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "sneaker_id", referencedColumnName = "id")
     private Sneaker sneaker;
+
+    private Integer size;
 }

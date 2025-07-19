@@ -31,3 +31,5 @@ databaseChangeLog:
       file: db/changelog/db.insert-sneaker-data-2.1.sql
   - include:
       file: db/changelog/db.create-favorites-table-1.0.sql
+  - include:
+      file: db/changelog/db.create-cart-item-table-1.0.sql

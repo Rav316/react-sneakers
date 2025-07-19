@@ -14,7 +14,6 @@ export interface SneakerListItem {
   name: string;
   imageUrl: string;
   price: number;
-  description: string;
   firm: number;
   isFavorite: boolean;
 }

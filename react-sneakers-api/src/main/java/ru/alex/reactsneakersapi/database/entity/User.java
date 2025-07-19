@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -12,8 +13,8 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@ToString(exclude = "favoriteSneakers")
-@EqualsAndHashCode(exclude = "favoriteSneakers")
+@ToString(of = {"id", "name", "email", "password", "isActivated", "uuid"})
+@EqualsAndHashCode(of = {"id", "name", "email", "password", "isActivated", "uuid"})
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -35,4 +36,7 @@ public class User {
     )
     @Builder.Default
     private Set<Sneaker> favoriteSneakers = new HashSet<>();
+
+    @OneToMany(mappedBy = "user")
+    private List<CartItem> cartItems;
 }
