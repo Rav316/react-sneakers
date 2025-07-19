@@ -10,7 +10,7 @@ import { Toaster } from 'react-hot-toast';
 import { Route, Routes } from 'react-router';
 import { OutletLayout } from './hoc/outlet-layout.tsx';
 import { ProfilePage } from './pages/profile-page/profile-page.tsx';
-import { ErrorPage } from './pages/not-found-page/error-page.tsx';
+import { ErrorPage } from './pages/error-page/error-page.tsx';
 
 import img404 from './assets/404.svg';
 import { RequireAuth } from './hoc/require-auth.tsx';

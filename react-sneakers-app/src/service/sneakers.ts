@@ -1,4 +1,4 @@
-import type { PageResponse, SneakerListItem } from './model.ts';
+import type { PageResponse, Sneaker, SneakerListItem } from './model.ts';
 import { axiosInstance } from './instance.ts';
 import { ApiRoutes } from './constants.ts';
 import type { Order } from '../constants/order.ts';
@@ -41,6 +41,11 @@ export const findAllByIds = async (
   );
   return response.data;
 };
+
+export const findById = async (id: number): Promise<Sneaker> => {
+  const response = await axiosInstance.get<Sneaker>(`${ApiRoutes.SNEAKERS}/${id}`);
+  return response.data;
+}
 
 export const removeAllFavorites = async (): Promise<void> => {
   await axiosInstance.delete(`${ApiRoutes.SNEAKERS}/favorites`);

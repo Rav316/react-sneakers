@@ -20,7 +20,7 @@ export const SneakerSizes: React.FC<Props> = ({
         <div
           key={index}
           className={clsx(styles.size, {
-            [styles.unavailable]: availableSizes.includes(size),
+            [styles.unavailable]: !availableSizes.includes(size),
             [styles.selected]: selectedSize === size,
           })}
           onClick={() => onClickSize(size)}

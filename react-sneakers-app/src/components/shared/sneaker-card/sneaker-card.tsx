@@ -22,7 +22,7 @@ interface Props {
 }
 
 export const SneakerCard: React.FC<Props> = ({
-  sneaker: { imageUrl, price, name, id, isFavorite },
+  sneaker: { imageUrl, price, name, type, id, isFavorite },
 }) => {
   const staticUrl: string = import.meta.env.VITE_STATIC_URL;
 
@@ -72,7 +72,7 @@ export const SneakerCard: React.FC<Props> = ({
       <Link to={`/sneakers/${id}`}>
         <img src={`${staticUrl}${imageUrl}`} alt={'sneaker image'} />
       </Link>
-      <span className={styles.name}>{name}</span>
+      <span className={styles.name}>{`${type.name} ${name}`}</span>
       <div className={styles.priceInfo}>
         <div>
           <span className={styles.priceLabel}>ЦЕНА:</span>

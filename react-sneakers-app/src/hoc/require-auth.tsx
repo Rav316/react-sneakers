@@ -2,7 +2,7 @@ import { useSelector } from 'react-redux';
 import type { RootState } from '../redux/store.ts';
 import * as React from 'react';
 import type { PropsWithChildren } from 'react';
-import { ErrorPage } from '../pages/not-found-page/error-page.tsx';
+import { ErrorPage } from '../pages/error-page/error-page.tsx';
 
 import img401 from '../assets/401.svg';
 

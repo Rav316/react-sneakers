@@ -1,1 +1,1 @@
-export const sizes = [39, 40, 41, 42, 43, 44, 45, 46];
+export const sizes = [38, 39, 40, 41, 42, 43, 44, 45];
