@@ -7,6 +7,7 @@ import ru.alex.reactsneakersapi.dto.sneaker.SneakerReadDto;
 import ru.alex.reactsneakersapi.dto.sneakerItem.SneakerItemReadDto;
 import ru.alex.reactsneakersapi.mapper.ReadMapper;
 import ru.alex.reactsneakersapi.mapper.sneakerItem.SneakerItemReadMapper;
+import ru.alex.reactsneakersapi.mapper.sneakerType.SneakerTypeReadMapper;
 
 import java.util.List;
 
@@ -14,6 +15,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class SneakerReadMapper extends ReadMapper<Sneaker, SneakerReadDto> {
     private final SneakerItemReadMapper sneakerItemReadMapper;
+    private final SneakerTypeReadMapper sneakerTypeReadMapper;
 
     @Override
     public SneakerReadDto toDto(Sneaker entity) {
@@ -25,6 +27,7 @@ public class SneakerReadMapper extends ReadMapper<Sneaker, SneakerReadDto> {
         return new SneakerReadDto(
                 entity.getId(),
                 entity.getName(),
+                sneakerTypeReadMapper.toDto(entity.getType()),
                 entity.getImageUrl(),
                 entity.getPrice(),
                 entity.getDescription(),

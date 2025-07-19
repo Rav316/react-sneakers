@@ -13,6 +13,6 @@ public interface SneakerRepository extends JpaRepository<Sneaker, Integer>, Snea
     @Query("SELECT s FROM Sneaker s JOIN s.favoriteUsers u WHERE u.id = :userId")
     List<Sneaker> findAllFavorites(Integer userId);
 
-    @Query("SELECT s FROM Sneaker s LEFT JOIN FETCH s.items i LEFT JOIN s.firm f WHERE s.id = :id")
+    @Query("SELECT s FROM Sneaker s LEFT JOIN FETCH s.items i LEFT JOIN FETCH s.firm f LEFT JOIN FETCH s.type t WHERE s.id = :id")
     Optional<Sneaker> findByIdWithItems(Integer id);
 }

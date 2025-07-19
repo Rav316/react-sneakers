@@ -11,7 +11,7 @@ public class SneakerTypeReadMapper extends ReadMapper<SneakerType, SneakerTypeRe
     public SneakerTypeReadDto toDto(SneakerType entity) {
         return new SneakerTypeReadDto(
                 entity.getId(),
-                entity.getType()
+                entity.getName()
         );
     }
 }

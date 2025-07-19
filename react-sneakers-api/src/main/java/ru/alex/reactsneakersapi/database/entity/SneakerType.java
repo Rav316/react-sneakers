@@ -17,7 +17,7 @@ public class SneakerType {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    private String type;
+    private String name;
 
     @OneToMany(mappedBy = "type")
     private List<Sneaker> sneakers;

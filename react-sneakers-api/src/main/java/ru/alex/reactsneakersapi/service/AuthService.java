@@ -4,6 +4,7 @@ import jakarta.persistence.EntityNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cache.CacheManager;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -18,6 +19,7 @@ import ru.alex.reactsneakersapi.mapper.user.UserLoginDto;
 import ru.alex.reactsneakersapi.mapper.user.UserReadMapper;
 import ru.alex.reactsneakersapi.mapper.user.UserRegisterMapper;
 
+import java.util.Objects;
 import java.util.UUID;
 
 @Service
@@ -31,6 +33,7 @@ public class AuthService {
     private Boolean emailConfirmation;
 
     private final AuthenticationManager authenticationManager;
+    private final CacheManager cacheManager;
     private final JwtService jwtService;
     private final EmailService emailService;
     private final UserRegisterMapper userRegisterMapper;
@@ -55,6 +58,7 @@ public class AuthService {
             String link = scheme + "://" + hostAddress + ":" + serverPort + "/api/auth/activate/" + uuid;
             emailService.sendActivationMail(userReadDto, link);
         }
+        Objects.requireNonNull(cacheManager.getCache("users")).put(user.getEmail(), createdUser);
         return authResponse;
     }
 

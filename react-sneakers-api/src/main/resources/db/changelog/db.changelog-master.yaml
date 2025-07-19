@@ -41,3 +41,9 @@ databaseChangeLog:
       file: db/changelog/db.create-sneaker-table-2.0.sql
   - include:
       file: db/changelog/db.insert-sneaker-data-3.0.sql
+  - include:
+      file: db/changelog/db.create-sneaker-type-table-1.1.sql
+  - include:
+      file: db/changelog/db.create-cart-item-table-1.1.sql
+  - include:
+      file: db/changelog/db.insert-sneaker-item-data-2.0.sql
