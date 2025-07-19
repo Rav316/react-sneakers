@@ -10,6 +10,7 @@ import { fetchSneakerDetails } from '../../redux/slice/sneaker-details-slice.ts'
 import { useParams } from 'react-router';
 import { SneakerDetailsSkeleton } from '../../components/shared/sneaker-details-skeleton/sneaker-details-skeleton.tsx';
 import { ErrorPage } from '../error-page/error-page.tsx';
+import { ErrorResult } from '../../components/shared/error-result/error-result.tsx';
 
 export const SneakerDetailsPage = () => {
   const staticUrl: string = import.meta.env.VITE_STATIC_URL;
@@ -42,15 +43,19 @@ export const SneakerDetailsPage = () => {
   }, [dispatch, params.id]);
 
   if (error) {
-    return (
-      <ErrorPage
-        image={img404}
-        title={'Страница не найдена'}
-        description={
-          'Проверьте корректность введённого адреса или повторите попытку позже'
-        }
-      />
-    );
+    if (error.code === 404) {
+      return (
+        <ErrorPage
+          image={img404}
+          title={'Страница не найдена'}
+          description={
+            'Проверьте корректность введённого адреса или повторите попытку позже'
+          }
+        />
+      );
+    } else {
+      return <ErrorResult />;
+    }
   }
 
   return (
