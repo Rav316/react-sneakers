@@ -5,15 +5,11 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.alex.reactsneakersapi.database.entity.Sneaker;
-import ru.alex.reactsneakersapi.database.entity.User;
 import ru.alex.reactsneakersapi.database.repository.SneakerRepository;
-import ru.alex.reactsneakersapi.database.repository.UserRepository;
 import ru.alex.reactsneakersapi.dto.filter.SneakerFilter;
 import ru.alex.reactsneakersapi.dto.sneaker.SneakerListDto;
 import ru.alex.reactsneakersapi.dto.sneaker.SneakerReadDto;
 import ru.alex.reactsneakersapi.exception.SneakerNotFoundException;
-import ru.alex.reactsneakersapi.exception.UserNotFoundException;
 import ru.alex.reactsneakersapi.mapper.sneaker.SneakerListMapper;
 import ru.alex.reactsneakersapi.mapper.sneaker.SneakerReadMapper;
 
@@ -26,7 +22,6 @@ import static ru.alex.reactsneakersapi.util.AuthUtils.*;
 @RequiredArgsConstructor
 public class SneakerService {
     private final SneakerRepository sneakerRepository;
-    private final UserRepository userRepository;
     private final SneakerListMapper sneakerListMapper;
     private final SneakerReadMapper sneakerReadMapper;
 
@@ -61,24 +56,18 @@ public class SneakerService {
 
     @Transactional
     public void addToFavorite(Integer id) {
-        Sneaker sneaker = sneakerRepository.findById(id)
-                .orElseThrow(() -> new SneakerNotFoundException(id));
-        String authorizedUserEmail = getAuthorizedUser().email();
-        User user = userRepository.findByEmail(authorizedUserEmail)
-                .orElseThrow(() -> new UserNotFoundException(authorizedUserEmail));
-        user.getFavoriteSneakers().add(sneaker);
-        userRepository.save(user);
+        if (!sneakerRepository.existsById(id)) {
+            throw new SneakerNotFoundException(id);
+        }
+        sneakerRepository.addToFavorite(id, getAuthorizedUser().id());
     }
 
     @Transactional
     public void removeFromFavorites(Integer id) {
-        Sneaker sneaker = sneakerRepository.findById(id)
-                .orElseThrow(() -> new SneakerNotFoundException(id));
-        String authorizedUserEmail = getAuthorizedUser().email();
-        User user = userRepository.findByEmail(authorizedUserEmail)
-                .orElseThrow(() -> new UserNotFoundException(authorizedUserEmail));
-        user.getFavoriteSneakers().remove(sneaker);
-        userRepository.save(user);
+        if(!sneakerRepository.existsById(id)) {
+            throw new SneakerNotFoundException(id);
+        }
+        sneakerRepository.removeFromFavorites(id, getAuthorizedUser().id());
     }
 
     @Transactional

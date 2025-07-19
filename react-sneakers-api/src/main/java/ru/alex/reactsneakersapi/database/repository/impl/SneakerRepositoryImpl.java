@@ -22,10 +22,7 @@ import ru.alex.reactsneakersapi.dto.filter.SneakerFilter;
 import ru.alex.reactsneakersapi.dto.sneaker.SneakerListDto;
 import ru.alex.reactsneakersapi.mapper.sneaker.SneakerListMapper;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 import static ru.alex.reactsneakersapi.database.entity.QSneaker.sneaker;
 
@@ -76,6 +73,8 @@ public class SneakerRepositoryImpl implements SneakerRepositoryCustom {
         return new PageImpl<>(sneakers, pageable, Objects.requireNonNull(total));
     }
 
+
+
     @Override
     public void addFavoritesBatch(List<Integer> sneakerIds, Integer userId) {
         List<FavoritesCreateDto> batch = sneakerIds
@@ -89,6 +88,18 @@ public class SneakerRepositoryImpl implements SneakerRepositoryCustom {
                 """;
         SqlParameterSource[] batchParams = SqlParameterSourceUtils.createBatch(batch.toArray());
         jdbcTemplate.batchUpdate(sql, batchParams);
+    }
+
+    @Override
+    public void addToFavorite(Integer sneakerId, Integer userId) {
+        String sql = "INSERT INTO favorites(sneaker_id, user_id) VALUES (:sneakerId, :userId) ON CONFLICT DO NOTHING";
+        jdbcTemplate.update(sql, Map.of("sneakerId", sneakerId, "userId", userId));
+    }
+
+    @Override
+    public void removeFromFavorites(Integer sneakerId, Integer userId) {
+        String sql = "DELETE FROM favorites WHERE sneaker_id = :sneakerId AND user_id = :userId";
+        jdbcTemplate.update(sql, Map.of("sneakerId", sneakerId, "userId", userId));
     }
 
     @Override
