@@ -54,6 +54,7 @@ public class SneakerRepositoryImpl implements SneakerRepositoryCustom {
                                 .exists()
                 )
                 .from(sneaker)
+                .leftJoin(sneaker.type).fetchJoin()
                 .where(predicate)
                 .orderBy(getSortOrder(filter))
                 .offset(pageable.getOffset())

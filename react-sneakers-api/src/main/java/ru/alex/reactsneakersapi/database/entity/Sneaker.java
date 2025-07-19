@@ -34,6 +34,10 @@ public class Sneaker {
     @JoinColumn(name = "firm_id", referencedColumnName = "id")
     private Firm firm;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "sneaker_type_id", referencedColumnName = "id")
+    private SneakerType type;
+
     @OneToMany(mappedBy = "sneaker")
     private List<SneakerItem> items;
 
