@@ -1,6 +1,9 @@
 import type {
-  CartItemCreateDto, CartResponse,
-  ErrorResponse
+  CartItem,
+  CartItemCreateDto,
+  CartItemUpdateDto,
+  CartResponse,
+  ErrorResponse,
 } from '../../service/model.ts';
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { callApiWithErrorHandling } from '../../util/call-api-with-error-handling.ts';
@@ -21,7 +24,6 @@ const initialState: CartSlice = {
   cart: {
     items: [],
     sum: 0,
-    tax: 0,
   },
   loading: true,
   addStatus: {
@@ -38,7 +40,7 @@ export const fetchCart = createAsyncThunk<
 });
 
 export const addToCart = createAsyncThunk<
-  void,
+  CartItem,
   CartItemCreateDto,
   { rejectValue: ErrorResponse }
 >(
@@ -47,6 +49,21 @@ export const addToCart = createAsyncThunk<
     return await callApiWithErrorHandling(
       Api.cart.addToCart,
       cartItemCreateDto,
+      rejectWithValue,
+    );
+  },
+);
+
+export const updateCartItemQuantity = createAsyncThunk<
+  CartItem,
+  CartItemUpdateDto,
+  { rejectValue: ErrorResponse }
+>(
+  'cart/updateCartItemQuantity',
+  async (cartItemUpdateDto: CartItemUpdateDto, { rejectWithValue }) => {
+    return await callApiWithErrorHandling(
+      Api.cart.updateCartItemQuantity,
+      cartItemUpdateDto,
       rejectWithValue,
     );
   },
@@ -74,12 +91,37 @@ const cartSlice = createSlice({
           loading: true,
         };
       })
-      .addCase(addToCart.fulfilled, (state) => {
+      .addCase(addToCart.fulfilled, (state, action) => {
         state.addStatus = {
           loading: false,
         };
+        state.cart.items.push(action.payload);
+        state.cart.sum += action.payload.price * action.payload.quantity;
       })
       .addCase(addToCart.rejected, (state, action) => {
+        state.addStatus = {
+          loading: false,
+          error: extractError(action),
+        };
+      })
+      .addCase(updateCartItemQuantity.pending, (state) => {
+        state.addStatus = {
+          loading: true,
+        };
+      })
+      .addCase(updateCartItemQuantity.fulfilled, (state, action) => {
+        state.addStatus = {
+          loading: false,
+        };
+        state.cart.items = state.cart.items.map((item) =>
+          item.id === action.payload.id ? action.payload : item,
+        );
+        state.cart.sum = state.cart.items.reduce(
+          (acc, item) => acc + item.price * item.quantity,
+          0,
+        );
+      })
+      .addCase(updateCartItemQuantity.rejected, (state, action) => {
         state.addStatus = {
           loading: false,
           error: extractError(action),

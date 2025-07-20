@@ -17,6 +17,7 @@ import { RequireAuth } from './hoc/require-auth.tsx';
 import { checkAuth } from './redux/slice/auth-slice.ts';
 import { FavoritesPage } from './pages/favorites-page/favorites-page.tsx';
 import { SneakerDetailsPage } from './pages/sneaker-details-page/sneaker-details-page.tsx';
+import { fetchCart } from './redux/slice/cart-slice.ts';
 
 const App = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -41,6 +42,7 @@ const App = () => {
   useEffect(() => {
     if (token) {
       dispatch(checkAuth());
+      dispatch(fetchCart())
     }
   }, [dispatch, token]);
 

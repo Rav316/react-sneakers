@@ -6,8 +6,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import type { AppDispatch, RootState } from '../../../redux/store.ts';
 import { setIsDrawerOpen } from '../../../redux/slice/cart-drawer-slice.ts';
 import { Arrow } from '../../ui/arrow.tsx';
-import { useEffect } from 'react';
-import { fetchCart } from '../../../redux/slice/cart-slice.ts';
 import { CartError } from '../error/cart-error/cart-error.tsx';
 import { Skeleton } from '../../ui/skeleton/skeleton.tsx';
 
@@ -21,12 +19,6 @@ export const CartDrawer = () => {
   const onCloseDrawer = () => {
     dispatch(setIsDrawerOpen(false));
   };
-
-  useEffect(() => {
-    if (isOpen) {
-      dispatch(fetchCart());
-    }
-  }, [dispatch, isOpen]);
 
   return (
     <>
@@ -65,15 +57,10 @@ export const CartDrawer = () => {
             <div className={styles.resultWrapper}>
               <div className={styles.resultInfoWrapper}>
                 <div className={styles.resultInfo}>
-                  <span>Налог 5%:</span>
-                  <div />
-                  <span className={styles.price}>{cart.tax} руб.</span>
-                </div>
-                <div className={styles.resultInfo}>
                   <span>Итого:</span>
                   <div />
                   <span className={styles.price}>
-                    {cart.sum + cart.tax} руб.
+                    {cart.sum} руб.
                   </span>
                 </div>
                 <div className={styles.placeOrderButton}>

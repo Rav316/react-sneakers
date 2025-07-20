@@ -69,6 +69,7 @@ export interface CartItem {
   type: string;
   imageUrl: string;
   price: number;
+  sneakerItemId: number;
   size: number;
   quantity: number;
 }
@@ -76,5 +77,9 @@ export interface CartItem {
 export interface CartResponse {
   items: CartItem[];
   sum: number;
-  tax: number;
+}
+
+export interface CartItemUpdateDto {
+  id: number,
+  quantity: number,
 }

@@ -2,17 +2,18 @@ import styles from './sneaker-sizes.module.scss';
 import * as React from 'react';
 import { sizes } from '../../../constants/sizes.ts';
 import clsx from 'clsx';
+import type { SneakerItem } from '../../../service/model.ts';
 
 interface Props {
-  selectedSize: number | null;
+  selectedItem: SneakerItem | null;
   onClickSize: (size: number) => void;
-  availableSizes: number[];
+  availableItems: SneakerItem[];
 }
 
 export const SneakerSizes: React.FC<Props> = ({
-  selectedSize,
+  selectedItem,
   onClickSize,
-  availableSizes,
+  availableItems,
 }) => {
   return (
     <div className={styles.root}>
@@ -20,8 +21,10 @@ export const SneakerSizes: React.FC<Props> = ({
         <div
           key={index}
           className={clsx(styles.size, {
-            [styles.unavailable]: !availableSizes.includes(size),
-            [styles.selected]: selectedSize === size,
+            [styles.unavailable]: !availableItems
+              .map((item) => item.size)
+              .includes(size),
+            [styles.selected]: selectedItem?.size === size,
           })}
           onClick={() => onClickSize(size)}
         >

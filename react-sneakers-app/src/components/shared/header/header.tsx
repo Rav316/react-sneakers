@@ -9,10 +9,12 @@ import type { AppDispatch, RootState } from '../../../redux/store.ts';
 import { setIsModalOpen } from '../../../redux/slice/auth-modal-slice.ts';
 import { Link, useNavigate } from 'react-router';
 import { setIsDrawerOpen } from '../../../redux/slice/cart-drawer-slice.ts';
+import { Skeleton } from '../../ui/skeleton/skeleton.tsx';
 
 export const Header = () => {
-  const token = useSelector((state: RootState) => state.auth.token);
   const dispatch = useDispatch<AppDispatch>();
+  const token = useSelector((state: RootState) => state.auth.token);
+  const { cart, loading } = useSelector((state: RootState) => state.cart);
   const navigate = useNavigate();
 
   const onProfileClick = () => {
@@ -33,7 +35,11 @@ export const Header = () => {
           className={styles.menuItem}
         >
           <img src={cartIcon} alt={'cart icon'} />
-          <span>1205 руб.</span>
+          {loading ? (
+            <Skeleton width={70} height={18} borderRadius={5} />
+          ) : (
+            <span>{cart.sum} руб.</span>
+          )}
         </div>
         <Link to={'/favorites'}>
           <div className={styles.menuItem}>

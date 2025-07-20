@@ -11,24 +11,27 @@ import { useParams } from 'react-router';
 import { SneakerDetailsSkeleton } from '../../components/shared/sneaker-details-skeleton/sneaker-details-skeleton.tsx';
 import { ErrorPage } from '../error-page/error-page.tsx';
 import { ErrorResult } from '../../components/shared/error/error-result/error-result.tsx';
-import { addToCart } from '../../redux/slice/cart-slice.ts';
+import {
+  addToCart,
+  updateCartItemQuantity,
+} from '../../redux/slice/cart-slice.ts';
 import { unwrapResult } from '@reduxjs/toolkit';
 import toast from 'react-hot-toast';
+import type { SneakerItem } from '../../service/model.ts';
 
 export const SneakerDetailsPage = () => {
   const staticUrl: string = import.meta.env.VITE_STATIC_URL;
   const params = useParams();
 
   const [counter, setCounter] = useState(1);
-  const [selectedSize, setSelectedSize] = useState<number | null>(null);
+  const [selectedItem, setSelectedItem] = useState<SneakerItem | null>(null);
 
   const dispatch = useDispatch<AppDispatch>();
   const { sneaker, loading, error } = useSelector(
     (state: RootState) => state.sneakerDetails,
   );
-  const { loading: addToCartLoading} = useSelector(
-    (state: RootState) => state.cart.addStatus,
-  );
+  const cart = useSelector((state: RootState) => state.cart.cart);
+  const addToCartLoading = useSelector((state: RootState) => state.cart.addStatus.loading);
 
   const onClickMinus = () => {
     if (counter > 1) {
@@ -37,24 +40,39 @@ export const SneakerDetailsPage = () => {
   };
 
   const onClickSize = (size: number) => {
-    if (selectedSize === size) {
-      setSelectedSize(null);
+    if (selectedItem?.size === size) {
+      setSelectedItem(null);
     } else {
-      setSelectedSize(size);
+      setSelectedItem(sneaker.items.find((item) => item.size === size)!);
     }
   };
 
   const onClickAddToCart = async () => {
-    if (selectedSize) {
+    if (selectedItem) {
       try {
-        const action = await dispatch(
-          addToCart({
-            sneakerItem: sneaker.items.find((item) => item.size === selectedSize)!.id,
-            quantity: counter,
-          })
+        const find = cart.items.find(
+          (item) => item.sneakerItemId === selectedItem.id,
         );
 
-        unwrapResult(action);
+        if (!find) {
+
+          const action = await dispatch(
+            addToCart({
+              sneakerItem: selectedItem.id,
+              quantity: counter,
+            })
+          );
+          unwrapResult(action);
+        } else {
+          const action = await dispatch(
+            updateCartItemQuantity({
+              id: find.id,
+              quantity: counter,
+            })
+          );
+          unwrapResult(action);
+        }
+
         toast.success('Товар добавлен в корзину');
       } catch {
         toast.error('Ошибка при добавлении в корзину');
@@ -117,8 +135,8 @@ export const SneakerDetailsPage = () => {
               <span className={styles.sneakerInfo}>Размер:</span>
               <div className={styles.sizesWrapper}>
                 <SneakerSizes
-                  availableSizes={sneaker.items.map((item) => item.size)}
-                  selectedSize={selectedSize}
+                  availableItems={sneaker.items}
+                  selectedItem={selectedItem}
                   onClickSize={onClickSize}
                 />
               </div>
