@@ -22,7 +22,7 @@ public class CartItemCreateMapper extends CreateMapper<CartItem, CartItemCreateD
 
     @Override
     public CartItem toEntity(CartItemCreateDto dto) {
-        SneakerItem sneakerItem = sneakerItemRepository.findById(dto.sneakerItem())
+        SneakerItem sneakerItem = sneakerItemRepository.findByIdWithLoadedEntities(dto.sneakerItem())
                 .orElseThrow(() -> new SneakerItemNotFoundException(dto.sneakerItem()));
         String authorizedUserEmail = getAuthorizedUser().email();
         User user = userRepository.findByEmail(authorizedUserEmail)

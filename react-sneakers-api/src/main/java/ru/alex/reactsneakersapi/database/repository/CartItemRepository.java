@@ -23,11 +23,18 @@ public interface CartItemRepository extends JpaRepository<CartItem, Integer> {
         """)
     List<CartItem> findAllByUser(Integer userId);
 
-    @Query("SELECT ci FROM CartItem ci WHERE ci.sneakerItem.id = :sneakerItemId AND ci.user.id = :userId")
-    Optional<CartItem> findBySneakerItemAndUser(Integer sneakerItemId, Integer userId);
-
     @Query("SELECT ci FROM CartItem ci WHERE ci.id = :id AND ci.user.id = :userId")
     Optional<CartItem> findByIdAndUser(Integer id, Integer userId);
+
+    @Query("""
+        SELECT ci
+        FROM CartItem ci
+        LEFT JOIN FETCH ci.sneakerItem si
+        LEFT JOIN FETCH si.sneaker s
+        LEFT JOIN FETCH s.type t
+        WHERE ci.id = :id AND ci.user.id = :userId
+        """)
+    Optional<CartItem> findByIdAndUserWithLoadedEntities(Integer id, Integer userId);
 
     @Modifying
     @Query("DELETE FROM CartItem ci WHERE ci.id = :id AND ci.user.id = :userId")

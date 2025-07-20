@@ -19,6 +19,7 @@ public class CartItemReadMapper extends ReadMapper<CartItem, CartItemReadDto> {
                 sneaker.getType().getName(),
                 sneaker.getImageUrl(),
                 sneaker.getPrice(),
+                sneakerItem.getId(),
                 sneakerItem.getSize(),
                 entity.getQuantity()
         );

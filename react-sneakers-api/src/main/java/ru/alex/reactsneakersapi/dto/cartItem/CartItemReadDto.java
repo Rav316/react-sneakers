@@ -8,6 +8,7 @@ public record CartItemReadDto(
         String type,
         String imageUrl,
         BigDecimal price,
+        Integer sneakerItemId,
         Integer size,
         Integer quantity
 ) {

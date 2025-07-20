@@ -7,7 +7,6 @@ import java.util.List;
 
 public record CartResponse (
         List<CartItemReadDto> items,
-        BigDecimal sum,
-        BigDecimal tax
+        BigDecimal sum
 ) {
 }

@@ -7,10 +7,11 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.alex.reactsneakersapi.dto.cart.CartResponse;
 import ru.alex.reactsneakersapi.dto.cartItem.CartItemCreateDto;
+import ru.alex.reactsneakersapi.dto.cartItem.CartItemEditDto;
+import ru.alex.reactsneakersapi.dto.cartItem.CartItemReadDto;
 import ru.alex.reactsneakersapi.service.CartService;
 
-import static org.springframework.http.HttpStatus.NO_CONTENT;
-import static org.springframework.http.HttpStatus.OK;
+import static org.springframework.http.HttpStatus.*;
 
 @RestController
 @RequestMapping("/api/cart")
@@ -24,10 +25,22 @@ public class CartController {
     }
 
     @PostMapping
-    public ResponseEntity<HttpStatus> addSneakerToCart(
+    public ResponseEntity<CartItemReadDto> addSneakerToCart(
             @Validated @RequestBody CartItemCreateDto cartItemCreateDto
     ) {
-        cartService.increaseCartItem(cartItemCreateDto);
+        return new ResponseEntity<>(cartService.increaseCartItem(cartItemCreateDto), CREATED);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<CartItemReadDto> updateCartItemQuantity(@PathVariable("id") Integer id,
+                                                                  @Validated @RequestBody CartItemEditDto cartItemEditDto) {
+        return new ResponseEntity<>(cartService.updateCartItemQuantity(id, cartItemEditDto), OK);
+    }
+
+
+    @PutMapping("/{id}/decrement")
+    public ResponseEntity<HttpStatus> decrementCartItemQuantity(@PathVariable("id") Integer id) {
+        cartService.decrementCartItem(id);
         return new ResponseEntity<>(OK);
     }
 
@@ -35,11 +48,5 @@ public class CartController {
     public ResponseEntity<HttpStatus> removeSneakerFromCart(@PathVariable("id") Integer id) {
         cartService.removeCartItem(id);
         return new ResponseEntity<>(NO_CONTENT);
-    }
-
-    @PutMapping("/{id}/decrement")
-    public ResponseEntity<HttpStatus> decrementCartItemQuantity(@PathVariable("id") Integer id) {
-        cartService.decrementCartItem(id);
-        return new ResponseEntity<>(OK);
     }
 }

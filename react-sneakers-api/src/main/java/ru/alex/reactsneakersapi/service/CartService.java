@@ -7,13 +7,13 @@ import ru.alex.reactsneakersapi.database.entity.CartItem;
 import ru.alex.reactsneakersapi.database.repository.CartItemRepository;
 import ru.alex.reactsneakersapi.dto.cart.CartResponse;
 import ru.alex.reactsneakersapi.dto.cartItem.CartItemCreateDto;
+import ru.alex.reactsneakersapi.dto.cartItem.CartItemEditDto;
 import ru.alex.reactsneakersapi.dto.cartItem.CartItemReadDto;
 import ru.alex.reactsneakersapi.exception.CartItemNotFoundException;
 import ru.alex.reactsneakersapi.mapper.cartItem.CartItemCreateMapper;
 import ru.alex.reactsneakersapi.mapper.cartItem.CartItemReadMapper;
 
 import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.util.List;
 
 import static ru.alex.reactsneakersapi.util.AuthUtils.getAuthorizedUser;
@@ -35,26 +35,24 @@ public class CartService {
                 .map(item -> item.price().multiply(BigDecimal.valueOf(item.quantity())))
                 .reduce(BigDecimal::add)
                 .orElse(BigDecimal.ZERO);
-        BigDecimal tax = sum.multiply(BigDecimal.valueOf(0.05)).setScale(2, RoundingMode.FLOOR);
-        return new CartResponse(
-                items,
-                sum.subtract(tax),
-                tax
-        );
+        return new CartResponse(items, sum);
     }
 
     @Transactional
-    public void increaseCartItem(CartItemCreateDto cartItemCreateDto) {
-        cartItemRepository.findBySneakerItemAndUser(cartItemCreateDto.sneakerItem(), getAuthorizedUser().id())
-                .ifPresentOrElse(item -> {
-                    item.setQuantity(item.getQuantity() + cartItemCreateDto.quantity());
-                    cartItemRepository.save(item);
-                }, () -> {
-                    CartItem cartItem = cartItemCreateMapper.toEntity(cartItemCreateDto);
-                    cartItemRepository.save(cartItem);
-                });
+    public CartItemReadDto increaseCartItem(CartItemCreateDto cartItemCreateDto) {
+        CartItem cartItem = cartItemCreateMapper.toEntity(cartItemCreateDto);
+        return cartItemReadMapper.toDto(cartItemRepository.save(cartItem));
     }
 
+    @Transactional
+    public CartItemReadDto updateCartItemQuantity(Integer id, CartItemEditDto cartItemEditDto) {
+        CartItem cartItem = cartItemRepository.findByIdAndUserWithLoadedEntities(id, getAuthorizedUser().id())
+                .orElseThrow(() -> new CartItemNotFoundException(id));
+        cartItem.setQuantity(cartItem.getQuantity() + cartItemEditDto.quantity());
+        return cartItemReadMapper.toDto(cartItemRepository.save(cartItem));
+    }
+
+    @Transactional
     public void decrementCartItem(Integer id) {
         CartItem cartItem = cartItemRepository.findByIdAndUser(id, getAuthorizedUser().id())
                 .orElseThrow(() -> new CartItemNotFoundException(id));
