@@ -10,7 +10,10 @@ import { fetchSneakerDetails } from '../../redux/slice/sneaker-details-slice.ts'
 import { useParams } from 'react-router';
 import { SneakerDetailsSkeleton } from '../../components/shared/sneaker-details-skeleton/sneaker-details-skeleton.tsx';
 import { ErrorPage } from '../error-page/error-page.tsx';
-import { ErrorResult } from '../../components/shared/error-result/error-result.tsx';
+import { ErrorResult } from '../../components/shared/error/error-result/error-result.tsx';
+import { addToCart } from '../../redux/slice/cart-slice.ts';
+import { unwrapResult } from '@reduxjs/toolkit';
+import toast from 'react-hot-toast';
 
 export const SneakerDetailsPage = () => {
   const staticUrl: string = import.meta.env.VITE_STATIC_URL;
@@ -22,6 +25,9 @@ export const SneakerDetailsPage = () => {
   const dispatch = useDispatch<AppDispatch>();
   const { sneaker, loading, error } = useSelector(
     (state: RootState) => state.sneakerDetails,
+  );
+  const { loading: addToCartLoading} = useSelector(
+    (state: RootState) => state.cart.addStatus,
   );
 
   const onClickMinus = () => {
@@ -35,6 +41,24 @@ export const SneakerDetailsPage = () => {
       setSelectedSize(null);
     } else {
       setSelectedSize(size);
+    }
+  };
+
+  const onClickAddToCart = async () => {
+    if (selectedSize) {
+      try {
+        const action = await dispatch(
+          addToCart({
+            sneakerItem: sneaker.items.find((item) => item.size === selectedSize)!.id,
+            quantity: counter,
+          })
+        );
+
+        unwrapResult(action);
+        toast.success('Товар добавлен в корзину');
+      } catch {
+        toast.error('Ошибка при добавлении в корзину');
+      }
     }
   };
 
@@ -98,7 +122,12 @@ export const SneakerDetailsPage = () => {
                   onClickSize={onClickSize}
                 />
               </div>
-              <Button content={'Добавить в корзину'} width={'100%'} />
+              <Button
+                onClick={onClickAddToCart}
+                disabled={addToCartLoading}
+                content={'Добавить в корзину'}
+                width={'100%'}
+              />
             </div>
           </div>
         </div>

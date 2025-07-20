@@ -2,6 +2,7 @@ import type { ErrorResponse, Sneaker } from '../../service/model.ts';
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { Api } from '../../service/api-client.ts';
 import { callApiWithErrorHandling } from '../../util/call-api-with-error-handling.ts';
+import { extractError } from '../../util/extract-error.ts';
 
 interface SneakerDetailsSlice {
   sneaker: Sneaker;
@@ -51,14 +52,7 @@ const sneakerDetailsSlice = createSlice({
       state.loading = false;
     }).addCase(fetchSneakerDetails.rejected, (state, action) => {
       state.loading = false;
-      if(action.payload) {
-        state.error = action.payload;
-      } else {
-        state.error = {
-          message: action.error.message || 'Unknown error',
-          code: 500,
-        };
-      }
+      state.error = extractError(action.payload);
     })
   }
 });

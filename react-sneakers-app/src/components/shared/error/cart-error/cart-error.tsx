@@ -1,0 +1,11 @@
+import styles from './cart-error.module.scss';
+import screamingFace from '../../../../assets/screaming-face.png';
+
+export const CartError = () => {
+  return (
+    <div className={styles.root}>
+      <img src={screamingFace} alt={'screaming face'} />
+      <span>Что-то пошло не так. Попробуйте перезагрузить страницу.</span>
+    </div>
+  );
+}

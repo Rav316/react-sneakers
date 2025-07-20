@@ -8,6 +8,7 @@ import sneakerFavoritesReducer from './slice/sneaker-favorites-slice';
 import searchReducer from './slice/search-slice';
 import authReducer from './slice/auth-slice';
 import favoriteReducer from './slice/favorite-slice';
+import cartReducer from './slice/cart-slice';
 
 export const store = configureStore({
   reducer: {
@@ -18,7 +19,8 @@ export const store = configureStore({
     sneakerFavorites: sneakerFavoritesReducer,
     search: searchReducer,
     auth: authReducer,
-    favorites: favoriteReducer
+    favorites: favoriteReducer,
+    cart: cartReducer
   },
 });
 

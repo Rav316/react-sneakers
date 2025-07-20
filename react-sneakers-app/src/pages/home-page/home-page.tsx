@@ -9,7 +9,7 @@ import { SneakerCardSkeleton } from '../../components/shared/sneaker-card/skelet
 import { useDebounce } from 'use-debounce';
 import { EmptyResult } from '../../components/shared/empty-result/empty-result.tsx';
 import { Pagination } from '../../components/shared/pagination/pagination.tsx';
-import { ErrorResult } from '../../components/shared/error-result/error-result.tsx';
+import { ErrorResult } from '../../components/shared/error/error-result/error-result.tsx';
 import { SortBlock } from '../../components/shared/sort-block/sort-block.tsx';
 import type { Order } from '../../constants/order.ts';
 import { type SortOption, sortOptions } from '../../constants/sort.ts';

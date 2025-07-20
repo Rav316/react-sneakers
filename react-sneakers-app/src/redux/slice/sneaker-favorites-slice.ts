@@ -2,6 +2,7 @@ import type { ErrorResponse, SneakerListItem } from '../../service/model.ts';
 import { createAsyncThunk, createSlice, isAnyOf } from '@reduxjs/toolkit';
 import { callApiWithErrorHandling } from '../../util/call-api-with-error-handling.ts';
 import { Api } from '../../service/api-client.ts';
+import { extractError } from '../../util/extract-error.ts';
 
 interface SneakerFavoritesSlice {
   items: SneakerListItem[];
@@ -80,14 +81,7 @@ const sneakerFavoritesSlice = createSlice({
         isAnyOf(fetchFavoriteSneakers.rejected, fetchSneakersByIds.rejected),
         (state, action) => {
           state.loading = false;
-          if (action.payload) {
-            state.error = action.payload;
-          } else {
-            state.error = {
-              message: action.error.message || 'Unknown error',
-              code: 500,
-            };
-          }
+          state.error = extractError(action.payload)
         },
       );
   },

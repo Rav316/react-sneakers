@@ -57,3 +57,24 @@ export interface ErrorResponse {
   code: number;
   message: string;
 }
+
+export interface CartItemCreateDto {
+  sneakerItem: number;
+  quantity: number;
+}
+
+export interface CartItem {
+  id: number;
+  name: string;
+  type: string;
+  imageUrl: string;
+  price: number;
+  size: number;
+  quantity: number;
+}
+
+export interface CartResponse {
+  items: CartItem[];
+  sum: number;
+  tax: number;
+}

@@ -1,5 +1,5 @@
 import styles from './error-result.module.scss';
-import screamingFace from '../../../assets/screaming-face.png';
+import screamingFace from '../../../../assets/screaming-face.png';
 export const ErrorResult = () => {
   return (
     <div className={styles.root}>

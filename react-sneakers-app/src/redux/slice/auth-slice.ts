@@ -4,6 +4,7 @@ import { Api } from '../../service/api-client.ts';
 import type { LoginData, RegisterData } from '../../service/auth.ts';
 import type { AxiosError } from 'axios';
 import { callApiWithErrorHandling } from '../../util/call-api-with-error-handling.ts';
+import { extractError } from '../../util/extract-error.ts';
 
 interface AuthSlice {
   user?: User;
@@ -92,14 +93,7 @@ const authSlice = createSlice({
       })
       .addCase(login.rejected, (state, action) => {
         state.loading = false;
-        if (action.payload) {
-          state.error = action.payload;
-        } else {
-          state.error = {
-            message: action.error.message || 'Unknown error',
-            code: 500,
-          };
-        }
+        state.error = extractError(action.payload)
       })
       .addCase(checkAuth.rejected, (state, action) => {
         const errorCode = action.payload as number | undefined;
@@ -121,14 +115,7 @@ const authSlice = createSlice({
       })
       .addCase(register.rejected, (state, action) => {
         state.loading = false;
-        if (action.payload) {
-          state.error = action.payload;
-        } else {
-          state.error = {
-            message: action.error.message || 'Unknown error',
-            code: 500,
-          };
-        }
+        state.error = extractError(action.payload)
       });
   },
 });

@@ -7,6 +7,7 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import type { SearchParams } from '../../service/sneakers.ts';
 import { Api } from '../../service/api-client.ts';
 import type { AxiosError } from 'axios';
+import { extractError } from '../../util/extract-error.ts';
 
 interface SneakerSlice {
   sneakers: PageResponse<SneakerListItem>;
@@ -61,14 +62,7 @@ const sneakerSlice = createSlice({
     });
     builder.addCase(fetchSneakers.rejected, (state, action) => {
       state.loading = false;
-      if (action.payload) {
-        state.error = action.payload;
-      } else {
-        state.error = {
-          message: action.error.message || 'Unknown error',
-          code: 500,
-        };
-      }
+      state.error = extractError(action.payload)
     });
   },
 });
