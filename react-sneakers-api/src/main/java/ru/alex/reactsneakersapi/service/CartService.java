@@ -5,12 +5,15 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.alex.reactsneakersapi.database.entity.CartItem;
 import ru.alex.reactsneakersapi.database.repository.CartItemRepository;
+import ru.alex.reactsneakersapi.dto.cart.CartResponse;
 import ru.alex.reactsneakersapi.dto.cartItem.CartItemCreateDto;
 import ru.alex.reactsneakersapi.dto.cartItem.CartItemReadDto;
 import ru.alex.reactsneakersapi.exception.CartItemNotFoundException;
 import ru.alex.reactsneakersapi.mapper.cartItem.CartItemCreateMapper;
 import ru.alex.reactsneakersapi.mapper.cartItem.CartItemReadMapper;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.List;
 
 import static ru.alex.reactsneakersapi.util.AuthUtils.getAuthorizedUser;
@@ -18,16 +21,26 @@ import static ru.alex.reactsneakersapi.util.AuthUtils.getAuthorizedUser;
 @Service
 @Transactional
 @RequiredArgsConstructor
-public class CartItemService {
+public class CartService {
     private final CartItemRepository cartItemRepository;
     private final CartItemCreateMapper cartItemCreateMapper;
     private final CartItemReadMapper cartItemReadMapper;
 
-    public List<CartItemReadDto> findAll() {
-        return cartItemRepository.findAllByUser(getAuthorizedUser().id())
+    public CartResponse getCartByUser() {
+        List<CartItemReadDto> items = cartItemRepository.findAllByUser(getAuthorizedUser().id())
                 .stream()
                 .map(cartItemReadMapper::toDto)
                 .toList();
+        BigDecimal sum = items.stream()
+                .map(item -> item.price().multiply(BigDecimal.valueOf(item.quantity())))
+                .reduce(BigDecimal::add)
+                .orElse(BigDecimal.ZERO);
+        BigDecimal tax = sum.multiply(BigDecimal.valueOf(0.05)).setScale(2, RoundingMode.FLOOR);
+        return new CartResponse(
+                items,
+                sum.subtract(tax),
+                tax
+        );
     }
 
     @Transactional

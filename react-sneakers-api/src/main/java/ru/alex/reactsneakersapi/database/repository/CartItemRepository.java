@@ -17,6 +17,7 @@ public interface CartItemRepository extends JpaRepository<CartItem, Integer> {
         FROM CartItem ci
         LEFT JOIN FETCH ci.sneakerItem si
         LEFT JOIN FETCH si.sneaker s
+        LEFT JOIN FETCH s.type t
         WHERE ci.user.id = :userId
         ORDER BY ci.id
         """)

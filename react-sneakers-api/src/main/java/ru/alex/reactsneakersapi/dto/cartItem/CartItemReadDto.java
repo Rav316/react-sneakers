@@ -5,6 +5,7 @@ import java.math.BigDecimal;
 public record CartItemReadDto(
         Integer id,
         String name,
+        String type,
         String imageUrl,
         BigDecimal price,
         Integer size,
