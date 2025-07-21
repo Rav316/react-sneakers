@@ -69,6 +69,16 @@ export const updateCartItemQuantity = createAsyncThunk<
   },
 );
 
+export const decrementCartItemQuantity = createAsyncThunk<void, number, {rejectValue: ErrorResponse}>(
+  'cart/decrementCartItemQuantity',
+  async (id: number, { rejectWithValue }) =>
+    await callApiWithErrorHandling(
+      Api.cart.decrementCartItemQuantity,
+      id,
+      rejectWithValue,
+    ),
+)
+
 export const removeFromCart = createAsyncThunk<
   void,
   number,
@@ -136,6 +146,29 @@ const cartSlice = createSlice({
         );
       })
       .addCase(updateCartItemQuantity.rejected, (state, action) => {
+        state.changeStatus = {
+          loading: false,
+          error: extractError(action),
+        };
+      })
+      .addCase(decrementCartItemQuantity.pending, (state) => {
+        state.changeStatus = {
+          loading: true
+        }
+      })
+      .addCase(decrementCartItemQuantity.fulfilled, (state, action) => {
+        state.changeStatus = {
+          loading: false
+        }
+        state.cart.items = state.cart.items.map((item) => {
+          if(item.id === action.meta.arg) {
+            item.quantity -= 1;
+          }
+          return item;
+        })
+        state.cart.sum = state.cart.sum - (state.cart.items.find((item) => item.id === action.meta.arg)?.price || 0);
+      })
+      .addCase(decrementCartItemQuantity.rejected, (state, action) => {
         state.changeStatus = {
           loading: false,
           error: extractError(action),
