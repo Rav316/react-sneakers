@@ -31,7 +31,7 @@ export const SneakerDetailsPage = () => {
     (state: RootState) => state.sneakerDetails,
   );
   const cart = useSelector((state: RootState) => state.cart.cart);
-  const addToCartLoading = useSelector((state: RootState) => state.cart.addStatus.loading);
+  const addToCartLoading = useSelector((state: RootState) => state.cart.changeStatus.loading);
 
   const onClickMinus = () => {
     if (counter > 1) {

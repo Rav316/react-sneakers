@@ -14,7 +14,7 @@ interface CartSlice {
   cart: CartResponse;
   loading: boolean;
   error?: ErrorResponse;
-  addStatus: {
+  changeStatus: {
     loading: boolean;
     error?: ErrorResponse;
   };
@@ -26,7 +26,7 @@ const initialState: CartSlice = {
     sum: 0,
   },
   loading: true,
-  addStatus: {
+  changeStatus: {
     loading: false,
   },
 };
@@ -69,6 +69,20 @@ export const updateCartItemQuantity = createAsyncThunk<
   },
 );
 
+export const removeFromCart = createAsyncThunk<
+  void,
+  number,
+  { rejectValue: ErrorResponse }
+>(
+  'cart/removeFromCart',
+  async (id: number, { rejectWithValue }) =>
+    await callApiWithErrorHandling(
+      Api.cart.removeFromCart,
+      id,
+      rejectWithValue,
+    ),
+);
+
 const cartSlice = createSlice({
   name: 'cart',
   initialState,
@@ -87,30 +101,30 @@ const cartSlice = createSlice({
         state.error = extractError(action.payload);
       })
       .addCase(addToCart.pending, (state) => {
-        state.addStatus = {
+        state.changeStatus = {
           loading: true,
         };
       })
       .addCase(addToCart.fulfilled, (state, action) => {
-        state.addStatus = {
+        state.changeStatus = {
           loading: false,
         };
         state.cart.items.push(action.payload);
         state.cart.sum += action.payload.price * action.payload.quantity;
       })
       .addCase(addToCart.rejected, (state, action) => {
-        state.addStatus = {
+        state.changeStatus = {
           loading: false,
           error: extractError(action),
         };
       })
       .addCase(updateCartItemQuantity.pending, (state) => {
-        state.addStatus = {
+        state.changeStatus = {
           loading: true,
         };
       })
       .addCase(updateCartItemQuantity.fulfilled, (state, action) => {
-        state.addStatus = {
+        state.changeStatus = {
           loading: false,
         };
         state.cart.items = state.cart.items.map((item) =>
@@ -122,7 +136,30 @@ const cartSlice = createSlice({
         );
       })
       .addCase(updateCartItemQuantity.rejected, (state, action) => {
-        state.addStatus = {
+        state.changeStatus = {
+          loading: false,
+          error: extractError(action),
+        };
+      })
+      .addCase(removeFromCart.pending, (state) => {
+        state.changeStatus = {
+          loading: true,
+        };
+      })
+      .addCase(removeFromCart.fulfilled, (state, action) => {
+        state.cart.items = state.cart.items.filter(
+          (item) => item.id !== action.meta.arg,
+        );
+        state.cart.sum = state.cart.items.reduce(
+          (acc, item) => acc + item.price * item.quantity,
+          0,
+        );
+        state.changeStatus = {
+          loading: false,
+        };
+      })
+      .addCase(removeFromCart.rejected, (state, action) => {
+        state.changeStatus = {
           loading: false,
           error: extractError(action),
         };

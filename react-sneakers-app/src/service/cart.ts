@@ -21,3 +21,8 @@ export const updateCartItemQuantity = async (
   );
   return response.data;
 };
+
+export const removeFromCart = async (id: number): Promise<void> => {
+  const response = await axiosInstance.delete(`${ApiRoutes.CART}/${id}`);
+  return response.data;
+}

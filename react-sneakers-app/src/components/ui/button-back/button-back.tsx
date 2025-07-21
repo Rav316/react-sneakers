@@ -1,11 +1,14 @@
 import styles from './button-back.module.scss';
-import { useNavigate } from 'react-router';
 import { Arrow } from '../arrow.tsx';
+import * as React from 'react';
 
-export const ButtonBack = () => {
-  const navigate = useNavigate();
+interface Props {
+  onClick?: () => void
+}
+
+export const ButtonBack: React.FC<Props> = ({onClick}) => {
   return (
-    <button className={styles.backButton} onClick={() => navigate(-1)}>
+    <button className={styles.backButton} onClick={onClick}>
       <Arrow />
       <span>Вернуться назад</span>
     </button>
