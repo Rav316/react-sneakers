@@ -35,10 +35,10 @@ export const Header = () => {
           className={styles.menuItem}
         >
           <img src={cartIcon} alt={'cart icon'} />
-          {loading ? (
+          {token && loading ? (
             <Skeleton width={70} height={18} borderRadius={5} />
           ) : (
-            <span>{cart.sum} руб.</span>
+            <span>{cart.sum || 0} руб.</span>
           )}
         </div>
         <Link to={'/favorites'}>

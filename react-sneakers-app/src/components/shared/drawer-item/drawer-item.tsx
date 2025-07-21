@@ -5,9 +5,9 @@ import * as React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import type { AppDispatch, RootState } from '../../../redux/store.ts';
 import {
-  decrementCartItemQuantity,
-  removeFromCart,
-  updateCartItemQuantity,
+  decrementCartItemQuantity, decrementCartItemQuantityLocal,
+  removeFromCart, removeFromCartLocal,
+  updateCartItemQuantity, updateCartItemQuantityLocal
 } from '../../../redux/slice/cart-slice.ts';
 import { SneakerCounter } from '../sneaker-counter/sneaker-counter.tsx';
 import clsx from 'clsx';
@@ -20,10 +20,11 @@ interface Props {
 }
 
 export const DrawerItem: React.FC<Props> = ({ item }) => {
+  const dispatch = useDispatch<AppDispatch>();
   const { loading } = useSelector(
     (state: RootState) => state.cart.changeStatus,
   );
-  const dispatch = useDispatch<AppDispatch>();
+  const token = useSelector((state: RootState) => state.auth.token);
   const onClickRemove = async () => {
     try {
       const action = await dispatch(removeFromCart(item.id));
@@ -73,8 +74,8 @@ export const DrawerItem: React.FC<Props> = ({ item }) => {
         <span className={styles.price}>{item.price * item.quantity} руб.</span>
         <SneakerCounter
           counter={item.quantity}
-          onClickPlus={onClickPlus}
-          onClickMinus={onClickMinus}
+          onClickPlus={token ? onClickPlus : () => dispatch(updateCartItemQuantityLocal({id: item.id, quantity: 1}))}
+          onClickMinus={token ? onClickMinus : () => dispatch(decrementCartItemQuantityLocal(item.id))}
           small={true}
           minusDisabled={loading || item.quantity === 1}
           plusDisabled={loading}
@@ -82,7 +83,7 @@ export const DrawerItem: React.FC<Props> = ({ item }) => {
       </div>
       <div
         className={clsx(styles.removeButton, { [styles.disabled]: loading })}
-        onClick={onClickRemove}
+        onClick={token ? onClickRemove : () => dispatch(removeFromCartLocal(item.id))}
       >
         <img src={closeIcon} alt={'close icon'} />
       </div>

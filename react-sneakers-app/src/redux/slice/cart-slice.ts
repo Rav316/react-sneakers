@@ -21,10 +21,7 @@ interface CartSlice {
 }
 
 const initialState: CartSlice = {
-  cart: {
-    items: [],
-    sum: 0,
-  },
+  cart: localStorage.getItem('cart') ? JSON.parse(localStorage.getItem('cart')!) : { items: [], sum: 0 },
   loading: true,
   changeStatus: {
     loading: false,
@@ -69,7 +66,11 @@ export const updateCartItemQuantity = createAsyncThunk<
   },
 );
 
-export const decrementCartItemQuantity = createAsyncThunk<void, number, {rejectValue: ErrorResponse}>(
+export const decrementCartItemQuantity = createAsyncThunk<
+  void,
+  number,
+  { rejectValue: ErrorResponse }
+>(
   'cart/decrementCartItemQuantity',
   async (id: number, { rejectWithValue }) =>
     await callApiWithErrorHandling(
@@ -77,7 +78,7 @@ export const decrementCartItemQuantity = createAsyncThunk<void, number, {rejectV
       id,
       rejectWithValue,
     ),
-)
+);
 
 export const removeFromCart = createAsyncThunk<
   void,
@@ -96,7 +97,44 @@ export const removeFromCart = createAsyncThunk<
 const cartSlice = createSlice({
   name: 'cart',
   initialState,
-  reducers: {},
+  reducers: {
+    addToCartLocal: (state, action: {payload: CartItem}) => {
+      state.cart.items.push(action.payload);
+      state.cart.sum += action.payload.price * action.payload.quantity;
+      localStorage.setItem('cart', JSON.stringify(state.cart));
+    },
+    updateCartItemQuantityLocal: (
+      state,
+      action: { payload: CartItemUpdateDto },
+    ) => {
+      const item = state.cart.items.find(
+        (item) => item.id === action.payload.id,
+      );
+      if (item) {
+        item.quantity += action.payload.quantity;
+        state.cart.sum += item.price * action.payload.quantity;
+        localStorage.setItem('cart', JSON.stringify(state.cart));
+      }
+    },
+    decrementCartItemQuantityLocal: (state, action) => {
+      const item = state.cart.items.find((item) => item.id === action.payload);
+      if (item) {
+        item.quantity -= 1;
+        state.cart.sum -= item.price;
+        localStorage.setItem('cart', JSON.stringify(state.cart));
+      }
+    },
+    removeFromCartLocal: (state, action) => {
+      const item = state.cart.items.find((item) => item.id === action.payload);
+      if (item) {
+        state.cart.sum -= item.price * item.quantity;
+        state.cart.items = state.cart.items.filter(
+          (item) => item.id !== action.payload,
+        );
+        localStorage.setItem('cart', JSON.stringify(state.cart));
+      }
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(fetchCart.pending, (state) => {
@@ -153,20 +191,23 @@ const cartSlice = createSlice({
       })
       .addCase(decrementCartItemQuantity.pending, (state) => {
         state.changeStatus = {
-          loading: true
-        }
+          loading: true,
+        };
       })
       .addCase(decrementCartItemQuantity.fulfilled, (state, action) => {
         state.changeStatus = {
-          loading: false
-        }
+          loading: false,
+        };
         state.cart.items = state.cart.items.map((item) => {
-          if(item.id === action.meta.arg) {
+          if (item.id === action.meta.arg) {
             item.quantity -= 1;
           }
           return item;
-        })
-        state.cart.sum = state.cart.sum - (state.cart.items.find((item) => item.id === action.meta.arg)?.price || 0);
+        });
+        state.cart.sum =
+          state.cart.sum -
+          (state.cart.items.find((item) => item.id === action.meta.arg)
+            ?.price || 0);
       })
       .addCase(decrementCartItemQuantity.rejected, (state, action) => {
         state.changeStatus = {
@@ -201,3 +242,9 @@ const cartSlice = createSlice({
 });
 
 export default cartSlice.reducer;
+export const {
+  addToCartLocal,
+  updateCartItemQuantityLocal,
+  decrementCartItemQuantityLocal,
+  removeFromCartLocal,
+} = cartSlice.actions;

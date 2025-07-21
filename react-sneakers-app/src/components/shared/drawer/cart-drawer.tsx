@@ -16,6 +16,7 @@ export const CartDrawer = () => {
   const { cart, loading, error } = useSelector(
     (state: RootState) => state.cart,
   );
+  const token = useSelector((state: RootState) => state.auth.token);
 
   const onCloseDrawer = () => {
     dispatch(setIsDrawerOpen(false));
@@ -33,7 +34,7 @@ export const CartDrawer = () => {
         ) : (
           <>
             {
-              !loading && !cart.items.length ? (
+              (!token || !loading) && !cart.items.length ? (
                 <EmptyCart/>
               ) : (
                 <>
@@ -47,7 +48,7 @@ export const CartDrawer = () => {
                       </div>
                     </div>
                     <div className={styles.itemsWrapper}>
-                      {loading
+                      {loading && token
                         ? Array.from({ length: 3 }).map((_, index) => (
                           <Skeleton key={index} height={130} borderRadius={20} />
                         ))

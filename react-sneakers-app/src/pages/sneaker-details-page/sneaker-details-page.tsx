@@ -12,12 +12,12 @@ import { SneakerDetailsSkeleton } from '../../components/shared/sneaker-details-
 import { ErrorPage } from '../error-page/error-page.tsx';
 import { ErrorResult } from '../../components/shared/error/error-result/error-result.tsx';
 import {
-  addToCart,
-  updateCartItemQuantity,
+  addToCart, addToCartLocal,
+  updateCartItemQuantity, updateCartItemQuantityLocal
 } from '../../redux/slice/cart-slice.ts';
 import { unwrapResult } from '@reduxjs/toolkit';
 import toast from 'react-hot-toast';
-import type { SneakerItem } from '../../service/model.ts';
+import type { CartItem, SneakerItem } from '../../service/model.ts';
 
 export const SneakerDetailsPage = () => {
   const staticUrl: string = import.meta.env.VITE_STATIC_URL;
@@ -32,6 +32,7 @@ export const SneakerDetailsPage = () => {
   );
   const cart = useSelector((state: RootState) => state.cart.cart);
   const addToCartLoading = useSelector((state: RootState) => state.cart.changeStatus.loading);
+  const token = useSelector((state: RootState) => state.auth.token);
 
   const onClickMinus = () => {
     if (counter > 1) {
@@ -53,24 +54,40 @@ export const SneakerDetailsPage = () => {
         const find = cart.items.find(
           (item) => item.sneakerItemId === selectedItem.id,
         );
-
-        if (!find) {
-
-          const action = await dispatch(
-            addToCart({
-              sneakerItem: selectedItem.id,
-              quantity: counter,
-            })
-          );
-          unwrapResult(action);
+        if(!token) {
+          if(!find) {
+            const cartItem: CartItem = {
+              id: selectedItem.id,
+              name: sneaker.name,
+              type: sneaker.type.name,
+              imageUrl: sneaker.imageUrl,
+              price: sneaker.price,
+              sneakerItemId: selectedItem.id,
+              size: selectedItem.size,
+              quantity: counter
+            }
+            dispatch(addToCartLocal(cartItem))
+          } else {
+            dispatch(updateCartItemQuantityLocal({id: find.id, quantity: counter}))
+          }
         } else {
-          const action = await dispatch(
-            updateCartItemQuantity({
-              id: find.id,
-              quantity: counter,
-            })
-          );
-          unwrapResult(action);
+          if (!find) {
+            const action = await dispatch(
+              addToCart({
+                sneakerItem: selectedItem.id,
+                quantity: counter,
+              })
+            );
+            unwrapResult(action);
+          } else {
+            const action = await dispatch(
+              updateCartItemQuantity({
+                id: find.id,
+                quantity: counter,
+              })
+            );
+            unwrapResult(action);
+          }
         }
 
         toast.success('Товар добавлен в корзину');
