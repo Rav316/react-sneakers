@@ -5,6 +5,7 @@ ext {
             'querydsl': '5.1.0',
             'hibernate': '7.0.3.Final',
             'jakarta': '3.2.0',
-            'caffeine': '3.2.1'
+            'caffeine': '3.2.1',
+            'postgresql': '42.7.7'
     ]
 }

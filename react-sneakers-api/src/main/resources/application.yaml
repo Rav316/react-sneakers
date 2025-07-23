@@ -30,6 +30,9 @@ spring:
       mail.smtp:
         auth: true
         starttls.enable: true
+  threads:
+    virtual:
+      enabled: true
 logging:
   level:
     org.springframework.jdbc.core.JdbcTemplate: debug
