@@ -1,15 +1,7 @@
 import type { AuthResponse } from './model.ts';
 import { axiosInstance } from './instance.ts';
 import { ApiRoutes } from './constants.ts';
-
-export interface LoginData {
-  email: string;
-  password: string;
-}
-
-export interface RegisterData extends LoginData {
-  name: string;
-}
+import type { LoginData, RegisterData } from '../modal/schema.ts';
 
 export const register = async (data: RegisterData): Promise<AuthResponse> => {
   const response = await axiosInstance.post<AuthResponse>(

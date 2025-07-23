@@ -1,30 +1,37 @@
 import styles from './form-input.module.scss';
 import * as React from 'react';
+import { useFormContext } from 'react-hook-form';
 
 interface Props {
-  id: string;
+  id?: string;
+  name: string;
   placeholder: string;
   label?: string;
-  value?: string;
-  onChange?: React.ChangeEventHandler<HTMLInputElement>;
+  type?: 'text' | 'password';
 }
 
 export const FormInput: React.FC<Props> = ({
   id,
+  name,
   placeholder,
   label,
-  value,
-  onChange,
+  type = 'text',
 }) => {
+  const {
+    register,
+    formState: { errors },
+  } = useFormContext();
+  const error = errors[name]?.message as string | undefined;
   return (
     <div className={styles.root}>
-      <label htmlFor={id}>{label}</label>
+      {label && <label htmlFor={id || name}>{label}</label>}
       <input
-        id={id}
+        id={id || name}
         placeholder={placeholder}
-        value={value}
-        onChange={onChange}
+        type={type}
+        {...register(name)}
       />
+      {error && <p className={styles.error}>{error}</p>}
     </div>
   );
 };

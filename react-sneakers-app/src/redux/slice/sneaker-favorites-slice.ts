@@ -81,7 +81,7 @@ const sneakerFavoritesSlice = createSlice({
         isAnyOf(fetchFavoriteSneakers.rejected, fetchSneakersByIds.rejected),
         (state, action) => {
           state.loading = false;
-          state.error = extractError(action.payload)
+          state.error = extractError(action)
         },
       );
   },

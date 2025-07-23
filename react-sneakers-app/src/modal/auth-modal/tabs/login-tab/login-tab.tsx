@@ -1,9 +1,7 @@
 import styles from './login-tab.module.scss';
-import { FormInput } from '../../../../components/ui/input/form-input.tsx';
 import { Button } from '../../../../components/ui/button/button.tsx';
 import * as React from 'react';
-import { useEffect, useState } from 'react';
-import type { LoginData } from '../../../../service/auth.ts';
+import { useEffect } from 'react';
 import { clearError, login } from '../../../../redux/slice/auth-slice.ts';
 import { useDispatch, useSelector } from 'react-redux';
 import type { AppDispatch, RootState } from '../../../../redux/store.ts';
@@ -11,13 +9,23 @@ import { useNavigate } from 'react-router';
 import toast from 'react-hot-toast';
 import { setIsModalOpen } from '../../../../redux/slice/auth-modal-slice.ts';
 import { syncGuestFavorites } from '../../../../redux/slice/favorite-slice.ts';
+import { formLoginSchema, type LoginData } from '../../../schema.ts';
+import { FormProvider, useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { FormInput } from '../../../../components/ui/input/form-input.tsx';
 
 interface Props {
   onClickRegister: () => void;
 }
 
 export const LoginTab: React.FC<Props> = ({ onClickRegister }) => {
-  const [form, setForm] = useState<LoginData>({ email: '', password: '' });
+  const form = useForm<LoginData>({
+    resolver: zodResolver(formLoginSchema),
+    defaultValues: {
+      email: '',
+      password: ''
+    }
+  })
   const { loading, error, token } = useSelector(
     (state: RootState) => state.auth,
   );
@@ -25,9 +33,8 @@ export const LoginTab: React.FC<Props> = ({ onClickRegister }) => {
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    dispatch(login(form));
+  const onSubmit = (data: LoginData) => {
+    dispatch(login(data));
   };
 
   useEffect(() => {
@@ -57,36 +64,35 @@ export const LoginTab: React.FC<Props> = ({ onClickRegister }) => {
   return (
     <>
       <h1>Вход</h1>
-      <form className={styles.elementWrapper} onSubmit={handleSubmit}>
-        <FormInput
-          placeholder={'Введите e-mail...'}
-          id={'email'}
-          label={'E-mail'}
-          value={form.email}
-          onChange={(e) => setForm({ ...form, email: e.target.value })}
-        />
-        <FormInput
-          placeholder={'Введите пароль...'}
-          id={'password'}
-          label={'Пароль'}
-          value={form.password}
-          onChange={(e) => setForm({ ...form, password: e.target.value })}
-        />
-        <div className={styles.buttonWrapper}>
-          <Button
-            width={'100%'}
-            content={'Войти'}
-            type={'submit'}
-            disabled={loading}
+      <FormProvider {...form}>
+        <form className={styles.elementWrapper} onSubmit={form.handleSubmit(onSubmit)}>
+          <FormInput
+            name="email"
+            placeholder="Введите e-mail..."
+            label="E-mail"
           />
-          <span>
+          <FormInput
+            name="password"
+            placeholder="Введите пароль..."
+            label="Пароль"
+            type="password"
+          />
+          <div className={styles.buttonWrapper}>
+            <Button
+              width={'100%'}
+              content={'Войти'}
+              type={'submit'}
+              disabled={loading}
+            />
+            <span>
             Впервые на сайте?{' '}
-            <span onClick={onClickRegister} className={styles.register}>
+              <span onClick={onClickRegister} className={styles.register}>
               Зарегистрируйтесь
             </span>
           </span>
-        </div>
-      </form>
+          </div>
+        </form>
+      </FormProvider>
     </>
   );
 };

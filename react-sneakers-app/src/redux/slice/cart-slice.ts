@@ -146,7 +146,7 @@ const cartSlice = createSlice({
       })
       .addCase(fetchCart.rejected, (state, action) => {
         state.loading = false;
-        state.error = extractError(action.payload);
+        state.error = extractError(action);
       })
       .addCase(addToCart.pending, (state) => {
         state.changeStatus = {

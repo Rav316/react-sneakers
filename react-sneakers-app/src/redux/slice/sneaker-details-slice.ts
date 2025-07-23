@@ -52,7 +52,7 @@ const sneakerDetailsSlice = createSlice({
       state.loading = false;
     }).addCase(fetchSneakerDetails.rejected, (state, action) => {
       state.loading = false;
-      state.error = extractError(action.payload);
+      state.error = extractError(action);
     })
   }
 });

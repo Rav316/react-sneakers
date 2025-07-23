@@ -1,10 +1,10 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import type { AuthResponse, ErrorResponse, User } from '../../service/model.ts';
 import { Api } from '../../service/api-client.ts';
-import type { LoginData, RegisterData } from '../../service/auth.ts';
 import type { AxiosError } from 'axios';
 import { callApiWithErrorHandling } from '../../util/call-api-with-error-handling.ts';
 import { extractError } from '../../util/extract-error.ts';
+import type { LoginData, RegisterData } from '../../modal/schema.ts';
 
 interface AuthSlice {
   user?: User;
@@ -82,6 +82,7 @@ const authSlice = createSlice({
     builder
       .addCase(login.pending, (state) => {
         state.loading = true;
+        state.error = undefined;
       })
       .addCase(login.fulfilled, (state, action) => {
         state.loading = false;
@@ -93,7 +94,7 @@ const authSlice = createSlice({
       })
       .addCase(login.rejected, (state, action) => {
         state.loading = false;
-        state.error = extractError(action.payload)
+        state.error = extractError(action)
       })
       .addCase(checkAuth.rejected, (state, action) => {
         const errorCode = action.payload as number | undefined;
@@ -104,6 +105,7 @@ const authSlice = createSlice({
       })
       .addCase(register.pending, (state) => {
         state.loading = true;
+        state.error = undefined;
       })
       .addCase(register.fulfilled, (state, action) => {
         state.loading = false;
@@ -115,7 +117,7 @@ const authSlice = createSlice({
       })
       .addCase(register.rejected, (state, action) => {
         state.loading = false;
-        state.error = extractError(action.payload)
+        state.error = extractError(action);
       });
   },
 });

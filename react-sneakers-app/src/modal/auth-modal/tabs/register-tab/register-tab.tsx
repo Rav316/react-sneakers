@@ -1,21 +1,25 @@
 import styles from './register-tab.module.scss';
 import { FormInput } from '../../../../components/ui/input/form-input.tsx';
 import { Button } from '../../../../components/ui/button/button.tsx';
-import * as React from 'react';
-import { useEffect, useState } from 'react';
-import type { RegisterData } from '../../../../service/auth.ts';
+import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import type { AppDispatch, RootState } from '../../../../redux/store.ts';
 import { useNavigate } from 'react-router';
 import toast from 'react-hot-toast';
 import { setIsModalOpen } from '../../../../redux/slice/auth-modal-slice.ts';
 import { clearError, register } from '../../../../redux/slice/auth-slice.ts';
+import { FormProvider, useForm } from 'react-hook-form';
+import { formRegisterSchema, type RegisterData } from '../../../schema.ts';
+import { zodResolver } from '@hookform/resolvers/zod';
 
 export const RegisterTab = () => {
-  const [form, setForm] = useState<RegisterData>({
-    name: '',
-    email: '',
-    password: '',
+  const form = useForm<RegisterData>({
+    resolver: zodResolver(formRegisterSchema),
+    defaultValues: {
+      name: '',
+      email: '',
+      password: '',
+    },
   });
   const { loading, error, token } = useSelector(
     (state: RootState) => state.auth,
@@ -23,9 +27,8 @@ export const RegisterTab = () => {
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    dispatch(register(form));
+  const onSubmit = (data: RegisterData) => {
+    dispatch(register(data));
   };
 
   useEffect(() => {
@@ -52,40 +55,38 @@ export const RegisterTab = () => {
     };
   }, [dispatch]);
 
+  console.log('formState.errors', form.formState.errors);
+
   return (
     <>
       <h1>Регистрация</h1>
-      <form className={styles.elementWrapper} onSubmit={handleSubmit}>
-        <FormInput
-          placeholder={'Введите имя...'}
-          id={'name'}
-          label={'Имя'}
-          value={form.name}
-          onChange={(e) => setForm({ ...form, name: e.target.value })}
-        />
-        <FormInput
-          placeholder={'Введите e-mail...'}
-          id={'email'}
-          label={'E-mail'}
-          value={form.email}
-          onChange={(e) => setForm({ ...form, email: e.target.value })}
-        />
-        <FormInput
-          placeholder={'Введите пароль...'}
-          id={'password'}
-          label={'Пароль'}
-          value={form.password}
-          onChange={(e) => setForm({ ...form, password: e.target.value })}
-        />
-        <div className={styles.buttonWrapper}>
-          <Button
-            width={'100%'}
-            content={'Зарегистрироваться'}
-            type={'submit'}
-            disabled={loading}
+      <FormProvider {...form}>
+        <form
+          className={styles.elementWrapper}
+          onSubmit={form.handleSubmit(onSubmit)}
+        >
+          <FormInput name="name" placeholder="Введите имя..." label="Имя" />
+          <FormInput
+            name="email"
+            placeholder="Введите e-mail..."
+            label="E-mail"
           />
-        </div>
-      </form>
+          <FormInput
+            name="password"
+            placeholder="Введите пароль..."
+            label="Пароль"
+            type="password"
+          />
+          <div className={styles.buttonWrapper}>
+            <Button
+              width={'100%'}
+              content={loading ? 'Регистрация...' : 'Зарегистрироваться'}
+              type={'submit'}
+              disabled={loading}
+            />
+          </div>
+        </form>
+      </FormProvider>
     </>
   );
 };
