@@ -21,7 +21,9 @@ interface CartSlice {
 }
 
 const initialState: CartSlice = {
-  cart: localStorage.getItem('cart') ? JSON.parse(localStorage.getItem('cart')!) : { items: [], sum: 0 },
+  cart: localStorage.getItem('cart')
+    ? JSON.parse(localStorage.getItem('cart')!)
+    : { items: [], sum: 0 },
   loading: true,
   changeStatus: {
     loading: false,
@@ -33,6 +35,7 @@ export const fetchCart = createAsyncThunk<
   void,
   { rejectValue: ErrorResponse }
 >('cart/fetchCart', async (_, { rejectWithValue }) => {
+  console.log('cart fetched...');
   return await callApiWithErrorHandling(Api.cart.findAll, {}, rejectWithValue);
 });
 
@@ -94,11 +97,25 @@ export const removeFromCart = createAsyncThunk<
     ),
 );
 
+export const syncGuestCart = createAsyncThunk<
+  void,
+  CartItemCreateDto[],
+  { rejectValue: ErrorResponse }
+>(
+  'cart/syncGuestCart',
+  async (cartItems: CartItemCreateDto[], { rejectWithValue }) =>
+    await callApiWithErrorHandling(
+      Api.cart.syncGuestCart,
+      cartItems,
+      rejectWithValue,
+    ),
+);
+
 const cartSlice = createSlice({
   name: 'cart',
   initialState,
   reducers: {
-    addToCartLocal: (state, action: {payload: CartItem}) => {
+    addToCartLocal: (state, action: { payload: CartItem }) => {
       state.cart.items.push(action.payload);
       state.cart.sum += action.payload.price * action.payload.quantity;
       localStorage.setItem('cart', JSON.stringify(state.cart));
@@ -133,6 +150,11 @@ const cartSlice = createSlice({
         );
         localStorage.setItem('cart', JSON.stringify(state.cart));
       }
+    },
+    clearCart: (state) => {
+      state.cart.items = [];
+      state.cart.sum = 0;
+      localStorage.setItem('cart', JSON.stringify(state.cart));
     },
   },
   extraReducers: (builder) => {
@@ -247,4 +269,5 @@ export const {
   updateCartItemQuantityLocal,
   decrementCartItemQuantityLocal,
   removeFromCartLocal,
+  clearCart,
 } = cartSlice.actions;

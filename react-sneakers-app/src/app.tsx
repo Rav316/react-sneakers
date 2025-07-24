@@ -41,10 +41,10 @@ const App = () => {
 
   useEffect(() => {
     if (token) {
+      dispatch(fetchCart());
       dispatch(checkAuth());
-      dispatch(fetchCart())
     }
-  }, [dispatch, token]);
+  }, [dispatch]);
 
   return (
     <>

@@ -13,6 +13,7 @@ import { formLoginSchema, type LoginData } from '../../../schema.ts';
 import { FormProvider, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { FormInput } from '../../../../components/ui/input/form-input.tsx';
+import { fetchCart, syncGuestCart } from '../../../../redux/slice/cart-slice.ts';
 
 interface Props {
   onClickRegister: () => void;
@@ -23,13 +24,14 @@ export const LoginTab: React.FC<Props> = ({ onClickRegister }) => {
     resolver: zodResolver(formLoginSchema),
     defaultValues: {
       email: '',
-      password: ''
-    }
-  })
+      password: '',
+    },
+  });
   const { loading, error, token } = useSelector(
     (state: RootState) => state.auth,
   );
   const favorites = useSelector((state: RootState) => state.favorites.items);
+  const cartItems = useSelector((state: RootState) => state.cart.cart.items);
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
 
@@ -41,10 +43,21 @@ export const LoginTab: React.FC<Props> = ({ onClickRegister }) => {
     if (token) {
       toast.success('Вы успешно вошли в аккаунт');
       dispatch(setIsModalOpen(false));
-      dispatch(syncGuestFavorites(favorites))
+      dispatch(syncGuestFavorites(favorites));
+
+      dispatch(
+        syncGuestCart(
+          cartItems.map((item) => ({
+            sneakerItem: item.id,
+            quantity: item.quantity,
+          })),
+        ),
+      ).then(() => {
+        dispatch(fetchCart());
+      });
       navigate('/profile');
     }
-  }, [dispatch, favorites, navigate, token]);
+  }, [cartItems, dispatch, favorites, navigate, token]);
 
   useEffect(() => {
     if (error) {
@@ -65,7 +78,10 @@ export const LoginTab: React.FC<Props> = ({ onClickRegister }) => {
     <>
       <h1>Вход</h1>
       <FormProvider {...form}>
-        <form className={styles.elementWrapper} onSubmit={form.handleSubmit(onSubmit)}>
+        <form
+          className={styles.elementWrapper}
+          onSubmit={form.handleSubmit(onSubmit)}
+        >
           <FormInput
             name="email"
             placeholder="Введите e-mail..."
@@ -85,11 +101,11 @@ export const LoginTab: React.FC<Props> = ({ onClickRegister }) => {
               disabled={loading}
             />
             <span>
-            Впервые на сайте?{' '}
+              Впервые на сайте?{' '}
               <span onClick={onClickRegister} className={styles.register}>
-              Зарегистрируйтесь
+                Зарегистрируйтесь
+              </span>
             </span>
-          </span>
           </div>
         </form>
       </FormProvider>

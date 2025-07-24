@@ -22,6 +22,10 @@ export const updateCartItemQuantity = async (
   return response.data;
 };
 
+export const syncGuestCart = async (data: CartItemCreateDto[]): Promise<void> => {
+  await axiosInstance.put(`${ApiRoutes.CART}/sync`, data);
+};
+
 export const decrementCartItemQuantity = async (id: number): Promise<void> => {
   const response = await axiosInstance.put(
     `${ApiRoutes.CART}/${id}/decrement`,
