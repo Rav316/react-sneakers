@@ -11,6 +11,8 @@ import ru.alex.reactsneakersapi.dto.cartItem.CartItemEditDto;
 import ru.alex.reactsneakersapi.dto.cartItem.CartItemReadDto;
 import ru.alex.reactsneakersapi.service.CartService;
 
+import java.util.List;
+
 import static org.springframework.http.HttpStatus.*;
 
 @RestController
@@ -35,6 +37,12 @@ public class CartController {
     public ResponseEntity<CartItemReadDto> updateCartItemQuantity(@PathVariable("id") Integer id,
                                                                   @Validated @RequestBody CartItemEditDto cartItemEditDto) {
         return new ResponseEntity<>(cartService.updateCartItemQuantity(id, cartItemEditDto), OK);
+    }
+
+    @PutMapping("/sync")
+    public ResponseEntity<HttpStatus> syncGuestCart(@RequestBody List<CartItemCreateDto> cartItems) {
+        cartService.syncGuestCart(cartItems);
+        return new ResponseEntity<>(OK);
     }
 
 

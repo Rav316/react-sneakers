@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface CartItemRepository extends JpaRepository<CartItem, Integer> {
+public interface CartItemRepository extends JpaRepository<CartItem, Integer>, CartItemRepositoryCustom {
 
     @Query("""
         SELECT ci

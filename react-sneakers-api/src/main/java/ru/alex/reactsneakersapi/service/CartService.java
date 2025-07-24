@@ -53,6 +53,11 @@ public class CartService {
     }
 
     @Transactional
+    public void syncGuestCart(List<CartItemCreateDto> cartItems) {
+        cartItemRepository.addToCartBatch(cartItems, getAuthorizedUser().id());
+    }
+
+    @Transactional
     public void decrementCartItem(Integer id) {
         CartItem cartItem = cartItemRepository.findByIdAndUser(id, getAuthorizedUser().id())
                 .orElseThrow(() -> new CartItemNotFoundException(id));
