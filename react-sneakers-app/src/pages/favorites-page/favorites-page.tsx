@@ -1,30 +1,30 @@
 import styles from './favorites-page.module.scss';
-import arrowBackIcon from '../../assets/arrow-back/arrow-back-alt.svg';
 import { useDispatch, useSelector } from 'react-redux';
 import type { AppDispatch, RootState } from '../../redux/store.ts';
 import { useEffect } from 'react';
 import {
   fetchFavoriteSneakers,
   fetchSneakersByIds,
-  removeAllFavorites
+  removeAllFavorites,
 } from '../../redux/slice/sneaker-favorites-slice.ts';
 import { SneakerCard } from '../../components/shared/sneaker-card/sneaker-card.tsx';
-import { useNavigate } from 'react-router';
 import { SneakerCardSkeleton } from '../../components/shared/sneaker-card/skeleton/sneaker-card-skeleton.tsx';
 import { ErrorResult } from '../../components/shared/error/error-result/error-result.tsx';
 import { EmptyFavorites } from '../../components/shared/empty-favorites/empty-favorites.tsx';
 import { TrashIcon } from '../../components/ui/trash-icon.tsx';
 import { clearFavorites } from '../../redux/slice/favorite-slice.ts';
+import { ArrowBack } from '../../components/ui/arrow-back/arrow-back.tsx';
 
 export const FavoritesPage = () => {
   const dispatch = useDispatch<AppDispatch>();
-  const navigate = useNavigate();
   const token = useSelector((state: RootState) => state.auth.token);
-  const {items, loading, error} = useSelector((state: RootState) => state.sneakerFavorites);
+  const { items, loading, error } = useSelector(
+    (state: RootState) => state.sneakerFavorites,
+  );
   const favorites = useSelector((state: RootState) => state.favorites.items);
 
   const onClickClearFavorites = () => {
-    if(token) {
+    if (token) {
       dispatch(removeAllFavorites());
     } else {
       dispatch(clearFavorites());
@@ -32,7 +32,7 @@ export const FavoritesPage = () => {
   };
 
   useEffect(() => {
-    if(token) {
+    if (token) {
       dispatch(fetchFavoriteSneakers());
     } else {
       dispatch(fetchSneakersByIds(favorites ?? []));
@@ -45,37 +45,34 @@ export const FavoritesPage = () => {
       </div>
     );
   }
-  if(!loading && items.length === 0) {
+  if (!loading && items.length === 0) {
     return (
       <div className={styles.root}>
         <EmptyFavorites />
       </div>
-    )
+    );
   }
   return (
     <div className={styles.root}>
       <div className={styles.titleWrapper}>
         <div className={styles.title}>
-          <div className={styles.backButton} onClick={() => navigate(-1)}>
-            <img src={arrowBackIcon} alt={'arrow back icon'} />
-          </div>
+          <ArrowBack />
           <h1>Мои закладки</h1>
         </div>
         <div className={styles.clearFavorites} onClick={onClickClearFavorites}>
           <span>Очистить закладки</span>
-          <TrashIcon/>
+          <TrashIcon />
         </div>
-
       </div>
       <div className={styles.sneakerCardsWrapper}>
         {loading
           ? Array.from({ length: 6 }).map((_, index) => (
-            <SneakerCardSkeleton key={index} />
-          ))
+              <SneakerCardSkeleton key={index} />
+            ))
           : items.map((sneaker) => (
-            <SneakerCard key={sneaker.id} sneaker={sneaker} />
-          ))}
+              <SneakerCard key={sneaker.id} sneaker={sneaker} />
+            ))}
       </div>
     </div>
-  )
-}
+  );
+};

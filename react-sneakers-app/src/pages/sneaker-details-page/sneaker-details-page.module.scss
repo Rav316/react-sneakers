@@ -2,6 +2,17 @@
   padding-left: 43px;
   padding-right: 43px;
 
+  .nameWrapper {
+    display: flex;
+    align-items: center;
+    column-gap: 21px;
+
+    .textWrapper {
+      display: flex;
+      flex-direction: column;
+    }
+  }
+
   h1 {
     margin-top: 40px;
   }

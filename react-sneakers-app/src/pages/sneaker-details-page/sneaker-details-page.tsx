@@ -18,6 +18,7 @@ import {
 import { unwrapResult } from '@reduxjs/toolkit';
 import toast from 'react-hot-toast';
 import type { CartItem, SneakerItem } from '../../service/model.ts';
+import { ArrowBack } from '../../components/ui/arrow-back/arrow-back.tsx';
 
 export const SneakerDetailsPage = () => {
   const staticUrl: string = import.meta.env.VITE_STATIC_URL;
@@ -123,9 +124,14 @@ export const SneakerDetailsPage = () => {
         <SneakerDetailsSkeleton />
       ) : (
         <div className={styles.root}>
-          <h1>{sneaker.name}</h1>
-          <h3>{sneaker.type.name}</h3>
-          <p>{sneaker.description}</p>
+          <div className={styles.nameWrapper}>
+            <ArrowBack />
+            <div className={styles.textWrapper}>
+              <h1>{sneaker.name}</h1>
+              <h3>{sneaker.type.name}</h3>
+              <p>{sneaker.description}</p>
+            </div>
+          </div>
 
           <div className={styles.mainInfo}>
             <div className={styles.imgWrapper}>
