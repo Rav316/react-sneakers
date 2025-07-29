@@ -2,7 +2,6 @@ plugins {
     id 'java'
     id 'org.springframework.boot' version '3.5.3'
     id 'io.spring.dependency-management' version '1.1.7'
-    id "com.ewerk.gradle.plugins.querydsl" version "1.0.10"
 }
 apply from: 'version.gradle'
 
@@ -12,10 +11,6 @@ version = '0.0.1-SNAPSHOT'
 java {
     sourceCompatibility = JavaVersion.VERSION_21
     targetCompatibility = JavaVersion.VERSION_21
-}
-
-configurations {
-    querydsl.extendsFrom implementation, runtimeOnly, compileOnly
 }
 
 configurations {
@@ -39,8 +34,8 @@ dependencies {
     implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity6'
     implementation "com.auth0:java-jwt:${versions.jwt}"
     implementation "org.springdoc:springdoc-openapi-starter-webmvc-ui:${versions.openapi}"
-    implementation "com.querydsl:querydsl-jpa:${versions.querydsl}:jakarta"
-    implementation "com.querydsl:querydsl-core:${versions.querydsl}"
+    implementation "io.github.openfeign.querydsl:querydsl-jpa:${versions.querydsl}"
+    implementation "io.github.openfeign.querydsl:querydsl-core:${versions.querydsl}"
     implementation "org.hibernate.orm:hibernate-core:${versions.hibernate}"
     implementation "jakarta.persistence:jakarta.persistence-api:${versions.jakarta}"
     implementation "com.github.ben-manes.caffeine:caffeine:${versions.caffeine}"
@@ -50,22 +45,24 @@ dependencies {
     compileOnly 'org.projectlombok:lombok'
     runtimeOnly 'org.postgresql:postgresql'
     annotationProcessor 'org.projectlombok:lombok'
+    annotationProcessor "io.github.openfeign.querydsl:querydsl-apt:${versions.querydsl}:jpa"
+    annotationProcessor "jakarta.persistence:jakarta.persistence-api:${versions.jakarta}"
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
 
-querydsl {
-    jpa = true
-    library = "com.querydsl:querydsl-apt:${versions.querydsl}:jakarta"
-    querydslSourcesDir = layout.buildDirectory.dir("generated/sources/annotationProcessor/java/main").get().asFile
+sourceSets {
+    main {
+        java {
+            srcDirs += ['build/generated/sources/annotationProcessor/java/main']
+        }
+    }
 }
-
-compileQuerydsl {
-    options.annotationProcessorPath = configurations.querydsl
-}
-
-compileQuerydsl.dependsOn(clean)
 
 tasks.named('test') {
     useJUnitPlatform()
+}
+
+tasks.named('clean') {
+    delete file('build/generated')
 }
