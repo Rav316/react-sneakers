@@ -1,0 +1,42 @@
+.root {
+  display: flex;
+  padding-left: 43px;
+  padding-right: 43px;
+  margin-top: 40px;
+
+  @media (max-width: 860px) {
+    flex-direction: column;
+  }
+
+  .tabs {
+    width: 200px;
+    display: flex;
+    flex-direction: column;
+    row-gap: 17px;
+
+    @media (max-width: 685px) {
+      width: 100%;
+      row-gap: 0;
+      justify-content: space-around;
+      flex-direction: row;
+    }
+
+    span {
+      font-size: 18px;
+      color: #999999;
+      cursor: pointer;
+      transition: color 0.3s ease, font-size 0.3s ease;
+
+      &.active {
+        color: #000000;
+        font-size: 24px;
+        font-weight: 700;
+
+        @media (max-width: 685px) {
+          font-size: 18px;
+          font-weight: 400;
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,47 @@
+.root {
+  display: flex;
+  flex-direction: column;
+  padding-bottom: 40px;
+
+  h1 {
+    font-size: 40px;
+    font-weight: 700;
+
+    @media (max-width: 860px) {
+      margin-top: 60px;
+    }
+
+    @media (max-width:  685px) {
+      width: 100%;
+      text-align: center;
+    }
+  }
+
+  .profileFields {
+    margin-top: 40px;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(250px, 1fr));
+    gap: 40px;
+
+    @media (max-width:  685px) {
+      grid-template-columns: repeat(1, minmax(250px, 1fr));
+    }
+  }
+
+  .buttonWrapper {
+    @media (max-width:  685px) {
+      width: 100%;
+    }
+  }
+
+  .logoutButton {
+    margin-top: 20px;
+    width: 100px;
+    height: 35px;
+    background-color: #ff544a;
+    border: none;
+    border-radius: 10px;
+    color: white;
+    cursor: pointer;
+  }
+}

@@ -1,7 +1,7 @@
 import { Header } from '../components/shared/header/header.tsx';
 import { Outlet } from 'react-router';
 
-export const OutletLayout = () => {
+export const OutletHeader = () => {
   return (
     <>
       <Header />

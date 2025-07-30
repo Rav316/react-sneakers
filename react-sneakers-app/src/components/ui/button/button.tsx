@@ -23,7 +23,7 @@ export const Button: React.FC<Props> = ({
 }) => {
   return (
     <button
-      className={clsx({ [styles.alt]: alt })}
+      className={clsx(styles.myButton, { [styles.alt]: alt })}
       style={{ width, height }}
       onClick={onClick}
       type={type}
