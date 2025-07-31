@@ -8,10 +8,9 @@ interface Props {
   price: number;
   count: number;
   imageUrl?: string;
-  isLast?: boolean
 }
 
-export const OrderItem: React.FC<Props> = ({name, description, price, count, imageUrl, isLast = false}) => {
+export const OrderItem: React.FC<Props> = ({name, description, price, count, imageUrl}) => {
   return (
     <div className={styles.root}>
       <div className={styles.wrapper}>
@@ -29,8 +28,6 @@ export const OrderItem: React.FC<Props> = ({name, description, price, count, ima
         <span>{price} ₽</span>
         <p>x{count}</p>
       </div>
-
-      {!isLast && <div className={styles.divider} />}
     </div>
   );
 };

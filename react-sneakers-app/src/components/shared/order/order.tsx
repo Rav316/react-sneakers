@@ -65,7 +65,7 @@ export const Order: React.FC<Props> = ({ orderId, status }) => {
             description={
               'Легкие и комфортные кроссовки Nike Zoom Vomero 5 идеально подойдут для повседневной активности и бега.'
             }
-            price={1749.00}
+            price={1749.0}
             count={2}
             imageUrl={'http://192.168.0.105/sneaker/nike-zoom-vomero-5.jpg'}
           />
@@ -74,7 +74,7 @@ export const Order: React.FC<Props> = ({ orderId, status }) => {
             description={
               'Свежий взгляд на классику с объемным языком и ретро-стилем.'
             }
-            price={7799.00}
+            price={7799.0}
             count={1}
             imageUrl={'http://192.168.0.105/sneaker/vans-knu-skool.jpg'}
           />
@@ -83,11 +83,19 @@ export const Order: React.FC<Props> = ({ orderId, status }) => {
             description={
               'Легендарный стиль Майкла Джордана в современной интерпретации.'
             }
-            price={23999.00}
+            price={23999.0}
             count={10}
-            imageUrl={'http://192.168.0.105/sneaker/jordan-air-jordan-1-mid.jpg'}
-            isLast={true}
+            imageUrl={
+              'http://192.168.0.105/sneaker/jordan-air-jordan-1-mid.jpg'
+            }
           />
+        </div>
+        <div className={styles.result}>
+          <div className={styles.infoWrapper}>
+            <span>Итого:</span>
+            <p>43998 ₽</p>
+          </div>
+          <OrderButton status={'cancel'} />
         </div>
       </div>
     </div>

@@ -5,6 +5,7 @@
   width: 100%;
   max-width: 900px;
   box-sizing: border-box;
+  transition: padding-bottom 0.3s ease;
 
   @media (max-width: 685px) {
     margin-top: 20px;
@@ -61,5 +62,34 @@
     flex-direction: column;
     row-gap: 30px;
     padding-top: 30px;
+    padding-bottom: 30px;
+
+    & > div:not(:last-child) {
+      position: relative;
+
+      &::after {
+        content: '';
+        position: absolute;
+        bottom: -15px;
+        left: 0;
+        width: 100%;
+        height: 1px;
+        background-color: #e0e0e0;
+      }
+    }
+  }
+
+  .result {
+    display: flex;
+    justify-content: space-between;
+    align-items: end;
+
+    .infoWrapper {
+      display: flex;
+      font-size: 20px;
+      p {
+        font-weight: 600;
+      }
+    }
   }
 }
