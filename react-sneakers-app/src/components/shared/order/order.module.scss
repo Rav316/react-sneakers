@@ -1,0 +1,65 @@
+.root {
+  padding: 30px;
+  border-radius: 10px;
+  border: 1px solid #c9c9c9;
+  width: 100%;
+  max-width: 900px;
+  box-sizing: border-box;
+
+  @media (max-width: 685px) {
+    margin-top: 20px;
+    margin-bottom: 20px;
+  }
+  .orderInfo {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    column-gap: 10px;
+
+    @media (max-width: 685px) {
+      flex-direction: column;
+      align-items: start;
+      row-gap: 12px;
+    }
+
+    .infoWrapper {
+      display: flex;
+      column-gap: 19px;
+      align-items: center;
+
+      span {
+        font-size: 24px;
+        font-weight: 600;
+      }
+
+      p {
+        font-size: 16px;
+        color: #aeaeae;
+      }
+    }
+  }
+
+  .buttonWrapper {
+    display: flex;
+    align-items: center;
+    column-gap: 27px;
+
+    img {
+      width: 21px;
+      height: 13px;
+      cursor: pointer;
+    }
+  }
+
+  .orderItemsContainer {
+    overflow: hidden;
+    transition: height 0.3s ease;
+  }
+
+  .orderItems {
+    display: flex;
+    flex-direction: column;
+    row-gap: 30px;
+    padding-top: 30px;
+  }
+}

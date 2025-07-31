@@ -1,0 +1,74 @@
+.root {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  column-gap: 10px;
+  position: relative;
+
+  @media (max-width: 571px) {
+    flex-direction: column;
+    align-items: start;
+  }
+
+  .wrapper {
+    display: flex;
+    align-items: center;
+  }
+
+  .sneakerImg {
+    height: 65px;
+    margin-right: 15px;
+  }
+
+  .infoWrapper {
+    display: flex;
+    flex-direction: column;
+    row-gap: 5px;
+
+    @media (max-width: 571px) {
+      flex-direction: row;
+      column-gap: 10px;
+    }
+
+    .name {
+      @media (max-width: 571px) {
+        font-weight: 400;
+      }
+    }
+
+    span {
+      font-weight: 600;
+      font-size: 16px;
+    }
+
+    p {
+      font-size: 14px;
+      color: #9d9d9d;
+    }
+
+    .description {
+      @media (max-width: 571px) {
+        display: none;
+      }
+    }
+
+    &.priceCount {
+      align-items: flex-end;
+      text-align: end;
+      white-space: nowrap;
+
+      @media (max-width: 571px) {
+        align-items: start;
+      }
+    }
+  }
+  .divider {
+    position: absolute;
+    bottom: -15px;
+    left: 0;
+    width: 100%;
+    height: 1px;
+    background-color: #e0e0e0;
+  }
+}

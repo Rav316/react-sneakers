@@ -1,26 +1,29 @@
 import styles from './outlet-profile.module.scss';
 
-import { Outlet } from 'react-router';
-import { useState } from 'react';
+import { Link, Outlet, useLocation } from 'react-router';
 
 export const OutletProfile = () => {
-  const [activeTab, setActiveTab] = useState("profile");
+  const location = useLocation();
 
   return (
     <div className={styles.root}>
       <div className={styles.tabs}>
-        <span
-          className={activeTab === "profile" ? styles.active : ""}
-          onClick={() => setActiveTab("profile")}
-        >
-          Профиль
-        </span>
-        <span
-          className={activeTab === "orders" ? styles.active : ""}
-          onClick={() => setActiveTab("orders")}
-        >
-          Заказы
-        </span>
+        <Link to={'/profile'}>
+          <span
+            className={location.pathname === '/profile' ? styles.active : ''}
+          >
+            Профиль
+          </span>
+        </Link>
+        <Link to={'/profile/orders'}>
+          <span
+            className={
+              location.pathname === '/profile/orders' ? styles.active : ''
+            }
+          >
+            Заказы
+          </span>
+        </Link>
       </div>
       <Outlet />
     </div>

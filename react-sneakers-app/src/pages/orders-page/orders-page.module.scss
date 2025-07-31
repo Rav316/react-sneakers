@@ -1,0 +1,27 @@
+.root {
+  display: flex;
+  flex-direction: column;
+  padding-bottom: 40px;
+  width: 100%;
+
+  h1 {
+    font-size: 40px;
+    font-weight: 700;
+
+    @media (max-width: 860px) {
+      margin-top: 60px;
+    }
+
+    @media (max-width:  685px) {
+      width: 100%;
+      text-align: center;
+    }
+  }
+
+  .orders {
+    margin-top: 30px;
+    display: flex;
+    flex-direction: column;
+    row-gap: 20px;
+  }
+}

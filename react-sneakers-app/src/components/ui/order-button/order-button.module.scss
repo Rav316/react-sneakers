@@ -1,0 +1,23 @@
+.orderButton {
+  border: 2px solid;
+  background-color: white;
+  padding: 8px 15px;
+  border-radius: 10px;
+  font-weight: 600;
+  cursor: pointer;
+
+  &.canceled, &.cancel {
+    color: #FF544A;
+    border-color: #FF544A;
+  }
+
+  &.pending {
+    color: #E6C20D;
+    border-color: #E6C20D;
+  }
+
+  &.completed {
+    color: #1BB486;
+    border-color: #1BB486;
+  }
+}

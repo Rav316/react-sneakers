@@ -19,6 +19,7 @@ import { FavoritesPage } from './pages/favorites-page/favorites-page.tsx';
 import { SneakerDetailsPage } from './pages/sneaker-details-page/sneaker-details-page.tsx';
 import { fetchCart } from './redux/slice/cart-slice.ts';
 import { OutletProfile } from './hoc/outlet-profile/outlet-profile.tsx';
+import { OrdersPage } from './pages/orders-page/orders-page.tsx';
 
 const App = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -64,14 +65,8 @@ const App = () => {
                 </RequireAuth>
               }
             >
-              <Route
-                path={'/profile'}
-                element={
-                  <RequireAuth>
-                    <ProfilePage />
-                  </RequireAuth>
-                }
-              />
+              <Route path={'/profile'} element={<ProfilePage />} />
+              <Route path={'/profile/orders'} element={<OrdersPage />} />
             </Route>
             <Route path={'/favorites'} element={<FavoritesPage />} />
             <Route
