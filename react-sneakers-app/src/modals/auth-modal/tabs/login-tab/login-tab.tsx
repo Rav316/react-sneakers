@@ -9,7 +9,7 @@ import { useNavigate } from 'react-router';
 import toast from 'react-hot-toast';
 import { setIsModalOpen } from '../../../../redux/slice/auth-modal-slice.ts';
 import { syncGuestFavorites } from '../../../../redux/slice/favorite-slice.ts';
-import { formLoginSchema, type LoginData } from '../../../schema.ts';
+import { formLoginSchema, type LoginData } from '../../../../schemas/auth-schema.ts';
 import { FormProvider, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { FormInput } from '../../../../components/ui/input/form-input.tsx';

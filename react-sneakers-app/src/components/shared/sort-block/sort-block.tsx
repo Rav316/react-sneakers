@@ -40,7 +40,6 @@ export const SortBlock: React.FC<Props> = ({ order, setOrder, sortOption, setSor
   };
 
   const onClickRoot = () => {
-    console.log('clicked...');
     setOpen((prev) => !prev);
   };
 

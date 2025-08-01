@@ -45,6 +45,11 @@
     align-items: center;
     column-gap: 27px;
 
+    @media (max-width: 685px) {
+      width: 100%;
+      justify-content: space-between;
+    }
+
     img {
       width: 21px;
       height: 13px;

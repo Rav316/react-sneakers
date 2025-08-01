@@ -35,7 +35,6 @@ export const fetchCart = createAsyncThunk<
   void,
   { rejectValue: ErrorResponse }
 >('cart/fetchCart', async (_, { rejectWithValue }) => {
-  console.log('cart fetched...');
   return await callApiWithErrorHandling(Api.cart.findAll, {}, rejectWithValue);
 });
 

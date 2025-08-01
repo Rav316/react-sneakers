@@ -9,7 +9,7 @@ import toast from 'react-hot-toast';
 import { setIsModalOpen } from '../../../../redux/slice/auth-modal-slice.ts';
 import { clearError, register } from '../../../../redux/slice/auth-slice.ts';
 import { FormProvider, useForm } from 'react-hook-form';
-import { formRegisterSchema, type RegisterData } from '../../../schema.ts';
+import { formRegisterSchema, type RegisterData } from '../../../../schemas/auth-schema.ts';
 import { zodResolver } from '@hookform/resolvers/zod';
 
 export const RegisterTab = () => {
@@ -54,8 +54,6 @@ export const RegisterTab = () => {
       dispatch(clearError());
     };
   }, [dispatch]);
-
-  console.log('formState.errors', form.formState.errors);
 
   return (
     <>

@@ -4,7 +4,7 @@ import { Api } from '../../service/api-client.ts';
 import type { AxiosError } from 'axios';
 import { callApiWithErrorHandling } from '../../util/call-api-with-error-handling.ts';
 import { extractError } from '../../util/extract-error.ts';
-import type { LoginData, RegisterData } from '../../modal/schema.ts';
+import type { LoginData, RegisterData } from '../../schemas/auth-schema.ts';
 
 interface AuthSlice {
   user?: User;
@@ -95,6 +95,18 @@ const authSlice = createSlice({
       .addCase(login.rejected, (state, action) => {
         state.loading = false;
         state.error = extractError(action)
+      })
+      .addCase(checkAuth.pending, (state) => {
+        state.error = undefined;
+        state.loading = false;
+      })
+      .addCase(checkAuth.fulfilled, (state, action) => {
+        state.loading = false;
+        state.user = action.payload.user;
+        state.token = action.payload.token;
+        if (action.payload.token != null) {
+          localStorage.setItem('token', action.payload.token);
+        }
       })
       .addCase(checkAuth.rejected, (state, action) => {
         const errorCode = action.payload as number | undefined;

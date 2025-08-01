@@ -1,7 +1,7 @@
 import type { AuthResponse } from './model.ts';
 import { axiosInstance } from './instance.ts';
 import { ApiRoutes } from './constants.ts';
-import type { LoginData, RegisterData } from '../modal/schema.ts';
+import type { LoginData, RegisterData } from '../schemas/auth-schema.ts';
 
 export const register = async (data: RegisterData): Promise<AuthResponse> => {
   const response = await axiosInstance.post<AuthResponse>(

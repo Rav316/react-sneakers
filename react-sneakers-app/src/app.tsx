@@ -3,7 +3,7 @@ import { MainLayout } from './hoc/main-layout/main-layout.tsx';
 import HomePage from './pages/home-page/home-page.tsx';
 import { CartDrawer } from './components/shared/drawer/cart-drawer.tsx';
 import { useEffect } from 'react';
-import { AuthModal } from './modal/auth-modal/auth-modal.tsx';
+import { AuthModal } from './modals/auth-modal/auth-modal.tsx';
 import { useDispatch, useSelector } from 'react-redux';
 import type { AppDispatch, RootState } from './redux/store.ts';
 import { Toaster } from 'react-hot-toast';
