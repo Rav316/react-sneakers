@@ -98,7 +98,7 @@ const authSlice = createSlice({
       })
       .addCase(checkAuth.pending, (state) => {
         state.error = undefined;
-        state.loading = false;
+        state.loading = true;
       })
       .addCase(checkAuth.fulfilled, (state, action) => {
         state.loading = false;

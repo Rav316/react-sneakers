@@ -16,7 +16,7 @@ import {
 } from '../../schemas/form-profile-schema.ts';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useEffect } from 'react';
-import { Skeleton } from '../../components/ui/skeleton/skeleton.tsx';
+import { ProfileFormSkeleton } from '../../components/shared/profile-form-skeleton/profile-form-skeleton.tsx';
 
 export const ProfilePage = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -24,6 +24,7 @@ export const ProfilePage = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
+    console.log(loading);
     if (user) {
       form.reset({
         name: user.name,
@@ -64,12 +65,7 @@ export const ProfilePage = () => {
       >
         <FormProvider {...form}>
           {loading ? (
-            <>
-              <Skeleton height={50} borderRadius={10} />
-              <Skeleton height={50} borderRadius={10} />
-              <Skeleton height={50} borderRadius={10} />
-              <Skeleton height={50} borderRadius={10} />
-            </>
+            <ProfileFormSkeleton/>
           ) : (
             <>
               <FormInput name={'name'} placeholder={'Введите имя...'} />
