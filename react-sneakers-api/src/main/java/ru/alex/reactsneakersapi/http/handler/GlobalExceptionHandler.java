@@ -12,8 +12,7 @@ import ru.alex.reactsneakersapi.dto.error.ErrorResponse;
 import ru.alex.reactsneakersapi.util.ExceptionUtils;
 
 import java.time.Instant;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 import static org.springframework.http.HttpStatus.*;
 
@@ -21,13 +20,18 @@ import static org.springframework.http.HttpStatus.*;
 @ControllerAdvice
 public class GlobalExceptionHandler {
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<ErrorResponse> handleValidationException(MethodArgumentNotValidException ex) {
-        Map<String, String> errors = new HashMap<>();
+    public ResponseEntity<ErrorResponse> handleValidationExceptions(MethodArgumentNotValidException ex) {
+        Map<String, List<String>> errors = new TreeMap<>();
+
         ex.getBindingResult().getAllErrors().forEach((error) -> {
             String fieldName = ((FieldError) error).getField();
             String errorMessage = error.getDefaultMessage();
-            errors.put(fieldName, errorMessage);
+
+            errors.computeIfAbsent(fieldName, key -> new ArrayList<>()).add(errorMessage);
         });
+
+        errors.values().forEach(Collections::sort);
+
         ErrorResponse errorResponse = new ErrorResponse(
                 Instant.now(),
                 errors
