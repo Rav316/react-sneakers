@@ -1,14 +1,8 @@
-import type {
-  CartItem,
-  CartItemCreateDto,
-  CartItemUpdateDto,
-  CartResponse,
-  ErrorResponse,
-} from '../../service/model.ts';
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { callApiWithErrorHandling } from '../../util/call-api-with-error-handling.ts';
 import { Api } from '../../service/api-client.ts';
 import { extractError } from '../../util/extract-error.ts';
+import type { CartItem, CartItemCreateDto, CartItemUpdateDto, CartResponse, ErrorResponse } from '../../service/model';
 
 interface CartSlice {
   cart: CartResponse;

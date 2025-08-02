@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import type { ErrorResponse } from '../../service/model.ts';
 import { callApiWithErrorHandling } from '../../util/call-api-with-error-handling.ts';
 import { Api } from '../../service/api-client.ts';
+import type { ErrorResponse } from '../../service/model';
 
 interface FavoriteSlice {
   items: number[];

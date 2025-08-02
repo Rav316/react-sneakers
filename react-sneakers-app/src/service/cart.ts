@@ -1,6 +1,6 @@
-import type { CartItem, CartItemCreateDto, CartItemUpdateDto, CartResponse } from './model.ts';
 import { axiosInstance } from './instance.ts';
 import { ApiRoutes } from './constants.ts';
+import type { CartItem, CartItemCreateDto, CartItemUpdateDto, CartResponse } from './model';
 
 export const findAll = async (): Promise<CartResponse> => {
   const response = await axiosInstance.get<CartResponse>(ApiRoutes.CART);

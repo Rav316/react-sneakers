@@ -1,7 +1,7 @@
-import type { PageResponse, Sneaker, SneakerListItem } from './model.ts';
 import { axiosInstance } from './instance.ts';
 import { ApiRoutes } from './constants.ts';
 import type { Order } from '../constants/order.ts';
+import type { PageResponse, Sneaker, SneakerListItem } from './model';
 
 export interface SearchParams {
   page?: number;

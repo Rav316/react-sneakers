@@ -2,7 +2,7 @@ import styles from './sneaker-sizes.module.scss';
 import * as React from 'react';
 import { sizes } from '../../../constants/sizes.ts';
 import clsx from 'clsx';
-import type { SneakerItem } from '../../../service/model.ts';
+import type { SneakerItem } from '../../../service/model';
 
 interface Props {
   selectedItem: SneakerItem | null;

@@ -1,10 +1,10 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import type { AuthResponse, ErrorResponse, User } from '../../service/model.ts';
 import { Api } from '../../service/api-client.ts';
 import type { AxiosError } from 'axios';
 import { callApiWithErrorHandling } from '../../util/call-api-with-error-handling.ts';
 import { extractError } from '../../util/extract-error.ts';
 import type { LoginData, RegisterData } from '../../schemas/auth-schema.ts';
+import type { AuthResponse, ErrorResponse, User, UserEditDto } from '../../service/model';
 
 interface AuthSlice {
   user?: User;
@@ -64,6 +64,17 @@ export const checkAuth = createAsyncThunk<AuthResponse, void>(
     }
   },
 );
+
+export const updateProfile = createAsyncThunk<User, UserEditDto>(
+  'auth/updateProfile',
+  async (data: UserEditDto, thunkAPI) => {
+    return await callApiWithErrorHandling(
+      Api.users.updateProfile,
+      data,
+      thunkAPI.rejectWithValue,
+    );
+  },
+)
 
 const authSlice = createSlice({
   name: 'auth',
@@ -130,7 +141,19 @@ const authSlice = createSlice({
       .addCase(register.rejected, (state, action) => {
         state.loading = false;
         state.error = extractError(action);
-      });
+      })
+      .addCase(updateProfile.pending, (state) => {
+        state.loading = false;
+        state.error = undefined;
+      })
+      .addCase(updateProfile.fulfilled, (state, action) => {
+        state.loading = false;
+        state.user = action.payload;
+      })
+      .addCase(updateProfile.rejected, (state, action) => {
+        state.loading = false;
+        state.error = extractError(action);
+      })
   },
 });
 

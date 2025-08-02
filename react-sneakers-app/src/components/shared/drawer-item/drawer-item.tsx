@@ -1,6 +1,5 @@
 import styles from './drawer-item.module.scss';
 import closeIcon from '../../../assets/close.svg';
-import type { CartItem } from '../../../service/model.ts';
 import * as React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import type { AppDispatch, RootState } from '../../../redux/store.ts';
@@ -14,6 +13,7 @@ import clsx from 'clsx';
 import { unwrapResult } from '@reduxjs/toolkit';
 import toast from 'react-hot-toast';
 import { useDebouncedCallback } from 'use-debounce';
+import type { CartItem } from '../../../service/model';
 
 interface Props {
   item: CartItem;

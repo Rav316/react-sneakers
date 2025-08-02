@@ -17,8 +17,8 @@ import {
 } from '../../redux/slice/cart-slice.ts';
 import { unwrapResult } from '@reduxjs/toolkit';
 import toast from 'react-hot-toast';
-import type { CartItem, SneakerItem } from '../../service/model.ts';
 import { ArrowBack } from '../../components/ui/arrow-back/arrow-back.tsx';
+import type { CartItem, SneakerItem } from '../../service/model';
 
 export const SneakerDetailsPage = () => {
   const staticUrl: string = import.meta.env.VITE_STATIC_URL;

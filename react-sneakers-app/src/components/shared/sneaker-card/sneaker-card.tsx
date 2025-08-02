@@ -4,7 +4,6 @@ import clsx from 'clsx';
 
 import favoritesIcon from '../../../assets/favorites/favorites-light.svg';
 import selectedFavoritesIcon from '../../../assets/favorites/selected-favorites.svg';
-import type { SneakerListItem } from '../../../service/model.ts';
 import { useDispatch, useSelector } from 'react-redux';
 import type { AppDispatch, RootState } from '../../../redux/store.ts';
 import {
@@ -16,6 +15,7 @@ import {
 import { useDebouncedCallback } from 'use-debounce';
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router';
+import type { SneakerListItem } from '../../../service/model';
 
 interface Props {
   sneaker: SneakerListItem;

@@ -1,4 +1,4 @@
-import type { ErrorResponse } from '../service/model.ts';
+import type { ErrorResponse } from '../service/model';
 
 export const extractError = (action: any) => {
   if (action.payload) {

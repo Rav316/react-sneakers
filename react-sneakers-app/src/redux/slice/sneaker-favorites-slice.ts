@@ -1,8 +1,8 @@
-import type { ErrorResponse, SneakerListItem } from '../../service/model.ts';
 import { createAsyncThunk, createSlice, isAnyOf } from '@reduxjs/toolkit';
 import { callApiWithErrorHandling } from '../../util/call-api-with-error-handling.ts';
 import { Api } from '../../service/api-client.ts';
 import { extractError } from '../../util/extract-error.ts';
+import type { ErrorResponse, SneakerListItem } from '../../service/model';
 
 interface SneakerFavoritesSlice {
   items: SneakerListItem[];

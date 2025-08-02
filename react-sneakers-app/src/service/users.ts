@@ -1,8 +1,8 @@
-import type { User } from './model.ts';
 import { axiosInstance } from './instance.ts';
 import { ApiRoutes } from './constants.ts';
+import type { User, UserEditDto } from './model';
 
-export const profile = async (): Promise<User> => {
-  const response = await axiosInstance.get<User>(`${ApiRoutes.USERS}/profile`);
+export const updateProfile = async (data: UserEditDto): Promise<User> => {
+  const response = await axiosInstance.put<User>(`${ApiRoutes.USERS}/profile`, data);
   return response.data;
-};
+}

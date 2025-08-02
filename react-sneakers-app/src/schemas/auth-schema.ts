@@ -10,7 +10,8 @@ export const formLoginSchema = z.object({
 export const formRegisterSchema = formLoginSchema.extend({
   name: z
     .string()
-    .min(2, { message: 'Имя должно содержать не менее 2 символов' }),
+    .min(2, { message: 'Имя должно содержать не менее 2 символов' })
+    .max(32, { message: 'Имя должно содержать не более 32 символов' }),
 });
 
 export type LoginData = z.infer<typeof formLoginSchema>;

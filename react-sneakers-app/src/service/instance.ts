@@ -1,6 +1,6 @@
 import axios from 'axios';
-import type { AuthResponse } from './model.ts';
 import qs from 'qs';
+import type { AuthResponse } from './model';
 
 export const axiosInstance = axios.create({
   baseURL: import.meta.env.VITE_API_URL,
