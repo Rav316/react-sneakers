@@ -1,6 +1,5 @@
 package ru.alex.reactsneakersapi.service;
 
-import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -12,6 +11,7 @@ import ru.alex.reactsneakersapi.database.repository.SneakerItemRepository;
 import ru.alex.reactsneakersapi.dto.order.OrderCreateDto;
 import ru.alex.reactsneakersapi.dto.order.OrderListDto;
 import ru.alex.reactsneakersapi.dto.orderItem.OrderItemCreateDto;
+import ru.alex.reactsneakersapi.exception.SneakerItemNotFoundException;
 import ru.alex.reactsneakersapi.mapper.order.OrderListMapper;
 
 import java.time.Instant;
@@ -55,7 +55,7 @@ public class OrderService {
 
         for (OrderItemCreateDto orderItem : orderItemCreateList) {
             if (!sneakerItemIdsFromDb.contains(orderItem.sneakerItem())) {
-                throw new EntityNotFoundException("sneakerItem with id " + orderItem.sneakerItem() + " not found");
+                throw new SneakerItemNotFoundException(orderItem.sneakerItem());
             }
         }
 
