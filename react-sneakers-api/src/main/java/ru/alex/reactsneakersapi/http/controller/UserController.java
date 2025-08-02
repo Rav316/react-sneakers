@@ -1,13 +1,14 @@
 package ru.alex.reactsneakersapi.http.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
+import ru.alex.reactsneakersapi.dto.user.UserEditDto;
 import ru.alex.reactsneakersapi.dto.user.UserReadDto;
 import ru.alex.reactsneakersapi.service.UserService;
+
+import static org.springframework.http.HttpStatus.OK;
 
 @RestController
 @RequestMapping("/api/users")
@@ -17,6 +18,11 @@ public class UserController {
 
     @GetMapping("/profile")
     public ResponseEntity<UserReadDto> profile() {
-        return new ResponseEntity<>(userService.getProfile(), HttpStatus.OK);
+        return new ResponseEntity<>(userService.getProfile(), OK);
+    }
+
+    @PutMapping("/profile")
+    public ResponseEntity<UserReadDto> updateProfile(@Validated @RequestBody UserEditDto userEditDto) {
+        return new ResponseEntity<>(userService.updateProfile(userEditDto), OK);
     }
 }

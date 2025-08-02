@@ -1,18 +1,16 @@
 package ru.alex.reactsneakersapi.dto.user;
 
 import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
-public record UserRegisterDto(
-        @NotNull
+public record UserEditDto (
         @Size(min = 2, max = 32)
         String name,
-        @NotNull
         @Email
         String email,
-        @NotNull
         @Size(min = 4)
-        String password
+        String password,
+        @Size(min = 4)
+        String newPassword
 ) {
 }
