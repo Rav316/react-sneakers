@@ -38,6 +38,9 @@ spring:
   threads:
     virtual:
       enabled: true
+  jackson:
+    serialization:
+      WRITE_ENUMS_USING_INDEX: true
 logging:
   level:
     org.springframework.jdbc.core.JdbcTemplate: debug

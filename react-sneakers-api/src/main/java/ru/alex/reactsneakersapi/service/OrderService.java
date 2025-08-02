@@ -2,6 +2,7 @@ package ru.alex.reactsneakersapi.service;
 
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.alex.reactsneakersapi.database.entity.*;
@@ -30,7 +31,7 @@ public class OrderService {
     private final OrderListMapper orderListMapper;
 
     public List<OrderListDto> findAll() {
-        return orderRepository.findAll()
+        return orderRepository.findAll(Sort.by(Sort.Direction.DESC, "createdAt"))
                 .stream()
                 .map(orderListMapper::toDto)
                 .toList();
