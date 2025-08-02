@@ -2,16 +2,18 @@ import styles from './order.module.scss';
 import { OrderButton } from '../../ui/order-button/order-button.tsx';
 import { ArrowExpand } from '../../ui/arrow-expand/arrow-expand.tsx';
 import * as React from 'react';
-import type { OrderStatus } from '../../../constants/order-status.ts';
 import { OrderItem } from '../order-item/order-item.tsx';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
+import type { OrderListItem } from '../../../service/model';
+import { formatDateTime } from '../../../util/date-formatter.ts';
 
 interface Props {
-  orderId: number;
-  status: OrderStatus;
+  order: OrderListItem;
 }
 
-export const Order: React.FC<Props> = ({ orderId, status }) => {
+export const Order: React.FC<Props> = ({
+  order: { id, status, createdAt },
+}) => {
   const [isExpanded, setIsExpanded] = useState(false);
   const [contentHeight, setContentHeight] = useState(0);
   const contentRef = useRef<HTMLDivElement>(null);
@@ -40,15 +42,20 @@ export const Order: React.FC<Props> = ({ orderId, status }) => {
     return () => resizeObserver.disconnect();
   }, [isExpanded]);
 
+  const formattedDate = useMemo(
+    () => formatDateTime(new Date(createdAt)),
+    [createdAt],
+  );
+
   return (
     <div className={styles.root}>
       <div className={styles.orderInfo}>
         <div className={styles.infoWrapper}>
-          <span>Заказ #{orderId}</span>
-          <p>16 февраля 2024, в 20:31</p>
+          <span>Заказ #{id}</span>
+          <p>{formattedDate}</p>
         </div>
         <div className={styles.buttonWrapper}>
-          <OrderButton status={status} />
+          <OrderButton statusCode={status} />
           <ArrowExpand expanded={isExpanded} setIsExpanded={setIsExpanded} />
         </div>
       </div>
@@ -95,7 +102,7 @@ export const Order: React.FC<Props> = ({ orderId, status }) => {
             <span>Итого:</span>
             <p>43998 ₽</p>
           </div>
-          <OrderButton status={'cancel'} />
+          <OrderButton />
         </div>
       </div>
     </div>
