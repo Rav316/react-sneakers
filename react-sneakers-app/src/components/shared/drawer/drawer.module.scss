@@ -24,8 +24,9 @@
   top: 0;
   right: 0;
   height: 100%;
-  max-width: 400px;
-  min-width: 300px;
+  width: 400px;
+  max-width: 100%;
+  min-width: unset;
   background: white;
   padding: 1.75rem;
   display: flex;
@@ -33,6 +34,10 @@
   transform: translateX(100%);
   transition: transform 0.4s ease-in-out;
   overflow-y: scroll;
+
+  @media (max-width: 456px) {
+    width: auto;
+  }
 
   &.open {
     transform: translateX(0);
@@ -124,11 +129,17 @@
       width: 100%;
       height: 55px;
       background-color: #9dd558;
+      transition: background-color 0.3s ease-in-out;
       border-radius: 18px;
       font-size: 16px;
       color: white;
       margin-top: 24px;
       margin-bottom: 20px;
+      cursor: pointer;
+
+      &:hover {
+        background-color: #8cc644;
+      }
 
       span {
         position: absolute;

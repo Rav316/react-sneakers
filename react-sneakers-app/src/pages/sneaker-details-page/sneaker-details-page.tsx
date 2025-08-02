@@ -125,7 +125,9 @@ export const SneakerDetailsPage = () => {
       ) : (
         <div className={styles.root}>
           <div className={styles.nameWrapper}>
-            <ArrowBack />
+            <div className={styles.arrowBackWrapper}>
+              <ArrowBack />
+            </div>
             <div className={styles.textWrapper}>
               <h1>{sneaker.name}</h1>
               <h3>{sneaker.type.name}</h3>

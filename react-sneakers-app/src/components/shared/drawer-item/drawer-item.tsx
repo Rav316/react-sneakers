@@ -67,7 +67,9 @@ export const DrawerItem: React.FC<Props> = ({ item }) => {
     <div className={styles.root}>
       <img src={`${staticUrl}${item.imageUrl}`} alt={'sneaker image'} />
       <div className={styles.infoWrapper}>
-        <span>{`${item.type} ${item.name}`}</span>
+        <div className={styles.name}>
+          <span>{`${item.type} ${item.name}`}</span>
+        </div>
         <span className={styles.sizeQuantityInfo}>
           {item.size} размер, {item.quantity} шт.
         </span>

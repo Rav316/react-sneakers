@@ -7,6 +7,12 @@
     align-items: center;
     column-gap: 21px;
 
+    .arrowBackWrapper {
+      @media (max-width: 425px) {
+        display: none;
+      }
+    }
+
     .textWrapper {
       display: flex;
       flex-direction: column;
