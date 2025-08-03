@@ -3,14 +3,18 @@ import { Arrow } from '../arrow.tsx';
 import * as React from 'react';
 
 interface Props {
-  onClick?: () => void
+  onClick?: () => void;
+  text?: string;
 }
 
-export const ButtonBack: React.FC<Props> = ({onClick}) => {
+export const ButtonBack: React.FC<Props> = ({
+  text = 'Вернуться назад',
+  onClick,
+}) => {
   return (
     <button className={styles.backButton} onClick={onClick}>
       <Arrow />
-      <span>Вернуться назад</span>
+      <span>{text}</span>
     </button>
   );
 };

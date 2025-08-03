@@ -37,19 +37,16 @@ const orderItemSlice = createSlice({
   extraReducers: (builder) => {
     builder.addCase(fetchOrderItems.pending, (state, action) => {
       const orderId = action.meta.arg;
-      console.log(`pending: ${orderId}`);
       state.loadingByOrderId[orderId] = true;
       state.errorByOrderId[orderId] = undefined;
     })
       .addCase(fetchOrderItems.fulfilled, (state, action) => {
         const payload = action.payload;
-        console.log(`fulfilled: ${payload.orderId}`);
         state.loadingByOrderId[payload.orderId] = false;
         state.itemsByOrderId[payload.orderId] = action.payload;
       })
       .addCase(fetchOrderItems.rejected, (state, action) => {
         const orderId = action.meta.arg;
-        console.log(`rejected: ${orderId}`);
         state.loadingByOrderId[orderId] = false;
         state.errorByOrderId[orderId] = action.payload;
       });

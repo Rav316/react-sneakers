@@ -34,7 +34,6 @@ export const Order: React.FC<Props> = ({
 
   useEffect(() => {
     if (isExpanded && !items && !loading) {
-      console.log(`id: ${id}`);
       dispatch(fetchOrderItems(id));
     }
   }, [isExpanded, id, items, loading, dispatch]);

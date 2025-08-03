@@ -6,6 +6,7 @@ import { useEffect } from 'react';
 import { fetchOrders } from '../../redux/slice/order-slice.ts';
 import { Skeleton } from '../../components/ui/skeleton/skeleton.tsx';
 import { ErrorResult } from '../../components/shared/error/error-result/error-result.tsx';
+import { EmptyOrders } from '../../components/shared/empty-orders/empty-orders.tsx';
 
 export const OrdersPage = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -27,9 +28,12 @@ export const OrdersPage = () => {
   return (
     <div className={styles.root}>
       <h1>Мои заказы</h1>
-      <div className={styles.orders}>
-        {loading
-          ? Array.from({ length: 4 }).map((_, i) => (
+      {!loading && !orders.length ? (
+        <EmptyOrders/>
+      ) : (
+        <div className={styles.orders}>
+          {loading
+            ? Array.from({ length: 4 }).map((_, i) => (
               <Skeleton
                 key={i}
                 style={{ maxWidth: '900px' }}
@@ -38,8 +42,10 @@ export const OrdersPage = () => {
                 width={'100%'}
               />
             ))
-          : orders.map((order) => <Order key={order.id} order={order} />)}
-      </div>
+            : orders.map((order) => <Order key={order.id} order={order} />)}
+        </div>
+      )}
+
     </div>
   );
 };

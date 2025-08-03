@@ -26,7 +26,6 @@ export const ProfilePage = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    console.log(loading);
     if (user) {
       form.reset({
         name: user.name,
