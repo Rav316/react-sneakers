@@ -13,7 +13,7 @@ import { ErrorResult } from '../../components/shared/error/error-result/error-re
 import { SortBlock } from '../../components/shared/sort-block/sort-block.tsx';
 import type { Order } from '../../constants/order.ts';
 import { type SortOption, sortOptions } from '../../constants/sort.ts';
-import FadeContent from '../../components/ui/animation/fade-content.tsx';
+import FadeContent from '../../hoc/animation/fade-content.tsx';
 
 const HomePage = () => {
   const dispatch = useDispatch<AppDispatch>();

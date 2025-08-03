@@ -14,7 +14,7 @@ import { EmptyFavorites } from '../../components/shared/empty-favorites/empty-fa
 import { TrashIcon } from '../../components/ui/trash-icon.tsx';
 import { clearFavorites } from '../../redux/slice/favorite-slice.ts';
 import { ArrowBack } from '../../components/ui/arrow-back/arrow-back.tsx';
-import FadeContent from '../../components/ui/animation/fade-content.tsx';
+import FadeContent from '../../hoc/animation/fade-content.tsx';
 
 export const FavoritesPage = () => {
   const dispatch = useDispatch<AppDispatch>();
