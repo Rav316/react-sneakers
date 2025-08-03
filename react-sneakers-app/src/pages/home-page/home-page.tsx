@@ -13,6 +13,7 @@ import { ErrorResult } from '../../components/shared/error/error-result/error-re
 import { SortBlock } from '../../components/shared/sort-block/sort-block.tsx';
 import type { Order } from '../../constants/order.ts';
 import { type SortOption, sortOptions } from '../../constants/sort.ts';
+import FadeContent from '../../components/ui/animation/fade-content.tsx';
 
 const HomePage = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -71,11 +72,13 @@ const HomePage = () => {
         <>
           <div className={styles.sneakerCardsWrapper}>
             {loading
-              ? Array.from({ length: 6 }).map((_, index) => (
+              ? Array.from({ length: 12 }).map((_, index) => (
                   <SneakerCardSkeleton key={index} />
                 ))
               : sneakers.content.map((sneaker) => (
-                  <SneakerCard key={sneaker.id} sneaker={sneaker} />
+                  <FadeContent key={sneaker.id}>
+                    <SneakerCard sneaker={sneaker} />
+                  </FadeContent>
                 ))}
           </div>
           {!loading && (
