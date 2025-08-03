@@ -88,10 +88,17 @@
     display: flex;
     justify-content: space-between;
     align-items: end;
+    
+    @media (max-width: 500px) {
+      flex-direction: column;
+      align-items: normal;
+      row-gap: 10px;
+    }
 
     .infoWrapper {
       display: flex;
       font-size: 20px;
+      column-gap: 10px;
       p {
         font-weight: 600;
       }

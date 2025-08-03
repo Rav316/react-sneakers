@@ -24,7 +24,6 @@ export const OrdersPage = () => {
       </div>
     )
   }
-
   return (
     <div className={styles.root}>
       <h1>Мои заказы</h1>
