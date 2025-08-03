@@ -5,6 +5,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.alex.reactsneakersapi.database.entity.*;
+import ru.alex.reactsneakersapi.database.repository.CartItemRepository;
 import ru.alex.reactsneakersapi.database.repository.OrderItemRepository;
 import ru.alex.reactsneakersapi.database.repository.OrderRepository;
 import ru.alex.reactsneakersapi.database.repository.SneakerItemRepository;
@@ -28,6 +29,7 @@ public class OrderService {
     private final OrderRepository orderRepository;
     private final OrderItemRepository orderItemRepository;
     private final SneakerItemRepository sneakerItemRepository;
+    private final CartItemRepository cartItemRepository;
     private final OrderListMapper orderListMapper;
 
     public List<OrderListDto> findAll() {
@@ -38,7 +40,7 @@ public class OrderService {
     }
 
     @Transactional
-    public void create(OrderCreateDto orderCreateDto) {
+    public Integer create(OrderCreateDto orderCreateDto) {
         List<OrderItemCreateDto> orderItemCreateList = orderCreateDto.items();
         Set<Integer> sneakerItemIds = orderItemCreateList
                 .stream()
@@ -59,13 +61,16 @@ public class OrderService {
             }
         }
 
+        Integer userId = getAuthorizedUser().id();
         Order order = Order.builder()
-                .user(User.builder().id(getAuthorizedUser().id()).build())
+                .user(User.builder().id(userId).build())
                 .status(OrderStatus.PENDING)
                 .createdAt(Instant.now())
                 .build();
         Order savedOrder = orderRepository.save(order);
 
         orderItemRepository.createOrderItemsBatch(savedOrder.getId(), orderCreateDto.items());
+        cartItemRepository.clearUserCart(userId);
+        return savedOrder.getId();
     }
 }
