@@ -16,8 +16,8 @@ interface Props {
 }
 
 export const Order: React.FC<Props> = ({
-  order: { id, status, createdAt },
-}) => {
+                                         order: { id, status, createdAt },
+                                       }) => {
   const staticUrl: string = import.meta.env.VITE_STATIC_URL;
   const [isExpanded, setIsExpanded] = useState(false);
   const [contentHeight, setContentHeight] = useState(0);
@@ -85,7 +85,7 @@ export const Order: React.FC<Props> = ({
         <div className={styles.orderItems}>
           {loading && (
             <>
-              {Array.from({ length: 3 }).map((_, i) => (
+              {Array.from({ length: 1 }).map((_, i) => (
                 <Skeleton key={i} height={80} borderRadius={10} />
               ))}
             </>

@@ -11,18 +11,37 @@ import { Skeleton } from '../../ui/skeleton/skeleton.tsx';
 import { EmptyCart } from '../empty-cart/empty-cart.tsx';
 import { useState } from 'react';
 import { OrderPlaced } from '../order-placed/order-placed.tsx';
+import { createOrder } from '../../../redux/slice/cart-slice.ts';
+import type { OrderCreateDto } from '../../../service/model';
+import { unwrapResult } from '@reduxjs/toolkit';
+import toast from 'react-hot-toast';
 
 export const CartDrawer = () => {
   const dispatch = useDispatch<AppDispatch>();
   const { isOpen } = useSelector((state: RootState) => state.cartDrawer);
-  const { cart, loading, error } = useSelector(
+  const { cart, loading, error, changeStatus } = useSelector(
     (state: RootState) => state.cart,
   );
   const token = useSelector((state: RootState) => state.auth.token);
-  const [isOrderPlaced, setIsOrderPlaced] = useState(false);
+  const [orderId, setOrderId] = useState<number | null>(null);
 
   const onCloseDrawer = () => dispatch(setIsDrawerOpen(false));
-  const onClickPlaceOrder = () => setIsOrderPlaced(true);
+  const onClickPlaceOrder = async () => {
+    const orderCreateDto: OrderCreateDto = {
+      items: cart.items.map((item) => ({
+        sneakerItem: item.sneakerItemId,
+        quantity: item.quantity,
+      }))
+    }
+    const action = await dispatch(createOrder(orderCreateDto));
+    try {
+      const result = unwrapResult(action);
+      setOrderId(result);
+      toast.success('Заказ успешно оформлен');
+    } catch {
+      toast.error('Ошибка при оформлении заказа');
+    }
+  };
 
   const isEmptyCart = !cart.items.length;
   const showError = !loading && error;
@@ -44,10 +63,10 @@ export const CartDrawer = () => {
           <div />
           <span className={styles.price}>{cart.sum} руб.</span>
         </div>
-        <div className={styles.placeOrderButton} onClick={onClickPlaceOrder}>
+        <button disabled={changeStatus.loading} className={clsx(styles.placeOrderButton)} onClick={onClickPlaceOrder}>
           <span>Оформить заказ</span>
           <Arrow className={styles.arrowNext} direction="right" />
-        </div>
+        </button>
       </div>
     </div>
   );
@@ -60,8 +79,8 @@ export const CartDrawer = () => {
       />
 
       <div className={clsx(styles.drawer, { [styles.open]: isOpen })}>
-        {isOrderPlaced ? (
-          <OrderPlaced />
+        {orderId ? (
+          <OrderPlaced orderId={orderId} onClick={() => setOrderId(null)}/>
         ) : showError ? (
           <CartError />
         ) : showEmpty ? (
@@ -85,5 +104,4 @@ export const CartDrawer = () => {
       </div>
     </>
   );
-
 };

@@ -19,3 +19,12 @@ export interface OrderItem {
   size: number;
   quantity: number;
 }
+
+export interface OrderCreateDto {
+  items: OrderItemCreateDto[];
+}
+
+export interface OrderItemCreateDto {
+  sneakerItem: number;
+  quantity: number;
+}

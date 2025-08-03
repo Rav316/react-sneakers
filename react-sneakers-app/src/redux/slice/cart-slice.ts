@@ -1,8 +1,15 @@
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import { createAsyncThunk, createSlice, isAnyOf } from '@reduxjs/toolkit';
 import { callApiWithErrorHandling } from '../../util/call-api-with-error-handling.ts';
 import { Api } from '../../service/api-client.ts';
 import { extractError } from '../../util/extract-error.ts';
-import type { CartItem, CartItemCreateDto, CartItemUpdateDto, CartResponse, ErrorResponse } from '../../service/model';
+import type {
+  CartItem,
+  CartItemCreateDto,
+  CartItemUpdateDto,
+  CartResponse,
+  ErrorResponse,
+  OrderCreateDto,
+} from '../../service/model';
 
 interface CartSlice {
   cart: CartResponse;
@@ -104,6 +111,20 @@ export const syncGuestCart = createAsyncThunk<
     ),
 );
 
+export const createOrder = createAsyncThunk<
+  number,
+  OrderCreateDto,
+  { rejectValue: ErrorResponse }
+>(
+  'order/createOrder',
+  async (orderCreateDto: OrderCreateDto, { rejectWithValue }) =>
+    await callApiWithErrorHandling(
+      Api.orders.createOrder,
+      orderCreateDto,
+      rejectWithValue,
+    ),
+);
+
 const cartSlice = createSlice({
   name: 'cart',
   initialState,
@@ -152,9 +173,6 @@ const cartSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      .addCase(fetchCart.pending, (state) => {
-        state.loading = true;
-      })
       .addCase(fetchCart.fulfilled, (state, action) => {
         state.cart = action.payload;
         state.loading = false;
@@ -252,6 +270,26 @@ const cartSlice = createSlice({
           loading: false,
           error: extractError(action),
         };
+      })
+      .addCase(createOrder.pending, (state) => {
+        state.changeStatus = {
+          loading: true
+        }
+      })
+      .addCase(createOrder.fulfilled, (state) => {
+        state.changeStatus = {
+          loading: false
+        };
+        state.cart.items = [];
+        state.cart.sum = 0;
+      })
+      .addCase(createOrder.rejected, (state, action) => {
+        state.loading = false;
+        state.error = extractError(action);
+      })
+      .addMatcher(isAnyOf(fetchCart.pending), (state) => {
+        state.loading = true;
+        state.error = undefined;
       });
   },
 });

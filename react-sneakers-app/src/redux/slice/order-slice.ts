@@ -20,7 +20,11 @@ export const fetchOrders = createAsyncThunk<
   void,
   { rejectValue: ErrorResponse }
 >('order/fetchOrders', async (_, { rejectWithValue }) => {
-  return await callApiWithErrorHandling(Api.orders.findAll, {}, rejectWithValue);
+  return await callApiWithErrorHandling(
+    Api.orders.findAll,
+    {},
+    rejectWithValue,
+  );
 });
 
 const orderSlice = createSlice({
@@ -40,7 +44,7 @@ const orderSlice = createSlice({
       state.loading = false;
       state.error = extractError(action);
     });
-  }
+  },
 });
 
 export default orderSlice.reducer;
