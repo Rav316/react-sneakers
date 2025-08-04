@@ -15,6 +15,7 @@ import { createOrder } from '../../../redux/slice/cart-slice.ts';
 import type { OrderCreateDto } from '../../../service/model';
 import { unwrapResult } from '@reduxjs/toolkit';
 import toast from 'react-hot-toast';
+import { AnimatePresence, motion } from 'framer-motion';
 
 export const CartDrawer = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -48,12 +49,34 @@ export const CartDrawer = () => {
   const showEmpty = (!token || !loading) && isEmptyCart;
   const showSkeletons = loading && token;
 
-  const renderItems = () =>
-    showSkeletons
-      ? Array.from({ length: 3 }).map((_, i) => (
-          <Skeleton key={i} height={130} borderRadius={20} />
-        ))
-      : cart.items.map((item, i) => <DrawerItem key={i} item={item} />);
+  const renderItems = () => {
+    if (showSkeletons) {
+      return Array.from({ length: 3 }).map((_, i) => (
+        <Skeleton key={i} height={130} borderRadius={20} />
+      ));
+    }
+
+    return (
+      <AnimatePresence initial={false}>
+        {cart.items.map((item) => (
+          <motion.div
+            key={item.id}
+            layout
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: "auto" }}
+            exit={{
+              opacity: 0,
+              height: 0,
+              transition: { duration: 0.3 }
+            }}
+            transition={{ duration: 0.2 }}
+          >
+            <DrawerItem item={item} />
+          </motion.div>
+        ))}
+      </AnimatePresence>
+    );
+  };
 
   const renderFooter = () => (
     <div className={styles.resultWrapper}>
