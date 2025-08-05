@@ -1,7 +1,6 @@
 package ru.alex.reactsneakersapi.service;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.alex.reactsneakersapi.database.entity.*;
@@ -12,6 +11,7 @@ import ru.alex.reactsneakersapi.database.repository.SneakerItemRepository;
 import ru.alex.reactsneakersapi.dto.order.OrderCreateDto;
 import ru.alex.reactsneakersapi.dto.order.OrderListDto;
 import ru.alex.reactsneakersapi.dto.orderItem.OrderItemCreateDto;
+import ru.alex.reactsneakersapi.exception.OrderNotFoundException;
 import ru.alex.reactsneakersapi.exception.SneakerItemNotFoundException;
 import ru.alex.reactsneakersapi.mapper.order.OrderListMapper;
 
@@ -33,7 +33,7 @@ public class OrderService {
     private final OrderListMapper orderListMapper;
 
     public List<OrderListDto> findAll() {
-        return orderRepository.findAll(Sort.by(Sort.Direction.DESC, "createdAt"))
+        return orderRepository.findAllByUser(getAuthorizedUser().id())
                 .stream()
                 .map(orderListMapper::toDto)
                 .toList();
@@ -72,5 +72,13 @@ public class OrderService {
         orderItemRepository.createOrderItemsBatch(savedOrder.getId(), orderCreateDto.items());
         cartItemRepository.clearUserCart(userId);
         return savedOrder.getId();
+    }
+
+    @Transactional
+    public void cancelOrder(Integer id) {
+        Order order = orderRepository.findByIdAndUser(id, getAuthorizedUser().id())
+                .orElseThrow(() -> new OrderNotFoundException(id));
+        order.setStatus(OrderStatus.CANCELED);
+        orderRepository.save(order);
     }
 }

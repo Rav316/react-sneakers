@@ -1,6 +1,7 @@
 package ru.alex.reactsneakersapi.http.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -12,8 +13,7 @@ import ru.alex.reactsneakersapi.service.OrderService;
 
 import java.util.List;
 
-import static org.springframework.http.HttpStatus.CREATED;
-import static org.springframework.http.HttpStatus.OK;
+import static org.springframework.http.HttpStatus.*;
 
 @RestController
 @RequestMapping("/api/orders")
@@ -35,5 +35,11 @@ public class OrderController {
     @PostMapping
     public ResponseEntity<Integer> create(@Validated @RequestBody OrderCreateDto orderCreateDto) {
         return new ResponseEntity<>(orderService.create(orderCreateDto), CREATED);
+    }
+
+    @PutMapping("/{id}/cancel")
+    public ResponseEntity<HttpStatus> cancelOrder(@PathVariable("id") Integer id) {
+        orderService.cancelOrder(id);
+        return new ResponseEntity<>(NO_CONTENT);
     }
 }
