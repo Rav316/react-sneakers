@@ -20,6 +20,7 @@ import { SneakerDetailsPage } from './pages/sneaker-details-page/sneaker-details
 import { fetchCart } from './redux/slice/cart-slice.ts';
 import { OutletProfile } from './hoc/outlet-profile/outlet-profile.tsx';
 import { OrdersPage } from './pages/orders-page/orders-page.tsx';
+import { CancelOrderModal } from './modals/cancel-order-modal/cancel-order-modal.tsx';
 
 const App = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -27,10 +28,11 @@ const App = () => {
   const isDrawerOpen = useSelector(
     (state: RootState) => state.cartDrawer.isOpen,
   );
-  const isModalOpen = useSelector((state: RootState) => state.authModal.isOpen);
+  const isAuthModalOpen = useSelector((state: RootState) => state.authModal.isOpen);
+  const isCancelOrderModalOpen = useSelector((state: RootState) => state.cancelOrderModal.isOpen);
 
   useEffect(() => {
-    if (isDrawerOpen || isModalOpen) {
+    if (isDrawerOpen || isAuthModalOpen || isCancelOrderModalOpen) {
       document.body.style.overflow = 'hidden';
     } else {
       document.body.style.overflow = '';
@@ -39,7 +41,7 @@ const App = () => {
     return () => {
       document.body.style.overflow = '';
     };
-  }, [isDrawerOpen, isModalOpen]);
+  }, [isDrawerOpen, isAuthModalOpen, isCancelOrderModalOpen]);
 
   useEffect(() => {
     if (token) {
@@ -52,7 +54,8 @@ const App = () => {
     <>
       <Toaster position="top-center" />
       <CartDrawer />
-      {isModalOpen && <AuthModal />}
+      {isAuthModalOpen && <AuthModal />}
+      {isCancelOrderModalOpen && <CancelOrderModal />}
       <MainLayout>
         <Routes>
           <Route element={<OutletHeader />}>

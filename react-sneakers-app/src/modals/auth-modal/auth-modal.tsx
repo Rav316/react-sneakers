@@ -2,49 +2,25 @@ import styles from './auth-modal.module.scss';
 import { HeaderLogo } from '../../components/ui/header-logo/header-logo.tsx';
 
 import closeIcon from '../../assets/close.svg';
-import * as React from 'react';
-import { useDispatch } from 'react-redux';
-import { setIsModalOpen } from '../../redux/slice/auth-modal-slice.ts';
-import type { AppDispatch } from '../../redux/store.ts';
 import { useState } from 'react';
 import { LoginTab } from './tabs/login-tab/login-tab.tsx';
 import { RegisterTab } from './tabs/register-tab/register-tab.tsx';
 import { Arrow } from '../../components/ui/arrow.tsx';
+import { Modal } from '../../hoc/modal/modal.tsx';
+import { setIsModalOpen } from '../../redux/slice/auth-modal-slice.ts';
+import type { AppDispatch } from '../../redux/store.ts';
+import { useDispatch } from 'react-redux';
 
 export const AuthModal = () => {
-  const dispatch = useDispatch<AppDispatch>();
-  const [mouseDownOnRoot, setMouseDownOnRoot] = useState(false);
   const [isLoginTab, setIsLoginTab] = useState(true);
-
+  const dispatch = useDispatch<AppDispatch>();
   const onModalClose = () => {
     dispatch(setIsModalOpen(false));
   };
 
-  const handleRootMouseDown = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (e.target === e.currentTarget) {
-      setMouseDownOnRoot(true);
-    }
-  };
-
-  const handleRootMouseUp = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (mouseDownOnRoot && e.target === e.currentTarget) {
-      onModalClose();
-    }
-    setMouseDownOnRoot(false);
-  };
-
-  const handleRootMouseLeave = () => {
-    setMouseDownOnRoot(false);
-  };
-
   return (
-    <div
-      className={styles.root}
-      onMouseDown={handleRootMouseDown}
-      onMouseUp={handleRootMouseUp}
-      onMouseLeave={handleRootMouseLeave}
-    >
-      <div className={styles.modal}>
+    <Modal>
+      <div className={styles.root}>
         <img
           onClick={() => onModalClose()}
           className={styles.closeButton}
@@ -61,6 +37,6 @@ export const AuthModal = () => {
           <RegisterTab />
         )}
       </div>
-    </div>
+    </Modal>
   );
 };

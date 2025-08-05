@@ -10,6 +10,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import type { AppDispatch, RootState } from '../../../redux/store.ts';
 import { fetchOrderItems } from '../../../redux/slice/order-item-slice.ts';
 import { Skeleton } from '../../ui/skeleton/skeleton.tsx';
+import { openModal } from '../../../redux/slice/cancel-order-slice.ts';
 
 interface Props {
   order: OrderListItem;
@@ -112,7 +113,7 @@ export const Order: React.FC<Props> = ({
               <span>Итого:</span>
               <p>{items.sum} ₽</p>
             </div>
-            <OrderButton />
+            <OrderButton onClick={() => dispatch(openModal(id))}/>
           </div>
         )}
       </div>
