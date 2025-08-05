@@ -3,11 +3,28 @@ import { Modal } from '../../hoc/modal/modal.tsx';
 import { useDispatch, useSelector } from 'react-redux';
 import type { AppDispatch, RootState } from '../../redux/store.ts';
 import { closeModal } from '../../redux/slice/cancel-order-slice.ts';
-
+import { cancelOrder } from '../../redux/slice/order-slice.ts';
+import { unwrapResult } from '@reduxjs/toolkit';
+import toast from 'react-hot-toast';
 
 export const CancelOrderModal = () => {
-  const orderId = useSelector((state: RootState) => state.cancelOrderModal.orderId);
+  const orderId = useSelector(
+    (state: RootState) => state.cancelOrderModal.orderId,
+  );
   const dispatch = useDispatch<AppDispatch>();
+
+  const onClickCancel = async () => {
+    if (orderId) {
+      try {
+        const action = await dispatch(cancelOrder(orderId));
+        unwrapResult(action);
+        toast.success('Заказ успешно отменен');
+        dispatch(closeModal());
+      } catch {
+        toast.error('Ошибка при отмене заказа');
+      }
+    }
+  };
   return (
     <Modal>
       <div className={styles.root}>
@@ -18,10 +35,12 @@ export const CancelOrderModal = () => {
           reactSneaker@support.com
         </p>
         <div className={styles.buttonWrapper}>
-          <button className={styles.yesButton}>да, отменить</button>
+          <button className={styles.yesButton} onClick={onClickCancel}>
+            да, отменить
+          </button>
           <button
-            onClick={() => dispatch(closeModal())}
             className={styles.noButton}
+            onClick={() => dispatch(closeModal())}
           >
             нет
           </button>

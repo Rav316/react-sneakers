@@ -17,8 +17,8 @@ interface Props {
 }
 
 export const Order: React.FC<Props> = ({
-                                         order: { id, status, createdAt },
-                                       }) => {
+  order: { id, status, createdAt },
+}) => {
   const staticUrl: string = import.meta.env.VITE_STATIC_URL;
   const [isExpanded, setIsExpanded] = useState(false);
   const [contentHeight, setContentHeight] = useState(0);
@@ -92,9 +92,12 @@ export const Order: React.FC<Props> = ({
             </>
           )}
 
-          {error && <p className={styles.error}>Ошибка загрузки: {error.message}</p>}
+          {error && (
+            <p className={styles.error}>Ошибка загрузки: {error.message}</p>
+          )}
 
-          {!loading && items &&
+          {!loading &&
+            items &&
             items.items.map((item) => (
               <OrderItem
                 key={item.id}
@@ -113,7 +116,9 @@ export const Order: React.FC<Props> = ({
               <span>Итого:</span>
               <p>{items.sum} ₽</p>
             </div>
-            <OrderButton onClick={() => dispatch(openModal(id))}/>
+            {status !== 0 && (
+              <OrderButton onClick={() => dispatch(openModal(id))} />
+            )}
           </div>
         )}
       </div>
