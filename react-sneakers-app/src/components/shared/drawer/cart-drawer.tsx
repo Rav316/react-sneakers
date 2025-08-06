@@ -32,13 +32,19 @@ export const CartDrawer = () => {
       items: cart.items.map((item) => ({
         sneakerItem: item.sneakerItemId,
         quantity: item.quantity,
-      }))
-    }
+      })),
+    };
     const action = await dispatch(createOrder(orderCreateDto));
     try {
       const result = unwrapResult(action);
       setOrderId(result);
-      toast.success('Заказ успешно оформлен');
+      // toast.success('Заказ успешно оформлен');
+      toast(
+        'Заказ успешно оформлен.🎉\nСсылка для оплаты заказа отправлена вам на почту',
+        {
+          duration: 6000
+        },
+      );
     } catch {
       toast.error('Ошибка при оформлении заказа');
     }
@@ -63,11 +69,11 @@ export const CartDrawer = () => {
             key={item.id}
             layout
             initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: "auto" }}
+            animate={{ opacity: 1, height: 'auto' }}
             exit={{
               opacity: 0,
               height: 0,
-              transition: { duration: 0.3 }
+              transition: { duration: 0.3 },
             }}
             transition={{ duration: 0.2 }}
           >
@@ -86,7 +92,11 @@ export const CartDrawer = () => {
           <div />
           <span className={styles.price}>{cart.sum} руб.</span>
         </div>
-        <button disabled={changeStatus.loading} className={clsx(styles.placeOrderButton)} onClick={onClickPlaceOrder}>
+        <button
+          disabled={changeStatus.loading}
+          className={clsx(styles.placeOrderButton)}
+          onClick={onClickPlaceOrder}
+        >
           <span>Оформить заказ</span>
           <Arrow className={styles.arrowNext} direction="right" />
         </button>
@@ -103,7 +113,7 @@ export const CartDrawer = () => {
 
       <div className={clsx(styles.drawer, { [styles.open]: isOpen })}>
         {orderId ? (
-          <OrderPlaced orderId={orderId} onClick={() => setOrderId(null)}/>
+          <OrderPlaced orderId={orderId} onClick={() => setOrderId(null)} />
         ) : showError ? (
           <CartError />
         ) : showEmpty ? (

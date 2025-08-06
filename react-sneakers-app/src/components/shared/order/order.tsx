@@ -4,13 +4,16 @@ import { ArrowExpand } from '../../ui/arrow-expand/arrow-expand.tsx';
 import * as React from 'react';
 import { OrderItem } from '../order-item/order-item.tsx';
 import { useEffect, useMemo, useRef, useState } from 'react';
-import type { OrderListItem } from '../../../service/model';
+import type { ErrorResponse, OrderListItem } from '../../../service/model';
 import { formatDateTime } from '../../../util/date-formatter.ts';
 import { useDispatch, useSelector } from 'react-redux';
 import type { AppDispatch, RootState } from '../../../redux/store.ts';
 import { fetchOrderItems } from '../../../redux/slice/order-item-slice.ts';
 import { Skeleton } from '../../ui/skeleton/skeleton.tsx';
 import { openModal } from '../../../redux/slice/cancel-order-slice.ts';
+import { Api } from '../../../service/api-client.ts';
+import toast from 'react-hot-toast';
+import type { AxiosError } from 'axios';
 
 interface Props {
   order: OrderListItem;
@@ -64,6 +67,23 @@ export const Order: React.FC<Props> = ({
     [createdAt],
   );
 
+  const onClickSendMail = async (id: number) => {
+    try {
+      await Api.orders.resendPaymentMail(id);
+      toast.success('Письмо успешно отправлено');
+    } catch (err) {
+      const error = err as AxiosError<ErrorResponse>;
+      console.log(error)
+      switch (error.status) {
+        case 429:
+          toast.error('Слишком много запросов. Попробуйте через 5 минут');
+          break;
+        default:
+          toast.error('Произошла ошибка');
+      }
+    }
+  }
+
   return (
     <div className={styles.root}>
       <div className={styles.orderInfo}>
@@ -116,10 +136,17 @@ export const Order: React.FC<Props> = ({
               <span>Итого:</span>
               <p>{items.sum} ₽</p>
             </div>
-            {status !== 0 && (
+            {status === 1 && (
               <OrderButton onClick={() => dispatch(openModal(id))} />
             )}
           </div>
+        )}
+        {status === 1 && (
+          <p className={styles.warning}>
+            Письмо с ссылкой на оплату заказа отправлено вам на почту. Если вы не
+            получили письмо, проверьте папку "Спам" или нажмите{' '}
+            <span className={styles.sendMail} onClick={() => onClickSendMail(id)}>сюда</span>
+          </p>
         )}
       </div>
     </div>

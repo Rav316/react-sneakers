@@ -104,4 +104,20 @@
       }
     }
   }
+
+  .warning {
+    margin-top: 10px;
+    color: #d3d3d3;
+    line-height: 1;
+
+    .sendMail {
+      text-decoration: underline;
+      cursor: pointer;
+      transition: color 0.3s ease;
+      color: #999999;
+      &:hover {
+        color: black;
+      }
+    }
+  }
 }
