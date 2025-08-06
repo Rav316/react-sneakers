@@ -43,7 +43,7 @@ public class OrderController {
     }
 
     @PostMapping("/{id}/resend-payment-mail")
-    public ResponseEntity<HttpStatus> sendPaymentMail(@PathVariable("id") Integer id, HttpServletRequest request) {
+    public ResponseEntity<HttpStatus> resendPaymentMail(@PathVariable("id") Integer id, HttpServletRequest request) {
         orderService.resendOrderPaymentMail(id ,request);
         return new ResponseEntity<>(OK);
     }
