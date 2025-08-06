@@ -1,5 +1,6 @@
 package ru.alex.reactsneakersapi.http.controller;
 
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -33,8 +34,24 @@ public class OrderController {
     }
 
     @PostMapping
-    public ResponseEntity<Integer> create(@Validated @RequestBody OrderCreateDto orderCreateDto) {
-        return new ResponseEntity<>(orderService.create(orderCreateDto), CREATED);
+    public ResponseEntity<Integer> create(
+            @Validated @RequestBody OrderCreateDto orderCreateDto,
+            HttpServletRequest request
+    ) {
+        Integer orderId = orderService.create(orderCreateDto, request);
+        return new ResponseEntity<>(orderId, CREATED);
+    }
+
+    @PostMapping("/{id}/resend-payment-mail")
+    public ResponseEntity<HttpStatus> sendPaymentMail(@PathVariable("id") Integer id, HttpServletRequest request) {
+        orderService.resendOrderPaymentMail(id ,request);
+        return new ResponseEntity<>(OK);
+    }
+
+    @GetMapping("/pay-for-order/{uuid}")
+    public ResponseEntity<HttpStatus> payForOrder(@PathVariable("uuid") String uuid) {
+        orderService.payForOrder(uuid);
+        return new ResponseEntity<>(OK);
     }
 
     @PutMapping("/{id}/cancel")

@@ -41,6 +41,7 @@ dependencies {
     implementation "com.github.ben-manes.caffeine:caffeine:${versions.caffeine}"
     implementation 'org.springframework.boot:spring-boot-starter-cache'
     implementation "org.postgresql:postgresql:${versions.postgresql}"
+    implementation 'org.springframework.boot:spring-boot-starter-data-redis'
     testImplementation 'org.springframework.security:spring-security-test'
     compileOnly 'org.projectlombok:lombok'
     runtimeOnly 'org.postgresql:postgresql'

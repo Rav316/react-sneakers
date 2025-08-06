@@ -1,6 +1,8 @@
 package ru.alex.reactsneakersapi.service;
 
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.alex.reactsneakersapi.database.entity.*;
@@ -11,9 +13,11 @@ import ru.alex.reactsneakersapi.database.repository.SneakerItemRepository;
 import ru.alex.reactsneakersapi.dto.order.OrderCreateDto;
 import ru.alex.reactsneakersapi.dto.order.OrderListDto;
 import ru.alex.reactsneakersapi.dto.orderItem.OrderItemCreateDto;
+import ru.alex.reactsneakersapi.dto.user.UserDetailsDto;
 import ru.alex.reactsneakersapi.exception.OrderNotFoundException;
 import ru.alex.reactsneakersapi.exception.SneakerItemNotFoundException;
 import ru.alex.reactsneakersapi.mapper.order.OrderListMapper;
+import ru.alex.reactsneakersapi.util.EmailUtils;
 
 import java.time.Instant;
 import java.util.List;
@@ -26,6 +30,11 @@ import static ru.alex.reactsneakersapi.util.AuthUtils.getAuthorizedUser;
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class OrderService {
+    @Value("${app.host-address}")
+    private String hostAddress;
+
+    private final EmailService emailService;
+    private final PaymentLinkService paymentLinkService;
     private final OrderRepository orderRepository;
     private final OrderItemRepository orderItemRepository;
     private final SneakerItemRepository sneakerItemRepository;
@@ -40,7 +49,7 @@ public class OrderService {
     }
 
     @Transactional
-    public Integer create(OrderCreateDto orderCreateDto) {
+    public Integer create(OrderCreateDto orderCreateDto, HttpServletRequest request) {
         List<OrderItemCreateDto> orderItemCreateList = orderCreateDto.items();
         Set<Integer> sneakerItemIds = orderItemCreateList
                 .stream()
@@ -69,9 +78,11 @@ public class OrderService {
                 .build();
         Order savedOrder = orderRepository.save(order);
 
-        orderItemRepository.createOrderItemsBatch(savedOrder.getId(), orderCreateDto.items());
+        Integer orderId = savedOrder.getId();
+        orderItemRepository.createOrderItemsBatch(orderId, orderCreateDto.items());
         cartItemRepository.clearUserCart(userId);
-        return savedOrder.getId();
+        sendOrderPaymentMail(orderId, request);
+        return orderId;
     }
 
     @Transactional
@@ -81,4 +92,33 @@ public class OrderService {
         order.setStatus(OrderStatus.CANCELED);
         orderRepository.save(order);
     }
+
+    public void resendOrderPaymentMail(Integer id, HttpServletRequest request) {
+        Order order = orderRepository.findByIdAndUser(id, getAuthorizedUser().id())
+                .orElseThrow(() -> new OrderNotFoundException(id));
+        if(order.getStatus() != OrderStatus.PENDING) {
+            throw new IllegalStateException("the order has already been paid or cancelled");
+        }
+        sendOrderPaymentMail(id, request);
+    }
+
+    @Transactional
+    public void payForOrder(String uuid) {
+        Integer orderId = Integer.valueOf(paymentLinkService.validatePaymentLink(uuid));
+        Order order = orderRepository.findById(orderId)
+                .orElseThrow(() -> new OrderNotFoundException(orderId));
+        if(order.getStatus() != OrderStatus.PENDING) {
+            throw new IllegalStateException("the order has already been paid or cancelled");
+        }
+        order.setStatus(OrderStatus.COMPLETED);
+    }
+
+    private void sendOrderPaymentMail(Integer id, HttpServletRequest request) {
+        UserDetailsDto authorizedUser = getAuthorizedUser();
+        String paymentUuid = paymentLinkService.createPaymentLink(authorizedUser.id(), id);
+        String hostName = EmailUtils.getHostName(hostAddress, request);
+        String paymentLink = String.format("%s/api/orders/pay-for-order/%s", hostName, paymentUuid);
+        emailService.sendPaymentEmail(id, authorizedUser.name(), authorizedUser.email(),  paymentLink);
+    }
+
 }

@@ -9,6 +9,7 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.server.ResponseStatusException;
 import ru.alex.reactsneakersapi.dto.error.ErrorResponse;
 import ru.alex.reactsneakersapi.util.ExceptionUtils;
 
@@ -76,5 +77,24 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(errorResponse, FORBIDDEN);
     }
 
+    @ExceptionHandler(ResponseStatusException.class)
+    public ResponseEntity<ErrorResponse> handleResponseStatusException(ResponseStatusException ex) {
+        ErrorResponse errorResponse = new ErrorResponse(
+                Instant.now(),
+                ex.getReason() != null ? ex.getReason() : ex.getStatusCode().toString()
+        );
+        return new ResponseEntity<>(errorResponse, ex.getStatusCode());
+    }
 
+    @ExceptionHandler({
+            IllegalStateException.class,
+            IllegalArgumentException.class
+    })
+    public ResponseEntity<ErrorResponse> handleBadRequestException(RuntimeException ex) {
+        ErrorResponse errorResponse = new ErrorResponse(
+                Instant.now(),
+                ex.getMessage()
+        );
+        return new ResponseEntity<>(errorResponse, BAD_REQUEST);
+    }
 }

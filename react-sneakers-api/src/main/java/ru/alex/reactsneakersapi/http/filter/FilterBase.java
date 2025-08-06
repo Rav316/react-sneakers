@@ -6,9 +6,10 @@ import org.springframework.web.filter.OncePerRequestFilter;
 public abstract class FilterBase extends OncePerRequestFilter {
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) {
-        return request.getRequestURI().startsWith("/api/auth") ||
-                request.getRequestURI().startsWith("/swagger-ui") ||
-                request.getRequestURI().startsWith("/v3/api-docs") ||
-                request.getRequestURI().startsWith("/images");
+        String requestURI = request.getRequestURI();
+        return requestURI.startsWith("/api/auth") ||
+                requestURI.startsWith("/swagger-ui") ||
+                requestURI.startsWith("/v3/api-docs") ||
+                requestURI.matches("/api/orders/pay-for-order/.*");
     }
 }

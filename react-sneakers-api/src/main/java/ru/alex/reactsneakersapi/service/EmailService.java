@@ -28,7 +28,7 @@ public class EmailService {
                         "link", link
                 )
         );
-        String htmlContent = templateEngine.process("email-template", context);
+        String htmlContent = templateEngine.process("account-activation-template", context);
 
 
         MimeMessage mimeMessage = mailSender.createMimeMessage();
@@ -36,6 +36,30 @@ public class EmailService {
             MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true, "UTF-8");
             helper.setTo(userAuthDto.email());
             helper.setSubject("Активация аккаунта react sneakers");
+            helper.setText(htmlContent, true);
+            mailSender.send(mimeMessage);
+        } catch (MessagingException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Async
+    public void sendPaymentEmail(Integer orderId, String name, String email, String link) {
+        Context context = new Context();
+        context.setVariables(
+                Map.of(
+                        "name", name,
+                        "orderId", orderId,
+                        "link", link
+                )
+        );
+        String htmlContent = templateEngine.process("order-payment-template", context);
+
+        MimeMessage mimeMessage = mailSender.createMimeMessage();
+        try {
+            MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true, "UTF-8");
+            helper.setTo(email);
+            helper.setSubject("Оплата заказа");
             helper.setText(htmlContent, true);
             mailSender.send(mimeMessage);
         } catch (MessagingException e) {
