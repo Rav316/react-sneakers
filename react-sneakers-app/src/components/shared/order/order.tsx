@@ -19,13 +19,13 @@ interface Props {
   order: OrderListItem;
 }
 
-export const Order: React.FC<Props> = ({
-  order: { id, status, createdAt },
-}) => {
+
+export const Order: React.FC<Props> = ({ order: { id, status, createdAt } }) => {
   const staticUrl: string = import.meta.env.VITE_STATIC_URL;
   const [isExpanded, setIsExpanded] = useState(false);
   const [contentHeight, setContentHeight] = useState(0);
   const contentRef = useRef<HTMLDivElement>(null);
+  const innerRef = useRef<HTMLDivElement>(null);
 
   const dispatch = useDispatch<AppDispatch>();
   const { itemsByOrderId, loadingByOrderId, errorByOrderId } = useSelector(
@@ -43,29 +43,35 @@ export const Order: React.FC<Props> = ({
   }, [isExpanded, id, items, loading, dispatch]);
 
   useEffect(() => {
-    if (contentRef.current) {
-      setContentHeight(isExpanded ? contentRef.current.scrollHeight : 0);
+    if (isExpanded && innerRef.current) {
+      setContentHeight(innerRef.current.scrollHeight);
+    } else {
+      setContentHeight(0);
     }
   }, [isExpanded, items, loading]);
 
   useEffect(() => {
-    const resizeObserver = new ResizeObserver(() => {
-      if (isExpanded && contentRef.current) {
-        setContentHeight(contentRef.current.scrollHeight);
+    if (!innerRef.current) return;
+    const observer = new ResizeObserver(() => {
+      if (isExpanded && innerRef.current) {
+        setContentHeight(innerRef.current.scrollHeight);
       }
     });
-
-    if (contentRef.current) {
-      resizeObserver.observe(contentRef.current);
-    }
-
-    return () => resizeObserver.disconnect();
+    observer.observe(innerRef.current);
+    return () => observer.disconnect();
   }, [isExpanded]);
 
-  const formattedDate = useMemo(
-    () => formatDateTime(new Date(createdAt)),
-    [createdAt],
-  );
+  useEffect(() => {
+    const handleResize = () => {
+      if (isExpanded && innerRef.current) {
+        setContentHeight(innerRef.current.scrollHeight);
+      }
+    };
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, [isExpanded]);
+
+  const formattedDate = useMemo(() => formatDateTime(new Date(createdAt)), [createdAt]);
 
   const onClickSendMail = async (id: number) => {
     try {
@@ -73,7 +79,6 @@ export const Order: React.FC<Props> = ({
       toast.success('Письмо успешно отправлено');
     } catch (err) {
       const error = err as AxiosError<ErrorResponse>;
-      console.log(error)
       switch (error.status) {
         case 429:
           toast.error('Слишком много запросов. Попробуйте через 5 минут');
@@ -82,7 +87,7 @@ export const Order: React.FC<Props> = ({
           toast.error('Произошла ошибка');
       }
     }
-  }
+  };
 
   return (
     <div className={styles.root}>
@@ -103,51 +108,53 @@ export const Order: React.FC<Props> = ({
         style={{ height: contentHeight }}
         aria-hidden={!isExpanded}
       >
-        <div className={styles.orderItems}>
-          {loading && (
-            <>
-              {Array.from({ length: 1 }).map((_, i) => (
-                <Skeleton key={i} height={80} borderRadius={10} />
-              ))}
-            </>
-          )}
-
-          {error && (
-            <p className={styles.error}>Ошибка загрузки: {error.message}</p>
-          )}
-
-          {!loading &&
-            items &&
-            items.items.map((item) => (
-              <OrderItem
-                key={item.id}
-                name={item.name}
-                description={item.description}
-                price={item.price}
-                count={item.quantity}
-                size={item.size}
-                imageUrl={`${staticUrl}${item.imageUrl}`}
-              />
-            ))}
-        </div>
-        {!loading && items && (
-          <div className={styles.result}>
-            <div className={styles.infoWrapper}>
-              <span>Итого:</span>
-              <p>{items.sum} ₽</p>
-            </div>
-            {status === 1 && (
-              <OrderButton onClick={() => dispatch(openModal(id))} />
+        <div ref={innerRef}>
+          <div className={styles.orderItems}>
+            {loading && (
+              <>
+                {Array.from({ length: 3 }).map((_, i) => (
+                  <Skeleton key={i} height={80} borderRadius={10} />
+                ))}
+              </>
             )}
+
+            {error && <p className={styles.error}>Ошибка загрузки: {error.message}</p>}
+
+            {!loading &&
+              items &&
+              items.items.map((item) => (
+                <OrderItem
+                  key={item.id}
+                  name={item.name}
+                  description={item.description}
+                  price={item.price}
+                  count={item.quantity}
+                  size={item.size}
+                  imageUrl={`${staticUrl}${item.imageUrl}`}
+                />
+              ))}
           </div>
-        )}
-        {status === 1 && (
-          <p className={styles.warning}>
-            Письмо с ссылкой на оплату заказа отправлено вам на почту. Если вы не
-            получили письмо, проверьте папку "Спам" или нажмите{' '}
-            <span className={styles.sendMail} onClick={() => onClickSendMail(id)}>сюда</span>
-          </p>
-        )}
+
+          {!loading && items && (
+            <div className={styles.result}>
+              <div className={styles.infoWrapper}>
+                <span>Итого:</span>
+                <p>{items.sum} ₽</p>
+              </div>
+              {status === 1 && <OrderButton onClick={() => dispatch(openModal(id))} />}
+            </div>
+          )}
+
+          {status === 1 && (
+            <p className={styles.warning}>
+              Письмо с ссылкой на оплату заказа отправлено вам на почту. Если вы не получили письмо,
+              проверьте папку "Спам" или нажмите{' '}
+              <span className={styles.sendMail} onClick={() => onClickSendMail(id)}>
+                сюда
+              </span>
+            </p>
+          )}
+        </div>
       </div>
     </div>
   );
