@@ -28,6 +28,10 @@ export const CartDrawer = () => {
 
   const onCloseDrawer = () => dispatch(setIsDrawerOpen(false));
   const onClickPlaceOrder = async () => {
+    if(!token) {
+      toast.error('Войдите в аккаунт, чтобы оформить заказ');
+      return;
+    }
     const orderCreateDto: OrderCreateDto = {
       items: cart.items.map((item) => ({
         sneakerItem: item.sneakerItemId,
@@ -38,7 +42,6 @@ export const CartDrawer = () => {
     try {
       const result = unwrapResult(action);
       setOrderId(result);
-      // toast.success('Заказ успешно оформлен');
       toast(
         'Заказ успешно оформлен.🎉\nСсылка для оплаты заказа отправлена вам на почту',
         {
