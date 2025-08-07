@@ -4,7 +4,12 @@ import type { AxiosError } from 'axios';
 import { callApiWithErrorHandling } from '../../util/call-api-with-error-handling.ts';
 import { extractError } from '../../util/extract-error.ts';
 import type { LoginData, RegisterData } from '../../schemas/auth-schema.ts';
-import type { AuthResponse, ErrorResponse, User, UserEditDto } from '../../service/model';
+import type {
+  AuthResponse,
+  ErrorResponse,
+  User,
+  UserEditDto,
+} from '../../service/model';
 
 interface AuthSlice {
   user?: User;
@@ -57,7 +62,7 @@ export const checkAuth = createAsyncThunk<AuthResponse, void>(
     } catch (err) {
       const error = err as AxiosError<{ message: string }>;
       const code = error.response?.status || 500;
-      if(code === 401) {
+      if (code === 401) {
         localStorage.removeItem('token');
       }
       return thunkAPI.rejectWithValue(code);
@@ -74,7 +79,7 @@ export const updateProfile = createAsyncThunk<User, UserEditDto>(
       thunkAPI.rejectWithValue,
     );
   },
-)
+);
 
 const authSlice = createSlice({
   name: 'auth',
@@ -105,7 +110,7 @@ const authSlice = createSlice({
       })
       .addCase(login.rejected, (state, action) => {
         state.loading = false;
-        state.error = extractError(action)
+        state.error = extractError(action);
       })
       .addCase(checkAuth.pending, (state) => {
         state.error = undefined;
@@ -121,7 +126,7 @@ const authSlice = createSlice({
       })
       .addCase(checkAuth.rejected, (state, action) => {
         const errorCode = action.payload as number | undefined;
-        if(errorCode && errorCode === 401) {
+        if (errorCode && errorCode === 401) {
           state.user = {};
           state.token = undefined;
         }
@@ -153,7 +158,7 @@ const authSlice = createSlice({
       .addCase(updateProfile.rejected, (state, action) => {
         state.loading = false;
         state.error = extractError(action);
-      })
+      });
   },
 });
 

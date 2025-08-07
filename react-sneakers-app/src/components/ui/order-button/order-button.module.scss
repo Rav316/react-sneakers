@@ -6,18 +6,19 @@
   font-weight: 600;
   cursor: pointer;
 
-  &.canceled, &.cancel {
-    color: #FF544A;
-    border-color: #FF544A;
+  &.canceled,
+  &.cancel {
+    color: #ff544a;
+    border-color: #ff544a;
   }
 
   &.pending {
-    color: #E6C20D;
-    border-color: #E6C20D;
+    color: #e6c20d;
+    border-color: #e6c20d;
   }
 
   &.completed {
-    color: #1BB486;
-    border-color: #1BB486;
+    color: #1bb486;
+    border-color: #1bb486;
   }
 }

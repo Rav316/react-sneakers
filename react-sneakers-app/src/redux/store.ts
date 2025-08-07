@@ -26,7 +26,7 @@ export const store = configureStore({
     cart: cartReducer,
     order: orderReducer,
     orderItem: orderItemReducer,
-    cancelOrderModal: cancelOrderModalReducer
+    cancelOrderModal: cancelOrderModalReducer,
   },
 });
 

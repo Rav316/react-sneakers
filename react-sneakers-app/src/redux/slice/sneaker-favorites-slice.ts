@@ -43,16 +43,13 @@ export const removeAllFavorites = createAsyncThunk<
   void,
   void,
   { rejectValue: ErrorResponse }
->(
-  'sneaker/removeFavoriteSneakers',
-  async (_, { rejectWithValue }) => {
-    return callApiWithErrorHandling(
-      Api.sneakers.removeAllFavorites,
-      {},
-      rejectWithValue,
-    );
-  },
-);
+>('sneaker/removeFavoriteSneakers', async (_, { rejectWithValue }) => {
+  return callApiWithErrorHandling(
+    Api.sneakers.removeAllFavorites,
+    {},
+    rejectWithValue,
+  );
+});
 
 const sneakerFavoritesSlice = createSlice({
   name: 'sneakerFavorites',
@@ -60,7 +57,7 @@ const sneakerFavoritesSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder
-      .addCase(removeAllFavorites.fulfilled, state => {
+      .addCase(removeAllFavorites.fulfilled, (state) => {
         state.items = [];
       })
       .addMatcher(
@@ -81,7 +78,7 @@ const sneakerFavoritesSlice = createSlice({
         isAnyOf(fetchFavoriteSneakers.rejected, fetchSneakersByIds.rejected),
         (state, action) => {
           state.loading = false;
-          state.error = extractError(action)
+          state.error = extractError(action);
         },
       );
   },

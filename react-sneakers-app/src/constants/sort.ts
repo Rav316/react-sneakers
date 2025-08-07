@@ -4,6 +4,6 @@ export interface SortOption {
 }
 
 export const sortOptions: SortOption[] = [
-  {label: 'цене', value: 'price'},
-  {label: 'алфавиту', value: 'alphabet'},
+  { label: 'цене', value: 'price' },
+  { label: 'алфавиту', value: 'alphabet' },
 ];

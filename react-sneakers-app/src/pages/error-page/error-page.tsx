@@ -1,7 +1,7 @@
 import styles from './error-page.module.scss';
-import { Button } from '../../components/ui/button/button.tsx';
 import { Link } from 'react-router';
 import * as React from 'react';
+import { Button } from '../../components/ui';
 
 interface Props {
   title: string;

@@ -68,9 +68,7 @@ export const DrawerItem: React.FC<Props> = ({ item }) => {
 
   const staticUrl: string = import.meta.env.VITE_STATIC_URL;
   return (
-    <motion.div
-      transition={{ duration: 0.1 }}
-    >
+    <motion.div transition={{ duration: 0.1 }}>
       <div className={styles.root}>
         <img src={`${staticUrl}${item.imageUrl}`} alt={'sneaker image'} />
         <div className={styles.infoWrapper}>

@@ -1,6 +1,4 @@
 import styles from './register-tab.module.scss';
-import { FormInput } from '../../../../components/ui/input/form-input.tsx';
-import { Button } from '../../../../components/ui/button/button.tsx';
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import type { AppDispatch, RootState } from '../../../../redux/store.ts';
@@ -9,8 +7,12 @@ import toast from 'react-hot-toast';
 import { setIsModalOpen } from '../../../../redux/slice/auth-modal-slice.ts';
 import { clearError, register } from '../../../../redux/slice/auth-slice.ts';
 import { FormProvider, useForm } from 'react-hook-form';
-import { formRegisterSchema, type RegisterData } from '../../../../schemas/auth-schema.ts';
+import {
+  formRegisterSchema,
+  type RegisterData,
+} from '../../../../schemas/auth-schema.ts';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { Button, FormInput } from '../../../../components/ui';
 
 export const RegisterTab = () => {
   const form = useForm<RegisterData>({

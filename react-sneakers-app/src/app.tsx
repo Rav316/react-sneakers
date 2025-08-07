@@ -1,26 +1,30 @@
 import './app.scss';
-import { MainLayout } from './hoc/main-layout/main-layout.tsx';
 import HomePage from './pages/home-page/home-page.tsx';
-import { CartDrawer } from './components/shared/drawer/cart-drawer.tsx';
 import { useEffect } from 'react';
-import { AuthModal } from './modals/auth-modal/auth-modal.tsx';
 import { useDispatch, useSelector } from 'react-redux';
 import type { AppDispatch, RootState } from './redux/store.ts';
 import { Toaster } from 'react-hot-toast';
 import { Route, Routes } from 'react-router';
-import { OutletHeader } from './hoc/outlet-header.tsx';
-import { ProfilePage } from './pages/profile-page/profile-page.tsx';
 import { ErrorPage } from './pages/error-page/error-page.tsx';
 
 import img404 from './assets/404.svg';
-import { RequireAuth } from './hoc/require-auth.tsx';
 import { checkAuth } from './redux/slice/auth-slice.ts';
-import { FavoritesPage } from './pages/favorites-page/favorites-page.tsx';
-import { SneakerDetailsPage } from './pages/sneaker-details-page/sneaker-details-page.tsx';
 import { fetchCart } from './redux/slice/cart-slice.ts';
-import { OutletProfile } from './hoc/outlet-profile/outlet-profile.tsx';
-import { OrdersPage } from './pages/orders-page/orders-page.tsx';
-import { CancelOrderModal } from './modals/cancel-order-modal/cancel-order-modal.tsx';
+import { CartDrawer } from './components/shared';
+import { AuthModal, CancelOrderModal } from './modals';
+import { MainLayout, OutletHeader, OutletProfile, RequireAuth } from './hoc';
+import * as React from 'react';
+
+const SneakerDetailsPage = React.lazy(
+  () => import('./pages/sneaker-details-page/sneaker-details-page'),
+);
+const ProfilePage = React.lazy(
+  () => import('./pages/profile-page/profile-page'),
+);
+const OrdersPage = React.lazy(() => import('./pages/orders-page/orders-page'));
+const FavoritesPage = React.lazy(
+  () => import('./pages/favorites-page/favorites-page'),
+);
 
 const App = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -28,8 +32,12 @@ const App = () => {
   const isDrawerOpen = useSelector(
     (state: RootState) => state.cartDrawer.isOpen,
   );
-  const isAuthModalOpen = useSelector((state: RootState) => state.authModal.isOpen);
-  const isCancelOrderModalOpen = useSelector((state: RootState) => state.cancelOrderModal.isOpen);
+  const isAuthModalOpen = useSelector(
+    (state: RootState) => state.authModal.isOpen,
+  );
+  const isCancelOrderModalOpen = useSelector(
+    (state: RootState) => state.cancelOrderModal.isOpen,
+  );
 
   useEffect(() => {
     if (isDrawerOpen || isAuthModalOpen || isCancelOrderModalOpen) {

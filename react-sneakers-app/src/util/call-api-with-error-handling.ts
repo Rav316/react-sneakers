@@ -2,11 +2,10 @@ import type { AxiosError } from 'axios';
 
 type RejectWithValueType<RejectValue> = (value: RejectValue) => any;
 
-
 export async function callApiWithErrorHandling<T, Arg, RejectValue>(
   apiCall: (arg: Arg) => Promise<T>,
   arg: Arg,
-  rejectWithValue: RejectWithValueType<RejectValue>
+  rejectWithValue: RejectWithValueType<RejectValue>,
 ): Promise<T | ReturnType<RejectWithValueType<RejectValue>>> {
   try {
     return await apiCall(arg);

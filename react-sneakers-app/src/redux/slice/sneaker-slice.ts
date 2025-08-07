@@ -3,7 +3,11 @@ import type { SearchParams } from '../../service/sneakers.ts';
 import { Api } from '../../service/api-client.ts';
 import type { AxiosError } from 'axios';
 import { extractError } from '../../util/extract-error.ts';
-import type { ErrorResponse, PageResponse, SneakerListItem } from '../../service/model';
+import type {
+  ErrorResponse,
+  PageResponse,
+  SneakerListItem,
+} from '../../service/model';
 
 interface SneakerSlice {
   sneakers: PageResponse<SneakerListItem>;
@@ -58,7 +62,7 @@ const sneakerSlice = createSlice({
     });
     builder.addCase(fetchSneakers.rejected, (state, action) => {
       state.loading = false;
-      state.error = extractError(action)
+      state.error = extractError(action);
     });
   },
 });

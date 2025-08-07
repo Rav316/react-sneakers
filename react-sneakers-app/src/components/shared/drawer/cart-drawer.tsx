@@ -5,9 +5,6 @@ import clsx from 'clsx';
 import { useDispatch, useSelector } from 'react-redux';
 import type { AppDispatch, RootState } from '../../../redux/store.ts';
 import { setIsDrawerOpen } from '../../../redux/slice/cart-drawer-slice.ts';
-import { Arrow } from '../../ui/arrow.tsx';
-import { CartError } from '../error/cart-error/cart-error.tsx';
-import { Skeleton } from '../../ui/skeleton/skeleton.tsx';
 import { EmptyCart } from '../empty-cart/empty-cart.tsx';
 import { useState } from 'react';
 import { OrderPlaced } from '../order-placed/order-placed.tsx';
@@ -16,6 +13,8 @@ import type { OrderCreateDto } from '../../../service/model';
 import { unwrapResult } from '@reduxjs/toolkit';
 import toast from 'react-hot-toast';
 import { AnimatePresence, motion } from 'framer-motion';
+import { Arrow, Skeleton } from '../../ui';
+import { CartError } from '../error';
 
 export const CartDrawer = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -28,7 +27,7 @@ export const CartDrawer = () => {
 
   const onCloseDrawer = () => dispatch(setIsDrawerOpen(false));
   const onClickPlaceOrder = async () => {
-    if(!token) {
+    if (!token) {
       toast.error('Войдите в аккаунт, чтобы оформить заказ');
       return;
     }
@@ -45,7 +44,7 @@ export const CartDrawer = () => {
       toast(
         'Заказ успешно оформлен.🎉\nСсылка для оплаты заказа отправлена вам на почту',
         {
-          duration: 6000
+          duration: 6000,
         },
       );
     } catch {

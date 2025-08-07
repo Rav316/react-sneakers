@@ -1,26 +1,29 @@
 import styles from './sneaker-details-page.module.scss';
 import img404 from '../../assets/404.svg';
-import { SneakerSizes } from '../../components/shared/sneaker-sizes/sneaker-sizes.tsx';
-import { Button } from '../../components/ui/button/button.tsx';
-import { SneakerCounter } from '../../components/shared/sneaker-counter/sneaker-counter.tsx';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import type { AppDispatch, RootState } from '../../redux/store.ts';
 import { fetchSneakerDetails } from '../../redux/slice/sneaker-details-slice.ts';
 import { useParams } from 'react-router';
-import { SneakerDetailsSkeleton } from '../../components/shared/sneaker-details-skeleton/sneaker-details-skeleton.tsx';
-import { ErrorPage } from '../error-page/error-page.tsx';
-import { ErrorResult } from '../../components/shared/error/error-result/error-result.tsx';
 import {
-  addToCart, addToCartLocal,
-  updateCartItemQuantity, updateCartItemQuantityLocal
+  addToCart,
+  addToCartLocal,
+  updateCartItemQuantity,
+  updateCartItemQuantityLocal,
 } from '../../redux/slice/cart-slice.ts';
 import { unwrapResult } from '@reduxjs/toolkit';
 import toast from 'react-hot-toast';
-import { ArrowBack } from '../../components/ui/arrow-back/arrow-back.tsx';
 import type { CartItem, SneakerItem } from '../../service/model';
+import {
+  ErrorResult,
+  SneakerCounter,
+  SneakerDetailsSkeleton,
+  SneakerSizes,
+} from '../../components/shared';
+import { ArrowBack, Button } from '../../components/ui';
+import { ErrorPage } from '../error-page/error-page.tsx';
 
-export const SneakerDetailsPage = () => {
+const SneakerDetailsPage = () => {
   const staticUrl: string = import.meta.env.VITE_STATIC_URL;
   const params = useParams();
 
@@ -32,7 +35,9 @@ export const SneakerDetailsPage = () => {
     (state: RootState) => state.sneakerDetails,
   );
   const cart = useSelector((state: RootState) => state.cart.cart);
-  const addToCartLoading = useSelector((state: RootState) => state.cart.changeStatus.loading);
+  const addToCartLoading = useSelector(
+    (state: RootState) => state.cart.changeStatus.loading,
+  );
   const token = useSelector((state: RootState) => state.auth.token);
 
   const onClickMinus = () => {
@@ -55,8 +60,8 @@ export const SneakerDetailsPage = () => {
         const find = cart.items.find(
           (item) => item.sneakerItemId === selectedItem.id,
         );
-        if(!token) {
-          if(!find) {
+        if (!token) {
+          if (!find) {
             const cartItem: CartItem = {
               id: selectedItem.id,
               name: sneaker.name,
@@ -65,11 +70,13 @@ export const SneakerDetailsPage = () => {
               price: sneaker.price,
               sneakerItemId: selectedItem.id,
               size: selectedItem.size,
-              quantity: counter
-            }
-            dispatch(addToCartLocal(cartItem))
+              quantity: counter,
+            };
+            dispatch(addToCartLocal(cartItem));
           } else {
-            dispatch(updateCartItemQuantityLocal({id: find.id, quantity: counter}))
+            dispatch(
+              updateCartItemQuantityLocal({ id: find.id, quantity: counter }),
+            );
           }
         } else {
           if (!find) {
@@ -77,7 +84,7 @@ export const SneakerDetailsPage = () => {
               addToCart({
                 sneakerItem: selectedItem.id,
                 quantity: counter,
-              })
+              }),
             );
             unwrapResult(action);
           } else {
@@ -85,7 +92,7 @@ export const SneakerDetailsPage = () => {
               updateCartItemQuantity({
                 id: find.id,
                 quantity: counter,
-              })
+              }),
             );
             unwrapResult(action);
           }
@@ -178,3 +185,5 @@ export const SneakerDetailsPage = () => {
     </>
   );
 };
+
+export default SneakerDetailsPage;

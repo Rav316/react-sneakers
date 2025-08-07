@@ -11,7 +11,7 @@
       margin-top: 60px;
     }
 
-    @media (max-width:  685px) {
+    @media (max-width: 685px) {
       width: 100%;
       text-align: center;
     }
@@ -23,13 +23,13 @@
     grid-template-columns: repeat(2, minmax(250px, 300px));
     column-gap: 40px;
 
-    @media (max-width:  685px) {
+    @media (max-width: 685px) {
       grid-template-columns: repeat(1, minmax(250px, 1fr));
     }
   }
 
   .buttonWrapper {
-    @media (max-width:  685px) {
+    @media (max-width: 685px) {
       width: 100%;
     }
   }

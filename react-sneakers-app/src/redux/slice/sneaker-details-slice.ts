@@ -44,17 +44,20 @@ const sneakerDetailsSlice = createSlice({
   initialState,
   reducers: {},
   extraReducers: (builder) => {
-    builder.addCase(fetchSneakerDetails.pending, (state) => {
-      state.loading = true;
-      state.error = undefined;
-    }).addCase(fetchSneakerDetails.fulfilled, (state, action) => {
-      state.sneaker = action.payload;
-      state.loading = false;
-    }).addCase(fetchSneakerDetails.rejected, (state, action) => {
-      state.loading = false;
-      state.error = extractError(action);
-    })
-  }
+    builder
+      .addCase(fetchSneakerDetails.pending, (state) => {
+        state.loading = true;
+        state.error = undefined;
+      })
+      .addCase(fetchSneakerDetails.fulfilled, (state, action) => {
+        state.sneaker = action.payload;
+        state.loading = false;
+      })
+      .addCase(fetchSneakerDetails.rejected, (state, action) => {
+        state.loading = false;
+        state.error = extractError(action);
+      });
+  },
 });
 
 export default sneakerDetailsSlice.reducer;

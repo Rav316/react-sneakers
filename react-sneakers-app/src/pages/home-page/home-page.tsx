@@ -1,19 +1,21 @@
 import styles from './home-page.module.scss';
-import { Search } from '../../components/shared/search/search.tsx';
-import { SneakerCard } from '../../components/shared/sneaker-card/sneaker-card.tsx';
 import { useDispatch, useSelector } from 'react-redux';
 import type { AppDispatch, RootState } from '../../redux/store.ts';
 import { useEffect, useState } from 'react';
 import { fetchSneakers } from '../../redux/slice/sneaker-slice.ts';
-import { SneakerCardSkeleton } from '../../components/shared/sneaker-card/skeleton/sneaker-card-skeleton.tsx';
 import { useDebounce } from 'use-debounce';
-import { EmptyResult } from '../../components/shared/empty-result/empty-result.tsx';
-import { Pagination } from '../../components/shared/pagination/pagination.tsx';
-import { ErrorResult } from '../../components/shared/error/error-result/error-result.tsx';
-import { SortBlock } from '../../components/shared/sort-block/sort-block.tsx';
 import type { Order } from '../../constants/order.ts';
 import { type SortOption, sortOptions } from '../../constants/sort.ts';
-import FadeContent from '../../hoc/animation/fade-content.tsx';
+import {
+  EmptyResult,
+  ErrorResult,
+  Pagination,
+  Search,
+  SneakerCard,
+  SneakerCardSkeleton,
+  SortBlock,
+} from '../../components/shared';
+import { FadeContent } from '../../hoc';
 
 const HomePage = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -32,7 +34,7 @@ const HomePage = () => {
         page: currentPage - 1,
         size: 12,
         order,
-        sort: sortOption.value
+        sort: sortOption.value,
       }),
     );
   }, [dispatch, debouncedSearch, currentPage, order, sortOption]);

@@ -8,15 +8,17 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    border: 1px solid #8CC644;
-    background-color: #8CC644;
+    border: 1px solid #8cc644;
+    background-color: #8cc644;
     color: white;
     cursor: pointer;
     border-radius: 10px;
     width: 38px;
     height: 38px;
     font-size: 22px;
-    transition: opacity 0.5s ease, background-color 0.5s ease;
+    transition:
+      opacity 0.5s ease,
+      background-color 0.5s ease;
     &:disabled {
       background-color: #e0e0e0;
       border-color: #ccc;
@@ -26,7 +28,7 @@
 
     &.alt {
       background-color: white;
-      color: #8CC644;
+      color: #8cc644;
       &:disabled {
         background-color: #f0f0f0;
         color: #b0b0b0;

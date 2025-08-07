@@ -273,12 +273,12 @@ const cartSlice = createSlice({
       })
       .addCase(createOrder.pending, (state) => {
         state.changeStatus = {
-          loading: true
-        }
+          loading: true,
+        };
       })
       .addCase(createOrder.fulfilled, (state) => {
         state.changeStatus = {
-          loading: false
+          loading: false,
         };
         state.cart.items = [];
         state.cart.sum = 0;

@@ -5,7 +5,7 @@ import type { AuthResponse } from './model';
 export const axiosInstance = axios.create({
   baseURL: import.meta.env.VITE_API_URL,
   timeout: 3000,
-  paramsSerializer: params => qs.stringify(params, { arrayFormat: 'comma' })
+  paramsSerializer: (params) => qs.stringify(params, { arrayFormat: 'comma' }),
 });
 
 axiosInstance.interceptors.request.use(

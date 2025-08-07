@@ -43,7 +43,9 @@
     align-items: center;
     border: 1px solid #dbdbdb;
     border-radius: 8px;
-    transition: opacity 0.3s ease, cursor 0.3s ease;
+    transition:
+      opacity 0.3s ease,
+      cursor 0.3s ease;
     img {
       width: 11px;
       height: 11px;

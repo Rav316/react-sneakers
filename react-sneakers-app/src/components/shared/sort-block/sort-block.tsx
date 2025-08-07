@@ -14,7 +14,12 @@ interface Props {
   setSortOption: React.Dispatch<React.SetStateAction<SortOption>>;
 }
 
-export const SortBlock: React.FC<Props> = ({ order, setOrder, sortOption, setSortOption }) => {
+export const SortBlock: React.FC<Props> = ({
+  order,
+  setOrder,
+  sortOption,
+  setSortOption,
+}) => {
   const [open, setOpen] = useState(false);
   const selectedRef = useRef<HTMLDivElement>(null);
 

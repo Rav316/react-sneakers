@@ -20,6 +20,6 @@ export interface CartResponse {
 }
 
 export interface CartItemUpdateDto {
-  id: number,
-  quantity: number,
+  id: number;
+  quantity: number;
 }

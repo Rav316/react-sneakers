@@ -17,7 +17,7 @@ export const SneakerCounter: React.FC<Props> = ({
   onClickPlus,
   small = false,
   minusDisabled = counter === 1,
-  plusDisabled = false
+  plusDisabled = false,
 }) => {
   return (
     <div className={clsx(styles.root, { [styles.small]: small })}>

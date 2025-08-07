@@ -43,9 +43,11 @@ export const findAllByIds = async (
 };
 
 export const findById = async (id: number): Promise<Sneaker> => {
-  const response = await axiosInstance.get<Sneaker>(`${ApiRoutes.SNEAKERS}/${id}`);
+  const response = await axiosInstance.get<Sneaker>(
+    `${ApiRoutes.SNEAKERS}/${id}`,
+  );
   return response.data;
-}
+};
 
 export const removeAllFavorites = async (): Promise<void> => {
   await axiosInstance.delete(`${ApiRoutes.SNEAKERS}/favorites`);

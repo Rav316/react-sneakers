@@ -1,6 +1,5 @@
 import styles from './profile-form-skeleton.module.scss';
-
-import { Skeleton } from '../../ui/skeleton/skeleton.tsx';
+import { Skeleton } from '../../ui';
 
 export const ProfileFormSkeleton = () => {
   return (
@@ -13,7 +12,7 @@ export const ProfileFormSkeleton = () => {
         <Skeleton height={50} borderRadius={10} />
         <Skeleton height={50} borderRadius={10} />
       </div>
-      <Skeleton style={{marginTop: '40px'}} height={50} borderRadius={10} />
+      <Skeleton style={{ marginTop: '40px' }} height={50} borderRadius={10} />
     </>
-  )
-}
+  );
+};

@@ -9,4 +9,4 @@ export const extractError = (action: any) => {
     message: action.error?.message || 'Unknown error',
     code: 500,
   };
-}
+};

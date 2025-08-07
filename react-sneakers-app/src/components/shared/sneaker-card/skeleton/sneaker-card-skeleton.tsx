@@ -1,5 +1,5 @@
-import { Skeleton } from '../../../ui/skeleton/skeleton.tsx';
 import styles from './sneaker-card-skeleton.module.scss';
+import { Skeleton } from '../../../ui';
 
 export const SneakerCardSkeleton = () => {
   return (

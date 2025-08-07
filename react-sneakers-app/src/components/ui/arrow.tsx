@@ -8,7 +8,12 @@ interface Props {
   direction?: Direction;
 }
 
-export const Arrow: React.FC<Props> = ({ className, color = '#ffffff', onClick, direction = 'left'}) => {
+export const Arrow: React.FC<Props> = ({
+  className,
+  color = '#ffffff',
+  onClick,
+  direction = 'left',
+}) => {
   return (
     <svg
       onClick={onClick}
@@ -18,7 +23,7 @@ export const Arrow: React.FC<Props> = ({ className, color = '#ffffff', onClick, 
       viewBox="0 0 15.7144 14.0081"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
-      style={{ transform: `rotate(${rotationMap[direction]}deg)`}}
+      style={{ transform: `rotate(${rotationMap[direction]}deg)` }}
     >
       <defs />
       <path

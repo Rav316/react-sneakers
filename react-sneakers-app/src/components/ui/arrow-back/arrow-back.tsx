@@ -9,4 +9,4 @@ export const ArrowBack = () => {
       <img src={arrowBackIcon} alt={'arrow back icon'} />
     </div>
   );
-}
+};

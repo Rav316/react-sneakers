@@ -3,13 +3,12 @@ import styles from './header.module.scss';
 import cartIcon from '../../../assets/cart.svg';
 import favoritesIcon from '../../../assets/favorites/favorites.svg';
 import profileIcon from '../../../assets/profile.svg';
-import { HeaderLogo } from '../../ui/header-logo/header-logo.tsx';
 import { useDispatch, useSelector } from 'react-redux';
 import type { AppDispatch, RootState } from '../../../redux/store.ts';
 import { setIsModalOpen } from '../../../redux/slice/auth-modal-slice.ts';
 import { Link, useNavigate } from 'react-router';
 import { setIsDrawerOpen } from '../../../redux/slice/cart-drawer-slice.ts';
-import { Skeleton } from '../../ui/skeleton/skeleton.tsx';
+import { HeaderLogo, Skeleton } from '../../ui';
 
 export const Header = () => {
   const dispatch = useDispatch<AppDispatch>();

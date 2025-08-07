@@ -6,8 +6,8 @@ interface CancelOrderModalSlice {
 }
 
 const initialState: CancelOrderModalSlice = {
-  isOpen: false
-}
+  isOpen: false,
+};
 
 const cancelOrderModalSlice = createSlice({
   name: 'cancelOrder',
@@ -15,14 +15,14 @@ const cancelOrderModalSlice = createSlice({
   reducers: {
     openModal: (state, action) => {
       state.isOpen = true;
-      state.orderId = action.payload
+      state.orderId = action.payload;
     },
     closeModal: (state) => {
       state.isOpen = false;
-      state.orderId = undefined
-    }
-  }}
-);
+      state.orderId = undefined;
+    },
+  },
+});
 
 export default cancelOrderModalSlice.reducer;
 export const { openModal, closeModal } = cancelOrderModalSlice.actions;

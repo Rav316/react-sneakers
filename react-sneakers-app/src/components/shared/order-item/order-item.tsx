@@ -11,7 +11,14 @@ interface Props {
   imageUrl?: string;
 }
 
-export const OrderItem: React.FC<Props> = ({name, description, price, count, size, imageUrl}) => {
+export const OrderItem: React.FC<Props> = ({
+  name,
+  description,
+  price,
+  count,
+  size,
+  imageUrl,
+}) => {
   return (
     <div className={styles.root}>
       <div className={styles.wrapper}>
@@ -27,7 +34,9 @@ export const OrderItem: React.FC<Props> = ({name, description, price, count, siz
       </div>
       <div className={clsx(styles.infoWrapper, styles.priceCount)}>
         <span>{price} ₽</span>
-        <p>{size} размер, {count} шт.</p>
+        <p>
+          {size} размер, {count} шт.
+        </p>
       </div>
     </div>
   );

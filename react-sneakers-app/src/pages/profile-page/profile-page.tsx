@@ -7,20 +7,19 @@ import { logout, updateProfile } from '../../redux/slice/auth-slice.ts';
 import toast from 'react-hot-toast';
 import { clearFavorites } from '../../redux/slice/favorite-slice.ts';
 import { clearCart } from '../../redux/slice/cart-slice.ts';
-import { FormInput } from '../../components/ui/input/form-input.tsx';
 import { FormProvider, useForm } from 'react-hook-form';
-import { Button } from '../../components/ui/button/button.tsx';
 import {
   formProfileSchema,
   type ProfileData,
 } from '../../schemas/profile-schema.ts';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useEffect } from 'react';
-import { ProfileFormSkeleton } from '../../components/shared/profile-form-skeleton/profile-form-skeleton.tsx';
 import { unwrapResult } from '@reduxjs/toolkit';
 import type { ErrorResponse } from '../../service/model';
+import { ProfileFormSkeleton } from '../../components/shared';
+import { Button, FormInput } from '../../components/ui';
 
-export const ProfilePage = () => {
+const ProfilePage = () => {
   const dispatch = useDispatch<AppDispatch>();
   const { user, loading } = useSelector((state: RootState) => state.auth);
   const navigate = useNavigate();
@@ -54,11 +53,15 @@ export const ProfilePage = () => {
     navigate('/');
   };
 
-  const onSubmit = async(data: ProfileData) => {
+  const onSubmit = async (data: ProfileData) => {
     try {
-      const action = await dispatch(updateProfile(Object.fromEntries(
-        Object.entries(data).filter(([, value]) => value !== '')
-      )));
+      const action = await dispatch(
+        updateProfile(
+          Object.fromEntries(
+            Object.entries(data).filter(([, value]) => value !== ''),
+          ),
+        ),
+      );
       unwrapResult(action);
       toast.success('Профиль успешно обновлен');
     } catch (err) {
@@ -84,7 +87,7 @@ export const ProfilePage = () => {
       >
         <FormProvider {...form}>
           {loading ? (
-            <ProfileFormSkeleton/>
+            <ProfileFormSkeleton />
           ) : (
             <>
               <FormInput name={'name'} placeholder={'Введите имя...'} />
@@ -121,3 +124,5 @@ export const ProfilePage = () => {
     </div>
   );
 };
+
+export default ProfilePage;

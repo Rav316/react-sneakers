@@ -12,7 +12,7 @@ interface FadeContentProps {
   className?: string;
 }
 
-const FadeContent: React.FC<FadeContentProps> = ({
+export const FadeContent: React.FC<FadeContentProps> = ({
   children,
   blur = false,
   duration = 300,
@@ -60,5 +60,3 @@ const FadeContent: React.FC<FadeContentProps> = ({
     </div>
   );
 };
-
-export default FadeContent;

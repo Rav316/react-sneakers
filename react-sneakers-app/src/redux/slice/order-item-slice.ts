@@ -19,27 +19,25 @@ export const fetchOrderItems = createAsyncThunk<
   OrderItemResponse,
   number,
   { rejectValue: ErrorResponse }
->(
-  'orderItem/fetchOrderItems',
-  async (orderId: number, { rejectWithValue }) => {
-    return await callApiWithErrorHandling(
-      Api.orders.findItemsByOrder,
-      orderId,
-      rejectWithValue,
-    )
-  },
-);
+>('orderItem/fetchOrderItems', async (orderId: number, { rejectWithValue }) => {
+  return await callApiWithErrorHandling(
+    Api.orders.findItemsByOrder,
+    orderId,
+    rejectWithValue,
+  );
+});
 
 const orderItemSlice = createSlice({
   name: 'orderItem',
   initialState,
   reducers: {},
   extraReducers: (builder) => {
-    builder.addCase(fetchOrderItems.pending, (state, action) => {
-      const orderId = action.meta.arg;
-      state.loadingByOrderId[orderId] = true;
-      state.errorByOrderId[orderId] = undefined;
-    })
+    builder
+      .addCase(fetchOrderItems.pending, (state, action) => {
+        const orderId = action.meta.arg;
+        state.loadingByOrderId[orderId] = true;
+        state.errorByOrderId[orderId] = undefined;
+      })
       .addCase(fetchOrderItems.fulfilled, (state, action) => {
         const payload = action.payload;
         state.loadingByOrderId[payload.orderId] = false;
@@ -50,7 +48,7 @@ const orderItemSlice = createSlice({
         state.loadingByOrderId[orderId] = false;
         state.errorByOrderId[orderId] = action.payload;
       });
-  }
+  },
 });
 
 export default orderItemSlice.reducer;

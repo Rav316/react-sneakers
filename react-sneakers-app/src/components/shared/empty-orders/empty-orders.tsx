@@ -1,7 +1,7 @@
 import styles from './empty-orders.module.scss';
 import pleadingFace from '../../../assets/pleading-face.png';
-import { ButtonBack } from '../../ui/button-back/button-back.tsx';
 import { useNavigate } from 'react-router';
+import { ButtonBack } from '../../ui';
 
 export const EmptyOrders = () => {
   const navigate = useNavigate();

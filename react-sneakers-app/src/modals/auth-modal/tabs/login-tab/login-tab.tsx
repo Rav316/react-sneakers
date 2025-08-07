@@ -1,5 +1,4 @@
 import styles from './login-tab.module.scss';
-import { Button } from '../../../../components/ui/button/button.tsx';
 import * as React from 'react';
 import { useEffect } from 'react';
 import { clearError, login } from '../../../../redux/slice/auth-slice.ts';
@@ -9,11 +8,17 @@ import { useNavigate } from 'react-router';
 import toast from 'react-hot-toast';
 import { setIsModalOpen } from '../../../../redux/slice/auth-modal-slice.ts';
 import { syncGuestFavorites } from '../../../../redux/slice/favorite-slice.ts';
-import { formLoginSchema, type LoginData } from '../../../../schemas/auth-schema.ts';
+import {
+  formLoginSchema,
+  type LoginData,
+} from '../../../../schemas/auth-schema.ts';
 import { FormProvider, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { FormInput } from '../../../../components/ui/input/form-input.tsx';
-import { fetchCart, syncGuestCart } from '../../../../redux/slice/cart-slice.ts';
+import {
+  fetchCart,
+  syncGuestCart,
+} from '../../../../redux/slice/cart-slice.ts';
+import { Button, FormInput } from '../../../../components/ui';
 
 interface Props {
   onClickRegister: () => void;

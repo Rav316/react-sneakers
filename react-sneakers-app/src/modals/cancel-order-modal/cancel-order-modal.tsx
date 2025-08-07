@@ -1,11 +1,11 @@
 import styles from './cancel-order-modal.module.scss';
-import { Modal } from '../../hoc/modal/modal.tsx';
 import { useDispatch, useSelector } from 'react-redux';
 import type { AppDispatch, RootState } from '../../redux/store.ts';
 import { closeModal } from '../../redux/slice/cancel-order-slice.ts';
 import { cancelOrder } from '../../redux/slice/order-slice.ts';
 import { unwrapResult } from '@reduxjs/toolkit';
 import toast from 'react-hot-toast';
+import { Modal } from '../../hoc';
 
 export const CancelOrderModal = () => {
   const orderId = useSelector(

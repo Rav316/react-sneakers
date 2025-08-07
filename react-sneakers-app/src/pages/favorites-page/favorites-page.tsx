@@ -7,16 +7,17 @@ import {
   fetchSneakersByIds,
   removeAllFavorites,
 } from '../../redux/slice/sneaker-favorites-slice.ts';
-import { SneakerCard } from '../../components/shared/sneaker-card/sneaker-card.tsx';
-import { SneakerCardSkeleton } from '../../components/shared/sneaker-card/skeleton/sneaker-card-skeleton.tsx';
-import { ErrorResult } from '../../components/shared/error/error-result/error-result.tsx';
-import { EmptyFavorites } from '../../components/shared/empty-favorites/empty-favorites.tsx';
-import { TrashIcon } from '../../components/ui/trash-icon.tsx';
 import { clearFavorites } from '../../redux/slice/favorite-slice.ts';
-import { ArrowBack } from '../../components/ui/arrow-back/arrow-back.tsx';
-import FadeContent from '../../hoc/animation/fade-content.tsx';
+import {
+  EmptyFavorites,
+  ErrorResult,
+  SneakerCard,
+  SneakerCardSkeleton,
+} from '../../components/shared';
+import { ArrowBack, TrashIcon } from '../../components/ui';
+import { FadeContent } from '../../hoc';
 
-export const FavoritesPage = () => {
+const FavoritesPage = () => {
   const dispatch = useDispatch<AppDispatch>();
   const token = useSelector((state: RootState) => state.auth.token);
   const { items, loading, error } = useSelector(
@@ -79,3 +80,5 @@ export const FavoritesPage = () => {
     </div>
   );
 };
+
+export default FavoritesPage;

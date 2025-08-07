@@ -1,5 +1,5 @@
-import { Header } from '../components/shared/header/header.tsx';
 import { Outlet } from 'react-router';
+import { Header } from '../components/shared';
 
 export const OutletHeader = () => {
   return (
