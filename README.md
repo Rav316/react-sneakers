@@ -121,9 +121,6 @@ See documentation in _[Swagger-UI](http://localhost:8080/swagger-ui/index.html)_
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 
-<br>
-<br>
-<br>
 <hr>
 
 ##### README created 08/07/2025
