@@ -109,7 +109,9 @@ Before running the project, you need to install and run docker and docker-compos
 ```shell
    git clone https://github.com/Rav316/react-sneakers.git
 ```
-2. Run application in docker
+
+2. create a .env file and specify the environment variables as per the example in [`.public.env`](./.public.env).
+3. Run application in docker
 ```shell
     docker-compose up
 ```
