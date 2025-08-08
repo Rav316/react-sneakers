@@ -1,6 +1,5 @@
 package ru.alex.reactsneakersapi.service;
 
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -17,7 +16,6 @@ import ru.alex.reactsneakersapi.dto.user.UserDetailsDto;
 import ru.alex.reactsneakersapi.exception.OrderNotFoundException;
 import ru.alex.reactsneakersapi.exception.SneakerItemNotFoundException;
 import ru.alex.reactsneakersapi.mapper.order.OrderListMapper;
-import ru.alex.reactsneakersapi.util.EmailUtils;
 
 import java.time.Instant;
 import java.util.List;
@@ -30,8 +28,8 @@ import static ru.alex.reactsneakersapi.util.AuthUtils.getAuthorizedUser;
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class OrderService {
-    @Value("${app.host-address}")
-    private String hostAddress;
+    @Value("${app.frontend-url}")
+    private String frontendUrl;
 
     private final EmailService emailService;
     private final PaymentLinkService paymentLinkService;
@@ -49,7 +47,7 @@ public class OrderService {
     }
 
     @Transactional
-    public Integer create(OrderCreateDto orderCreateDto, HttpServletRequest request) {
+    public Integer create(OrderCreateDto orderCreateDto) {
         List<OrderItemCreateDto> orderItemCreateList = orderCreateDto.items();
         Set<Integer> sneakerItemIds = orderItemCreateList
                 .stream()
@@ -81,7 +79,7 @@ public class OrderService {
         Integer orderId = savedOrder.getId();
         orderItemRepository.createOrderItemsBatch(orderId, orderCreateDto.items());
         cartItemRepository.clearUserCart(userId);
-        sendOrderPaymentMail(orderId, request);
+        sendOrderPaymentMail(orderId);
         return orderId;
     }
 
@@ -93,13 +91,13 @@ public class OrderService {
         orderRepository.save(order);
     }
 
-    public void resendOrderPaymentMail(Integer id, HttpServletRequest request) {
+    public void resendOrderPaymentMail(Integer id) {
         Order order = orderRepository.findByIdAndUser(id, getAuthorizedUser().id())
                 .orElseThrow(() -> new OrderNotFoundException(id));
         if(order.getStatus() != OrderStatus.PENDING) {
             throw new IllegalStateException("the order has already been paid or cancelled");
         }
-        sendOrderPaymentMail(id, request);
+        sendOrderPaymentMail(id);
     }
 
     @Transactional
@@ -113,11 +111,10 @@ public class OrderService {
         order.setStatus(OrderStatus.COMPLETED);
     }
 
-    private void sendOrderPaymentMail(Integer id, HttpServletRequest request) {
+    private void sendOrderPaymentMail(Integer id) {
         UserDetailsDto authorizedUser = getAuthorizedUser();
         String paymentUuid = paymentLinkService.createPaymentLink(authorizedUser.id(), id);
-        String hostName = EmailUtils.getHostName(hostAddress, request);
-        String paymentLink = String.format("%s/api/orders/pay-for-order/%s", hostName, paymentUuid);
+        String paymentLink = String.format("%s/orders/pay-for-order/%s", frontendUrl, paymentUuid);
         emailService.sendPaymentEmail(id, authorizedUser.name(), authorizedUser.email(),  paymentLink);
     }
 

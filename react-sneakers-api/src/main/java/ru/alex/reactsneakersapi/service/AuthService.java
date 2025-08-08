@@ -24,8 +24,8 @@ import java.util.UUID;
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class AuthService {
-    @Value("${app.host-address}")
-    private String hostAddress;
+    @Value("${app.frontend-url}")
+    private String frontendUrl;
 
     @Value("${app.email-confirmation}")
     private Boolean emailConfirmation;
@@ -38,7 +38,7 @@ public class AuthService {
     private final UserReadMapper userReadMapper;
 
     @Transactional
-    public AuthResponse register(UserRegisterDto userDto, HttpServletRequest request) {
+    public AuthResponse register(UserRegisterDto userDto) {
         User user = userRegisterMapper.toEntity(userDto);
         String uuid = UUID.randomUUID().toString();
         user.setUuid(uuid);
@@ -50,9 +50,7 @@ public class AuthService {
         UserReadDto userReadDto = userReadMapper.toDto(createdUser);
         AuthResponse authResponse = new AuthResponse(userReadDto, authToken);
         if(emailConfirmation) {
-            String scheme = request.getScheme();
-            int serverPort = request.getServerPort();
-            String link = scheme + "://" + hostAddress + ":" + serverPort + "/api/auth/activate/" + uuid;
+            String link = frontendUrl + "/orders/pay-for-order/" + uuid;
             emailService.sendActivationMail(userReadDto, link);
         }
         return authResponse;

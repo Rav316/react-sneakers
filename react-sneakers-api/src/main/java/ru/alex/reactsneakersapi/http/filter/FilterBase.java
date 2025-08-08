@@ -9,7 +9,6 @@ public abstract class FilterBase extends OncePerRequestFilter {
         String requestURI = request.getRequestURI();
         return requestURI.startsWith("/api/auth") ||
                 requestURI.startsWith("/swagger-ui") ||
-                requestURI.startsWith("/v3/api-docs") ||
-                requestURI.matches("/api/orders/pay-for-order/.*");
+                requestURI.startsWith("/v3/api-docs");
     }
 }

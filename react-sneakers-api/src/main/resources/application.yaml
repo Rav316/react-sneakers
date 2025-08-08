@@ -5,7 +5,7 @@ app:
     issuer: User details service
     expiration: 43200000 # 12 hours
     total-expiration: 1209600000 # 2 weeks
-  host-address: ${HOST_ADDRESS}
+  frontend-url: ${FRONTEND_URL}
   email-confirmation: false
 
 spring:

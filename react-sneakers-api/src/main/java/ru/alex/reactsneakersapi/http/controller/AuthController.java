@@ -28,11 +28,8 @@ public class AuthController {
     private final AuthService authService;
 
     @PostMapping("/register")
-    public ResponseEntity<AuthResponse> register(
-            @RequestBody @Valid UserRegisterDto userRegisterDto,
-            HttpServletRequest request
-    ) {
-        AuthResponse registeredUser = authService.register(userRegisterDto, request);
+    public ResponseEntity<AuthResponse> register(@RequestBody @Valid UserRegisterDto userRegisterDto) {
+        AuthResponse registeredUser = authService.register(userRegisterDto);
         return new ResponseEntity<>(registeredUser, CREATED);
     }
 
