@@ -21,6 +21,11 @@ export const createOrder = async (data: OrderCreateDto): Promise<number> => {
   return response.data;
 };
 
+export const payForOrder = async (uuid: string): Promise<void> => {
+  const response = await axiosInstance.post(`${ApiRoutes.ORDERS}/pay-for-order/${uuid}`);
+  return response.data;
+}
+
 export const cancelOrder = async (id: number): Promise<void> => {
   const response = await axiosInstance.put(`${ApiRoutes.ORDERS}/${id}/cancel`);
   return response.data;

@@ -25,6 +25,9 @@ const OrdersPage = React.lazy(() => import('./pages/orders-page/orders-page'));
 const FavoritesPage = React.lazy(
   () => import('./pages/favorites-page/favorites-page'),
 );
+const OrderPaymentPage = React.lazy(
+  () => import('./pages/order-payment-page/order-payment-page'),
+);
 
 const App = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -79,6 +82,14 @@ const App = () => {
               <Route path={'/profile'} element={<ProfilePage />} />
               <Route path={'/profile/orders'} element={<OrdersPage />} />
             </Route>
+            <Route
+              path={'/orders/pay-for-order/:paymentId'}
+              element={
+                <RequireAuth>
+                  <OrderPaymentPage />
+                </RequireAuth>
+              }
+            />
             <Route path={'/favorites'} element={<FavoritesPage />} />
             <Route
               path={'*'}
