@@ -30,6 +30,7 @@
       <ul>
         <li><a href="#prerequisites">Prerequisites</a></li>
         <li><a href="#installation">Installation</a></li>
+        <li><a href="#environment-variables">Environment Variables</a></li>
       </ul>
     </li>
   </ol>
@@ -115,6 +116,18 @@ Before running the project, you need to install and run docker and docker-compos
 ```shell
     docker-compose up
 ```
+
+### Environment Variables
+
+| Variable            | Description                                                                  | Example                    |
+|---------------------|------------------------------------------------------------------------------|----------------------------|
+| `POSTGRES_DB_NAME`  | Name of the PostgreSQL database used by the application                      | `sneakers_db`              |
+| `POSTGRES_USERNAME` | Username for connecting to the PostgreSQL database                           | `postgres`                 |
+| `POSTGRES_PASSWORD` | Password for connecting to the PostgreSQL database                           | `mysecretpassword`         |
+| `MAIL_USERNAME`     | Username (usually an email) for the SMTP service used to send emails         | `noreply@example.com`      |
+| `MAIL_PASSWORD`     | Password or API key for the SMTP service                                     | `smtp_app_password`        |
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 ### Documentation
 
